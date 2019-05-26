@@ -6,6 +6,8 @@ import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.TextView;
 
+import com.liuzozo.stepdemo.R;
+
 public class MyCountTimer extends CountDownTimer {
     private static final int TIME_COUNT = 31000;//倒计时总时间为31S，时间防止从29s开始显示（以倒计时30s为例子）
     private TextView btn;
@@ -51,7 +53,7 @@ public class MyCountTimer extends CountDownTimer {
         if (millisUntilFinished > 1000)
             btn.setText(millisUntilFinished / 1000 + "");
         else
-            btn.setText("Start!");
+            btn.setText(R.string.countdown_over);
 
         // 设置透明度渐变动画
         final AlphaAnimation alphaAnimation = new AlphaAnimation(0, 1);
