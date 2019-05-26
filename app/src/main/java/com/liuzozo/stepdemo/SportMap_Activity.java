@@ -11,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -26,6 +27,7 @@ import com.amap.api.maps.MapView;
 
 import com.amap.api.maps.model.MyLocationStyle;
 import com.liuzozo.stepdemo.bean.PathRecord;
+import com.liuzozo.stepdemo.fragment.MyCountTimer;
 import com.liuzozo.stepdemo.ui.UIHelperUtil;
 
 
@@ -90,6 +92,12 @@ public class SportMap_Activity extends AppCompatActivity implements
         // 初始化地图组件
         mapView = findViewById(R.id.stepMap);
         mapView.onCreate(savedInstanceState);//
+
+        Button btnCountTimer = (Button) findViewById(R.id.btnCountTimer);
+        //倒计时总时间为10S，时间防止从9s开始显示
+        MyCountTimer myCountTimer = new MyCountTimer(4000, 1000, btnCountTimer, "");
+        myCountTimer.start();
+
         initMap();
         initView();
 
