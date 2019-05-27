@@ -103,8 +103,8 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
                     android:src="@mipmap/plan" />
 
                 <TextView
@@ -124,8 +124,8 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
                     android:src="@mipmap/history_record" />
 
                 <TextView
