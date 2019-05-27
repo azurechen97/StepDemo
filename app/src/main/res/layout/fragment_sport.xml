@@ -10,24 +10,31 @@
         android:background="@mipmap/sport_bg"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_sport_mile"
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:lines="1"
-            android:text="1.56"
-            android:textColor="#fff"
-            android:textSize="60sp" />
+            android:layout_centerInParent="true">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_sport_mile"
-            android:layout_centerInParent="true"
-            android:text="总公里数"
-            android:textColor="#fff"
-            android:textSize="16sp" />
+            <TextView
+                android:id="@+id/tv_sport_mile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:lines="1"
+                android:text="1.56"
+                android:textColor="#fff"
+                android:textSize="60sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_sport_mile"
+                android:layout_centerInParent="true"
+                android:text="总公里数"
+                android:textColor="#fff"
+                android:textSize="16sp" />
+
+        </RelativeLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"

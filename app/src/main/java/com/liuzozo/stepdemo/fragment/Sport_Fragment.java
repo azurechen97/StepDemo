@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.liuzozo.stepdemo.R;
 import com.liuzozo.stepdemo.SportMap_Activity;
@@ -21,6 +22,9 @@ public class Sport_Fragment extends Fragment {
 
     // 开始运动按钮
     Button startBtn;
+    TextView sportMile;
+    TextView sportCount;
+    TextView sportTime;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -32,6 +36,16 @@ public class Sport_Fragment extends Fragment {
     }
 
     public void initView(View view) {
+
+        sportMile = (TextView) view.findViewById(R.id.tv_sport_mile);
+        sportMile.setText("2.78");
+
+        sportCount = (TextView) view.findViewById(R.id.tv_sport_count);
+        sportCount.setText("15");
+
+        sportTime = (TextView) view.findViewById(R.id.tv_sport_time);
+        sportTime.setText("1000.67");
+
         startBtn = (Button) view.findViewById(R.id.btnStart);
         startBtn.setOnClickListener(new OnClickListener() {
 
