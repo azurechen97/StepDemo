@@ -28,7 +28,7 @@ import com.amap.api.maps.MapView;
 
 import com.amap.api.maps.model.MyLocationStyle;
 import com.liuzozo.stepdemo.bean.PathRecord;
-import com.liuzozo.stepdemo.fragment.MyCountTimer;
+import com.liuzozo.stepdemo.utils.MyCountTimer;
 import com.liuzozo.stepdemo.ui.UIHelperUtil;
 
 

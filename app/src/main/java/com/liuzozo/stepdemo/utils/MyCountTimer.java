@@ -1,4 +1,4 @@
-package com.liuzozo.stepdemo.fragment;
+package com.liuzozo.stepdemo.utils;
 
 import android.os.CountDownTimer;
 import android.view.View;
