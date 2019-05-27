@@ -1,6 +1,8 @@
 package com.liuzozo.stepdemo.fragment;
 
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 
 import com.liuzozo.stepdemo.R;
 import com.liuzozo.stepdemo.SportMap_Activity;
+import com.liuzozo.stepdemo.utils.MyDatabaseHelper;
 
 /**
  *  点击开发运动的 界面
@@ -36,15 +39,49 @@ public class Sport_Fragment extends Fragment {
     }
 
     public void initView(View view) {
+        double distance = 0;
+        long duration = 0;
+        int count = 0;
+
+        MyDatabaseHelper databaseHelper = new MyDatabaseHelper(
+                getActivity(), "sport_record.db", null, 1);
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+
+        //查询 用db.query  返回一个Cursor 里面有数据
+        Cursor cursor = db.query("sport_record",
+                null, null, null,
+                null, null, null);
+
+        //查之前先把Cursor位置移到第一   从第一条开始查
+        boolean succeed = (cursor.moveToFirst());
+
+        if (succeed) {
+
+            do {
+                //先判断字段的数据类型 如果是String 就用 cursor.getString
+                // 是Double 就用 cursor.getDouble  以此类推
+                //cursor.getString函数需要传入 ColumnIndex
+                //用 cursor.getColumnIndex 传入字段名
+
+                distance += cursor.getDouble(cursor.getColumnIndex("distance"));
+                duration += cursor.getLong(cursor.getColumnIndex("duration"));
+                count += 1;
+
+                //查完一条之后调用cursor.moveToNext()把cursor的位置移动到下一条
+            } while (cursor.moveToNext());
+
+        }
+        //全部查完后  把cursor关闭
+        cursor.close();
 
         sportMile = (TextView) view.findViewById(R.id.tv_sport_mile);
-        sportMile.setText("2.78");
+        sportMile.setText(distance + "");
 
         sportCount = (TextView) view.findViewById(R.id.tv_sport_count);
-        sportCount.setText("15");
+        sportCount.setText(count + "");
 
         sportTime = (TextView) view.findViewById(R.id.tv_sport_time);
-        sportTime.setText("1000.67");
+        sportTime.setText(duration + "");
 
         startBtn = (Button) view.findViewById(R.id.btnStart);
         startBtn.setOnClickListener(new OnClickListener() {

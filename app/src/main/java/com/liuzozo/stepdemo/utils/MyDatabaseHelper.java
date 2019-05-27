@@ -12,11 +12,21 @@ import android.widget.Toast;
  */
 public class MyDatabaseHelper extends SQLiteOpenHelper{
 
-	public static final String CREATE_BOOK_TABLE = 
-	"create table book ("+
-	"id integer primary key autoincrement," +
-	"author text, "+
-	"pages integer)";
+    public static final String CREATE_SPORT_TABLE =
+            "create table sport_record (" +
+                    "id integer primary key autoincrement," +
+                    "user_id int, " +
+                    "distance double, " +
+                    "duration integer, " +
+                    "path_line text, " +
+                    "start_point text, " +
+                    "end_point text, " +
+                    "start_time integer, " +
+                    "end_time integer, " +
+                    "calorie double, " +
+                    "speed double, " +
+                    "distribution double, " +
+                    "date_tag double)";
 	
 	private Context mContext;
 	
@@ -28,9 +38,9 @@ public class MyDatabaseHelper extends SQLiteOpenHelper{
 	// 如果数据库不存在、则会执行，否者不会执行
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		db.execSQL(CREATE_BOOK_TABLE);
+        db.execSQL(CREATE_SPORT_TABLE);
 		// create other table
-		Toast.makeText(mContext, "create successed", Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext, "created successfully", Toast.LENGTH_SHORT).show();
 	}
 
 	// 创建数据库不会执行，增大版本号才会执行
