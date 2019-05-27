@@ -31,7 +31,7 @@ public class SportRecord implements Serializable {
     private String pathLine;
 
     //运动开始点
-    private String stratPoint;  // 起点经纬度类的俩个值的string
+    private String startPoint;  // 起点经纬度类的俩个值的string
 
     //运动结束点
     private String endPoint;
@@ -98,12 +98,12 @@ public class SportRecord implements Serializable {
         this.pathLine = pathLine;
     }
 
-    public String getStratPoint() {
-        return stratPoint;
+    public String getStartPoint() {
+        return startPoint;
     }
 
-    public void setStratPoint(String stratPoint) {
-        this.stratPoint = stratPoint;
+    public void setStartPoint(String startPoint) {
+        this.startPoint = startPoint;
     }
 
     public String getEndPoint() {
