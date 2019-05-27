@@ -39,6 +39,7 @@ public class Sport_Fragment extends Fragment {
     }
 
     public void initView(View view) {
+        //首先查询获得主界面所用数据
         double distance = 0;
         long duration = 0;
         int count = 0;
@@ -83,6 +84,7 @@ public class Sport_Fragment extends Fragment {
         sportTime = (TextView) view.findViewById(R.id.tv_sport_time);
         sportTime.setText(duration + "");
 
+        //开始按钮相关操作
         startBtn = (Button) view.findViewById(R.id.btnStart);
         startBtn.setOnClickListener(new OnClickListener() {
 
