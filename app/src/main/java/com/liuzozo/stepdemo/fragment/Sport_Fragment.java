@@ -1,6 +1,8 @@
 package com.liuzozo.stepdemo.fragment;
 
 
+import android.app.AlertDialog;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.app.Fragment;
@@ -16,6 +18,8 @@ import android.widget.TextView;
 import com.liuzozo.stepdemo.R;
 import com.liuzozo.stepdemo.SportMap_Activity;
 import com.liuzozo.stepdemo.utils.MyDatabaseHelper;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  *  点击开发运动的 界面
@@ -86,13 +90,32 @@ public class Sport_Fragment extends Fragment {
 
         //开始按钮相关操作
         startBtn = (Button) view.findViewById(R.id.btnStart);
+
         startBtn.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                Intent goSportMapIntent = new Intent(getActivity(),
-                        SportMap_Activity.class);
-                startActivity(goSportMapIntent);
+                SharedPreferences preferences = getActivity().getSharedPreferences(
+                        "BMI-data", MODE_PRIVATE);
+                if (preferences.contains("height")) {
+                    Intent goSportMapIntent = new Intent(getActivity(),
+                            SportMap_Activity.class);
+                    startActivity(goSportMapIntent);
+                } else {
+//                    SharedPreferences.Editor editor = getActivity().getSharedPreferences(
+//                            "BMI-data", MODE_PRIVATE).edit();
+//                    LayoutInflater inflater = getLayoutInflater();
+//                    View layout = inflater.inflate(R.layout.dialog_bmi,
+//                            (ViewGroup) getActivity().findViewById(R.id.dialog));
+//                    new AlertDialog.Builder(getActivity()).setTitle("自定义布局").setView(layout)
+//                            .setPositiveButton("确定", null)
+//                            .setNegativeButton("取消", null).show();
+                    new AlertDialog.Builder(getActivity()).setTitle("检测到首次使用")
+                            .setMessage("第一次使用需要设置身高及体重以便计算卡路里消耗。现在就去设置吗？")
+                            .setPositiveButton("是", null)
+                            .setNegativeButton("否", null)
+                            .show();
+                }
             }
         });
     }
