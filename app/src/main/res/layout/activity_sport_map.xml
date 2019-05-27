@@ -24,16 +24,6 @@
 
         <!-- 渐变背景色 -->
 
-        <Button
-            android:id="@+id/btnCountTimer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@null"
-            android:text="Start!"
-            android:textColor="@android:color/white"
-            android:textSize="72sp"
-            android:textAllCaps="false" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -163,6 +153,23 @@
             android:text="继续"
             android:textColor="#6BC4A2"
             android:textSize="18sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/countBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#BF000000">
+
+        <Button
+            android:id="@+id/btnCountTimer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:text="Start!"
+            android:textColor="@android:color/white"
+            android:textSize="72sp"
+            android:textAllCaps="false" />
     </LinearLayout>
 
 </RelativeLayout>

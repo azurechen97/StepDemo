@@ -3,5 +3,5 @@
 
     <string name="date_month_day">%1$s月%2$s日</string>
 
-    <string name="countdown_over">Start!</string>
+    <string name="countdown_over">开始!</string>
 </resources>

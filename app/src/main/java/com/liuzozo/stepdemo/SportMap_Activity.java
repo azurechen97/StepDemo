@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -94,8 +95,10 @@ public class SportMap_Activity extends AppCompatActivity implements
         mapView.onCreate(savedInstanceState);//
 
         Button btnCountTimer = (Button) findViewById(R.id.btnCountTimer);
+        LinearLayout countBackground = (LinearLayout) findViewById(R.id.countBackground);
         //倒计时总时间为10S，时间防止从9s开始显示
-        MyCountTimer myCountTimer = new MyCountTimer(4000, 1000, btnCountTimer, "");
+        MyCountTimer myCountTimer = new MyCountTimer(4000, 1000,
+                btnCountTimer, "End", countBackground);
         myCountTimer.start();
 
         initMap();

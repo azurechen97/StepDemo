@@ -1,9 +1,11 @@
 package com.liuzozo.stepdemo.fragment;
 
 import android.os.CountDownTimer;
+import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.liuzozo.stepdemo.R;
@@ -12,6 +14,7 @@ public class MyCountTimer extends CountDownTimer {
     private static final int TIME_COUNT = 31000;//倒计时总时间为31S，时间防止从29s开始显示（以倒计时30s为例子）
     private TextView btn;
     private String endStrRid;
+    private LinearLayout bg;
 
     /**
      * 参数 millisInFuture         倒计时总时间（如30s,60S，120s等）
@@ -19,19 +22,22 @@ public class MyCountTimer extends CountDownTimer {
      * 参数 btn               点击的按钮(因为Button是TextView子类，为了通用我的参数设置为TextView）
      * 参数 endStrRid   倒计时结束后，按钮对应显示的文字
      */
-    public MyCountTimer(long millisInFuture, long countDownInterval, TextView btn, String endStrRid) {
+    public MyCountTimer(long millisInFuture, long countDownInterval, TextView btn,
+                        String endStrRid, LinearLayout bg) {
         super(millisInFuture, countDownInterval);
         this.btn = btn;
         this.endStrRid = endStrRid;
+        this.bg = bg;
     }
 
     /**
      * 参数上面有注释
      */
-    public MyCountTimer(TextView btn, String endStrRid) {
+    public MyCountTimer(TextView btn, String endStrRid, LinearLayout bg) {
         super(TIME_COUNT, 1000);
         this.btn = btn;
         this.endStrRid = endStrRid;
+        this.bg = bg;
     }
 
     /**
@@ -40,7 +46,7 @@ public class MyCountTimer extends CountDownTimer {
     @Override
     public void onFinish() {
         btn.setText(endStrRid);
-        btn.setEnabled(true);
+        bg.setVisibility(View.GONE);
     }
 
     /**
