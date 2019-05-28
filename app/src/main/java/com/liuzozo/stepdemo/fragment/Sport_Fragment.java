@@ -2,12 +2,14 @@ package com.liuzozo.stepdemo.fragment;
 
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -112,11 +114,21 @@ public class Sport_Fragment extends Fragment {
 //                            .setNegativeButton("取消", null).show();
                     new AlertDialog.Builder(getActivity()).setTitle("检测到首次使用")
                             .setMessage("第一次使用需要设置身高及体重以便计算卡路里消耗。现在就去设置吗？")
-                            .setPositiveButton("是", null)
+                            .setPositiveButton("是", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    getFragmentManager()
+                                            .beginTransaction()
+                                            .addToBackStack(null)  //将当前fragment加入到返回栈中
+                                            .replace(R.id.id_nav_table_content, new Account_Fragment())
+                                            .commit();
+                                }
+                            })
                             .setNegativeButton("否", null)
                             .show();
                 }
             }
         });
     }
+
 }
