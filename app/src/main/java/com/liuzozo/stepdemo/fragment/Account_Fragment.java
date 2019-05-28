@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +43,13 @@ public class Account_Fragment extends Fragment implements View.OnClickListener {
     TextView tvWeight;
     TextView tvBMI;
 
+    LayoutInflater layoutInflater;
+    View dialogView;
+    TextView unit;
+    EditText editText;
+
+    SharedPreferences.Editor editor;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -68,6 +75,12 @@ public class Account_Fragment extends Fragment implements View.OnClickListener {
         tvWeight.setOnClickListener(this);
         tvBMI.setOnClickListener(this);
 
+        layoutInflater = LayoutInflater.from(getActivity());
+        dialogView = layoutInflater.inflate(R.layout.editbox_layout, null);
+        unit = (TextView) dialogView.findViewById(R.id.unit);
+        editText = (EditText) dialogView.findViewById(R.id.editText);
+        editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
         SharedPreferences preferences = getActivity().getSharedPreferences(
                 "BMI-data", MODE_PRIVATE);
         float height = preferences.getFloat("height", (float) 175.);
@@ -75,6 +88,9 @@ public class Account_Fragment extends Fragment implements View.OnClickListener {
         tvHeight.setText(getString(R.string.xliff_height, height));
         tvWeight.setText(getString(R.string.xliff_weight, weight));
         tvBMI.setText(getString(R.string.xliff_bmi, weight / height / height * 10000));
+
+        editor = getActivity().getSharedPreferences(
+                "BMI-data", MODE_PRIVATE).edit();
 
     }
 
@@ -95,19 +111,17 @@ public class Account_Fragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.tv_height:
-                final SharedPreferences.Editor editor1 = getActivity().getSharedPreferences(
-                        "BMI-data", MODE_PRIVATE).edit();
-                final EditText inputServer1 = new EditText(getActivity());
+                unit.setText(" cm");
 
                 new AlertDialog.Builder(getActivity())
                         .setTitle("请输入您的身高")
-                        .setView(inputServer1)
+                        .setView(dialogView)
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                editor1.putFloat("height",
-                                        Float.parseFloat(inputServer1.getText().toString()));
-                                editor1.apply();
+                                editor.putFloat("height",
+                                        Float.parseFloat(editText.getText().toString()));
+                                editor.apply();
 
                                 getFragmentManager()
                                         .beginTransaction()
@@ -120,24 +134,22 @@ public class Account_Fragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.tv_weight:
-                final SharedPreferences.Editor editor2 = getActivity().getSharedPreferences(
-                        "BMI-data", MODE_PRIVATE).edit();
-                final EditText inputServer2 = new EditText(getActivity());
+                unit.setText(" kg");
 
-                new AlertDialog.Builder(getActivity()).setTitle("请输入您的体重")
-                        .setView(inputServer2)
+                new AlertDialog.Builder(getActivity())
+                        .setTitle("请输入您的体重")
+                        .setView(dialogView)
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                editor2.putFloat("weight",
-                                        Float.parseFloat(inputServer2.getText().toString()));
-                                editor2.apply();
+                                editor.putFloat("weight",
+                                        Float.parseFloat(editText.getText().toString()));
+                                editor.apply();
 
                                 getFragmentManager()
                                         .beginTransaction()
                                         .replace(R.id.id_nav_table_content, new Account_Fragment())
                                         .commitNow();
-
                             }
                         })
                         .setNegativeButton("取消", null)
@@ -145,16 +157,13 @@ public class Account_Fragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.tv_bmi:
-                final SharedPreferences.Editor editor3 = getActivity().getSharedPreferences(
-                        "BMI-data", MODE_PRIVATE).edit();
-
                 new AlertDialog.Builder(getActivity()).setTitle("确定要清除数据吗？")
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                editor3.remove("height");
-                                editor3.remove("weight");
-                                editor3.apply();
+                                editor.remove("height");
+                                editor.remove("weight");
+                                editor.apply();
 
                                 getFragmentManager()
                                         .beginTransaction()
