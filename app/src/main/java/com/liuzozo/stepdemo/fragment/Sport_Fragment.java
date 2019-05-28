@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.liuzozo.stepdemo.MainActivity;
 import com.liuzozo.stepdemo.R;
 import com.liuzozo.stepdemo.SportMap_Activity;
 import com.liuzozo.stepdemo.utils.MyDatabaseHelper;
@@ -97,31 +98,23 @@ public class Sport_Fragment extends Fragment {
 
             @Override
             public void onClick(View v) {
+
+                final MainActivity mainActivity = (MainActivity) getActivity();
+
                 SharedPreferences preferences = getActivity().getSharedPreferences(
                         "BMI-data", MODE_PRIVATE);
-                if (preferences.contains("height")) {
+                if (preferences.contains("height") & preferences.contains("weight")) {
                     Intent goSportMapIntent = new Intent(getActivity(),
                             SportMap_Activity.class);
                     startActivity(goSportMapIntent);
                 } else {
-//                    SharedPreferences.Editor editor = getActivity().getSharedPreferences(
-//                            "BMI-data", MODE_PRIVATE).edit();
-//                    LayoutInflater inflater = getLayoutInflater();
-//                    View layout = inflater.inflate(R.layout.dialog_bmi,
-//                            (ViewGroup) getActivity().findViewById(R.id.dialog));
-//                    new AlertDialog.Builder(getActivity()).setTitle("自定义布局").setView(layout)
-//                            .setPositiveButton("确定", null)
-//                            .setNegativeButton("取消", null).show();
-                    new AlertDialog.Builder(getActivity()).setTitle("检测到首次使用")
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle("检测到首次使用")
                             .setMessage("第一次使用需要设置身高及体重以便计算卡路里消耗。现在就去设置吗？")
                             .setPositiveButton("是", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    getFragmentManager()
-                                            .beginTransaction()
-                                            .addToBackStack(null)  //将当前fragment加入到返回栈中
-                                            .replace(R.id.id_nav_table_content, new Account_Fragment())
-                                            .commit();
+                                    mainActivity.setTab(2);
                                 }
                             })
                             .setNegativeButton("否", null)

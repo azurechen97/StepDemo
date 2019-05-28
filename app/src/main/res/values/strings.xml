@@ -1,7 +1,20 @@
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">乐跑圈</string>
 
     <string name="date_month_day">%1$s月%2$s日</string>
 
     <string name="countdown_over">开始!</string>
+
+    <string name="xliff_height">
+        <xliff:g id="height">%1$1.0f</xliff:g> cm
+    </string>
+
+    <string name="xliff_weight">
+        <xliff:g id="weight">%1$1.0f</xliff:g> kg
+    </string>
+
+    <string name="xliff_bmi">
+        <xliff:g id="bmi">%1$1.1f</xliff:g> BMI
+    </string>
+
 </resources>

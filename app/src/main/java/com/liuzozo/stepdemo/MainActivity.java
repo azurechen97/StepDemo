@@ -69,4 +69,9 @@ public class MainActivity extends AppCompatActivity {
         textView.setText(textViewArray[index]);
         return view;
     }
+
+    //跳转tab
+    public void setTab(int tab) {
+        mTabHost.setCurrentTab(tab);
+    }
 }

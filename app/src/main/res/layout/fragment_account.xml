@@ -50,19 +50,24 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/tv_height"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="165cm" />
+                    android:text="165 cm" />
                 <TextView
+                    android:id="@+id/tv_weight"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:text="80kg" />
+                    android:text="80 kg"
+                    android:clickable="true" />
                 <TextView
+                    android:id="@+id/tv_bmi"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:text="24.2BMI" />
+                    android:text="24.2 BMI"
+                    android:clickable="true" />
 
             </LinearLayout>
 
