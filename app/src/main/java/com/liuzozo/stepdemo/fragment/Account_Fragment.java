@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,10 +75,9 @@ public class Account_Fragment extends Fragment implements View.OnClickListener {
         tvBMI.setOnClickListener(this);
 
         layoutInflater = LayoutInflater.from(getActivity());
-        dialogView = layoutInflater.inflate(R.layout.editbox_layout, null);
+        dialogView = layoutInflater.inflate(R.layout.dialog_parameters, null);
         unit = (TextView) dialogView.findViewById(R.id.unit);
         editText = (EditText) dialogView.findViewById(R.id.editText);
-        editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
         SharedPreferences preferences = getActivity().getSharedPreferences(
                 "BMI-data", MODE_PRIVATE);

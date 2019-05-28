@@ -15,7 +15,8 @@
             android:id="@+id/editText"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:lines="1" />
+            android:lines="1"
+            android:inputType="number|numberDecimal" />
 
         <TextView
             android:id="@+id/unit"
