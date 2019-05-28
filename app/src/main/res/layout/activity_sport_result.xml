@@ -16,14 +16,14 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="运动效果页面，此页面自己实现啊"/>
+            android:text="运动效果页面，此页面自己实现啊" />
 
 
         <TextView
             android:id="@+id/tv_shared"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="分享朋友圈"/>
+            android:text="分享朋友圈" />
 
     </LinearLayout>
 

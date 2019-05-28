@@ -1,7 +1,7 @@
 package com.liuzozo.stepdemo.utils;
 
 /**
- *  保存 app 的 一些常量
+ * 保存 app 的 一些常量
  */
 public class ConstrantUtils {
 

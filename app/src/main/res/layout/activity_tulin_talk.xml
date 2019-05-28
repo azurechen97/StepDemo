@@ -15,7 +15,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="此页面自己实现啊"/>
+            android:text="此页面自己实现啊" />
     </LinearLayout>
 
 

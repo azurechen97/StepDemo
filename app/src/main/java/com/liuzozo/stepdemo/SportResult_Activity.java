@@ -20,7 +20,7 @@ import java.io.IOException;
 
 /**
  * 运动结果页面，点击完成时跳到该页面
- *  评分运行规则：依次判断 距离大于0 ★；运动时间大于40分钟 ★★；速度在3~6km/h之间 ★★★
+ * 评分运行规则：依次判断 距离大于0 ★；运动时间大于40分钟 ★★；速度在3~6km/h之间 ★★★
  */
 public class SportResult_Activity extends AppCompatActivity implements View.OnClickListener {
 
@@ -37,13 +37,13 @@ public class SportResult_Activity extends AppCompatActivity implements View.OnCl
     }
 
 
-
     /**
      * 下面代码为点击分享朋友圈
      * 1 .首先根据页面布局，选择特定区域的View的id (root view id) , 转bitmap
      * 2. 压缩图片，以免图片过大，内存溢出
      * 3. 把图片保存成手机上的文件，得到Uri 路径，
      * 4. 利用安卓自带的应用程序之间的分享功能，进行分享到朋友圈，微信等
+     *
      * @param view
      */
     @Override

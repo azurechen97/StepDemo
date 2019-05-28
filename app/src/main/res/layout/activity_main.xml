@@ -5,13 +5,13 @@
     android:layout_height="match_parent"
     android:background="#E9EEF3"
     android:orientation="vertical"
-    tools:context=".MainActivity" >
+    tools:context=".MainActivity">
 
     <FrameLayout
         android:id="@+id/id_nav_table_content"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" >
+        android:layout_weight="1">
 
     </FrameLayout>
 
@@ -19,7 +19,7 @@
         android:id="@+id/id_tabhost"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="#fff" >
+        android:background="#fff">
 
         <FrameLayout
             android:id="@+id/id_tabContent"

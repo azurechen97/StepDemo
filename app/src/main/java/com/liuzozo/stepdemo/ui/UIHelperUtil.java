@@ -6,13 +6,14 @@ import android.widget.TextView;
 
 
 /**
- *  ui 相关的常用方法工具类
+ * ui 相关的常用方法工具类
  */
 public class UIHelperUtil {
 
 
     /**
      * 设置textView 左边的小图标
+     *
      * @param textView
      * @param drawable
      */

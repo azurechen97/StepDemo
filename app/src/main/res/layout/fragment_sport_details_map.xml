@@ -4,17 +4,15 @@
     android:layout_height="match_parent">
 
 
-
     <RelativeLayout
         android:id="@+id/rlMap"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent">
 
         <com.amap.api.maps.MapView
             android:id="@+id/detalsMap"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
-        </com.amap.api.maps.MapView>
+            android:layout_height="match_parent"></com.amap.api.maps.MapView>
     </RelativeLayout>
 
 
@@ -32,18 +30,19 @@
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:textColor="#fff"
-            android:text="0.21公里"/>
+            android:text="0.21公里" />
+
         <View
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="12dp"/>
+            android:layout_height="12dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:textColor="#fff"
-            android:text="00:10:49"/>
+            android:text="00:10:49" />
     </LinearLayout>
 
 </RelativeLayout>

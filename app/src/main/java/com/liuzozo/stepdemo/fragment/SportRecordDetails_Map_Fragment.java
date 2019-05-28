@@ -30,7 +30,7 @@ public class SportRecordDetails_Map_Fragment extends Fragment implements Locatio
                 false);
 
         // 初始化地图组件
-        mapView =  view.findViewById(R.id.detalsMap);
+        mapView = view.findViewById(R.id.detalsMap);
         mapView.onCreate(savedInstanceState);
 
         initSendData();

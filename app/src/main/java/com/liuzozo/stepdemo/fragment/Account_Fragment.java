@@ -23,13 +23,13 @@ import static android.content.Context.MODE_PRIVATE;
 
 /**
  * 个人信息页面
- *  当用户首次点击跑步的时侯，需要检测SharedPreference 里面是否存储了 运动标语， 身高、体重，并计算BMI，
- *   没有存储这些值的时侯，不能让他跳转到跑步页面
- *
- *   点击头像区域，设置头像
- *   点击头像左边区域，设置运动标语， 身高，体重 ， 保存SharedPreference 里面后，计算BMI 值显示到界面
- *
- *   点击跑步设置，一周记录，悦聊 分别跳转到对应页面
+ * 当用户首次点击跑步的时侯，需要检测SharedPreference 里面是否存储了 运动标语， 身高、体重，并计算BMI，
+ * 没有存储这些值的时侯，不能让他跳转到跑步页面
+ * <p>
+ * 点击头像区域，设置头像
+ * 点击头像左边区域，设置运动标语， 身高，体重 ， 保存SharedPreference 里面后，计算BMI 值显示到界面
+ * <p>
+ * 点击跑步设置，一周记录，悦聊 分别跳转到对应页面
  */
 
 public class Account_Fragment extends Fragment implements View.OnClickListener {

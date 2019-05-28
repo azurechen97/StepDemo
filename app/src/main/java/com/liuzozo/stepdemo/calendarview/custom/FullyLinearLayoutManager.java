@@ -220,7 +220,7 @@ public class FullyLinearLayoutManager extends LinearLayoutManager {
         try {
             child = recycler.getViewForPosition(position);
         } catch (IndexOutOfBoundsException e) {
-         //   LogUtils.e("LinearLayoutManager", "LinearLayoutManager doesn't work well with animations. Consider switching them off", e);
+            //   LogUtils.e("LinearLayoutManager", "LinearLayoutManager doesn't work well with animations. Consider switching them off", e);
             return;
         }
 
@@ -272,7 +272,7 @@ public class FullyLinearLayoutManager extends LinearLayoutManager {
 
     private static void onMakeInsertDirtyFailed() {
         canMakeInsetsDirty = false;
-       // LogUtils.w("LinearLayoutManager", "Can't make LayoutParams insets dirty, decorations measurements might be incorrect");
+        // LogUtils.w("LinearLayoutManager", "Can't make LayoutParams insets dirty, decorations measurements might be incorrect");
     }
 
     @Override

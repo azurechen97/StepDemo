@@ -107,6 +107,7 @@ public class StepUtils {
 
     /**
      * 将数据库里面保存的String 转为对应的LatLng ,以便显示在地图上
+     *
      * @param latLonStr
      * @return
      */
@@ -124,6 +125,7 @@ public class StepUtils {
 
     /**
      * 把地图上的经纬度转为String , 以便于保存
+     *
      * @return
      */
     public static String getLatLngPathLineString(List<LatLng> list) {
@@ -171,7 +173,6 @@ public class StepUtils {
         locString.append(location.getBearing());
         return locString.toString();
     }
-
 
 
     public static String getPathLineString(List<AMapLocation> list) {

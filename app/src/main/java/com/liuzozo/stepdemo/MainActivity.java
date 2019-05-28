@@ -14,8 +14,8 @@ import com.liuzozo.stepdemo.fragment.Sport_Fragment;
 import com.liuzozo.stepdemo.fragment.StepData_Fragment;
 
 /**
- *  app 主界面
- *  用于放三个Fragment 子布局
+ * app 主界面
+ * 用于放三个Fragment 子布局
  */
 public class MainActivity extends AppCompatActivity {
 
@@ -24,13 +24,13 @@ public class MainActivity extends AppCompatActivity {
     // 定义一个布局DefaultPassword
     private LayoutInflater layoutInflater;
     // 定义数组来存放3个菜单的 Fragment界面
-    private Class fragmentArray[] = { Sport_Fragment.class,
-            StepData_Fragment.class, Account_Fragment.class };
+    private Class fragmentArray[] = {Sport_Fragment.class,
+            StepData_Fragment.class, Account_Fragment.class};
     // 定义数组来存放导航图标
-    private int imageViewArray[] = { R.drawable.account_change_icon,
-            R.drawable.data_change_icon, R.drawable.account_change_icon };
+    private int imageViewArray[] = {R.drawable.account_change_icon,
+            R.drawable.data_change_icon, R.drawable.account_change_icon};
     // Tab 选项卡的文字
-    private String textViewArray[] = { "sports", "data", "account" };
+    private String textViewArray[] = {"sports", "data", "account"};
 
 
     @Override
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private void initView() {
         layoutInflater = LayoutInflater.from(this);
         // 实例化TabHost对象,得到Tabhost
-        mTabHost =   findViewById(R.id.id_tabhost);
+        mTabHost = findViewById(R.id.id_tabhost);
         mTabHost.setup(this, getSupportFragmentManager(),
                 R.id.id_nav_table_content);
 

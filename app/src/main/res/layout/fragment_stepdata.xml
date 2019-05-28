@@ -13,11 +13,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
             <RelativeLayout
                 android:id="@+id/rl_tool"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
                 android:background="#FFF">
+
                 <TextView
                     android:id="@+id/tv_month_day"
                     android:layout_width="wrap_content"
@@ -26,8 +28,8 @@
                     android:paddingLeft="16dp"
                     android:textColor="#000"
                     android:textSize="26sp"
-                    android:textStyle="bold"
-                    />
+                    android:textStyle="bold" />
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -45,7 +47,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:textColor="#000"
-                        android:textSize="10sp"/>
+                        android:textSize="10sp" />
 
                     <TextView
                         android:id="@+id/tv_lunar"
@@ -54,7 +56,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:textColor="#000"
-                        android:textSize="10sp"/>
+                        android:textSize="10sp" />
 
                 </LinearLayout>
 
@@ -74,7 +76,7 @@
                         android:tint="#000000"
                         android:contentDescription="@string/app_name"
                         android:scaleType="centerInside"
-                        android:src="@mipmap/ic_calendar"/>
+                        android:src="@mipmap/ic_calendar" />
 
                     <TextView
                         android:id="@+id/tv_current_day"
@@ -85,7 +87,7 @@
                         android:gravity="center"
                         android:text="13"
                         android:textColor="#000"
-                        android:textSize="12sp"/>
+                        android:textSize="12sp" />
                 </FrameLayout>
             </RelativeLayout>
 
@@ -126,7 +128,7 @@
                     app:year_view_month_text_color="#ff0000"
                     app:year_view_month_text_size="20sp"
                     app:month_view_show_mode="mode_only_current"
-                    app:year_view_scheme_color="#f17706"/>
+                    app:year_view_scheme_color="#f17706" />
 
 
                 <android.support.v4.widget.NestedScrollView
@@ -193,7 +195,6 @@
                             android:textSize="14sp" />
                     </LinearLayout>
                 </android.support.v4.widget.NestedScrollView>
-
 
 
             </com.haibin.calendarview.CalendarLayout>
