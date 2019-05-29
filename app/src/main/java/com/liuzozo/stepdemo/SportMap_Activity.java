@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 
+import android.os.CountDownTimer;
 import android.os.SystemClock;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -73,11 +74,12 @@ public class SportMap_Activity extends AppCompatActivity implements
     private AMapLocation previousLocation;
 
     private Chronometer chronometer;
+    CountDownTimer myCountTimer;
 
     private Long pauseStart;
     private long timeWhenStopped = 0;
     private boolean isPaused = false;
-    private boolean notCountdown = false;
+    private boolean countOver = false;
 
     private Double distance = 0.;
 
@@ -93,6 +95,10 @@ public class SportMap_Activity extends AppCompatActivity implements
     TextView tvSportContinue;
     TextView tvMileage;
     TextView tvDistribution;
+
+    Button btnCountTimer;
+    LinearLayout countBackground;
+
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     SimpleDateFormat dateTagFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -120,25 +126,11 @@ public class SportMap_Activity extends AppCompatActivity implements
 
         pathRecord = new PathRecord();
 
+        countOver = false;
+        isPaused = false;
+
         initView();
         initMap();
-
-        notCountdown = false;
-        isPaused = false;
-        //倒计时
-        Button btnCountTimer = (Button) findViewById(R.id.btnCountTimer);
-        final LinearLayout countBackground = (LinearLayout) findViewById(R.id.countBackground);
-        //倒计时总时间为10S，时间防止从9s开始显示
-        new MyCountTimer(4000, 1000,
-                btnCountTimer, "End") {
-            @Override
-            public void onFinish() {
-                super.onFinish();
-                countBackground.setVisibility(View.GONE);
-                notCountdown = true;
-            }
-        }.start();
-
     }
 
     private void initView() {
@@ -166,6 +158,10 @@ public class SportMap_Activity extends AppCompatActivity implements
         tvSportContinue.setVisibility(View.INVISIBLE);
 
         chronometer = (Chronometer) findViewById(R.id.cm_passTime);
+
+        //倒计时
+        btnCountTimer = (Button) findViewById(R.id.btnCountTimer);
+        countBackground = (LinearLayout) findViewById(R.id.countBackground);
     }
 
 
@@ -324,24 +320,36 @@ public class SportMap_Activity extends AppCompatActivity implements
             if (aMapLocation.getErrorCode() == 0) {
                 mListener.onLocationChanged(aMapLocation);// 显示系统圆点
 
-                if (aMapLocation.getLocationType() == 1 & !isPaused & notCountdown) { //限制准确度，防止飘点
+                LatLng currentLocation = new LatLng(
+                        aMapLocation.getLatitude(), aMapLocation.getLongitude());
 
-                    LatLng currentLocation = new LatLng(
-                            aMapLocation.getLatitude(), aMapLocation.getLongitude());
+                if (aMapLocation.getAccuracy() <= 25. & !countOver) { //信号不好时不会开始倒计时
+                    //倒计时
+                    myCountTimer = new MyCountTimer(4000, 1000,
+                            btnCountTimer, "End") {
+                        @Override
+                        public void onFinish() {
+                            super.onFinish();
+                            countBackground.setVisibility(View.GONE);
+                            countOver = true;
 
-                    //保存初始位置
+                            chronometer.setBase(SystemClock.elapsedRealtime());
+                            chronometer.start();
+                        }
+                    };
+                    myCountTimer.start();
+                }
+
+                if (aMapLocation.getAccuracy() <= 25. & !isPaused & countOver) { //限制准确度，防止飘点
+
                     if (pathRecord.getStartPoint() == null) {
-
+                        //初始时间
                         Date date = new Date();
                         pathRecord.setStartTime(date.getTime());
                         Log.i("StartTime", sdf.format(date));
-
-                        chronometer.setBase(SystemClock.elapsedRealtime());
-                        chronometer.start();
-
+                        //初始位置
                         pathRecord.setStartPoint(currentLocation);
                         Log.i("StartLocation", pathRecord.getStartPoint().toString());
-
                     } else {
                         LatLng previousLocationLL = new LatLng(
                                 previousLocation.getLatitude(), previousLocation.getLongitude());
@@ -373,7 +381,7 @@ public class SportMap_Activity extends AppCompatActivity implements
                     Toast.makeText(this, currentLocation.toString()
                             + "\nAccuracy: " + aMapLocation.getAccuracy(), Toast.LENGTH_SHORT)
                             .show();
-                } else if (!isPaused & notCountdown)
+                } else if (!isPaused & countOver)
                     Toast.makeText(this, "当前GPS信号不佳", Toast.LENGTH_LONG)
                             .show();
 
