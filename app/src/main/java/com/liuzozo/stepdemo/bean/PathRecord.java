@@ -47,17 +47,17 @@ public class PathRecord implements Parcelable {
 
     }
 
-    public Double calculateDistance() {
-        Double total = 0.;
-
-        if (mPathLinePoints.size() != 0)
-            for (int i = 0; i < mPathLinePoints.size() - 1; i++)
-                total += AMapUtils.calculateLineDistance(
-                        mPathLinePoints.get(i), mPathLinePoints.get(i + 1));
-
-        mDistance = total;
-        return mDistance;
-    }
+//    public Double calculateDistance() {
+//        Double total = 0.;
+//
+//        if (mPathLinePoints.size() != 0)
+//            for (int i = 0; i < mPathLinePoints.size() - 1; i++)
+//                total += AMapUtils.calculateLineDistance(
+//                        mPathLinePoints.get(i), mPathLinePoints.get(i + 1));
+//
+//        mDistance = total;
+//        return mDistance;
+//    }
 
     public Long calculateDuration() {
         mDuration = mEndTime - mStartTime - mPauseTime;
@@ -65,20 +65,22 @@ public class PathRecord implements Parcelable {
     }
 
     public Double calculateSpeed() {
-        if (mDistance == null)
-            calculateDistance();
-        if (mDuration == null)
-            calculateDuration();
-        mSpeed = (mDistance / 1000) / ((double) mDuration / 1000 / 3600);
+        calculateSpeed(mDistance, mDuration);
+        return mSpeed;
+    }
+
+    public Double calculateSpeed(Double distance, Long duration) {
+        mSpeed = (distance / 1000) / ((double) duration / 1000 / 3600);
         return mSpeed;
     }
 
     public Double calculateDistribution() {
-        if (mDistance == null)
-            calculateDistance();
-        if (mDuration == null)
-            calculateDuration();
-        mDistribution = ((double) mDuration / 1000 / 60) / (mDistance / 1000);
+        calculateDistribution(mDistance, mDuration);
+        return mDistribution;
+    }
+
+    public Double calculateDistribution(Double distance, Long duration) {
+        mDistribution = ((double) duration / 1000 / 60) / (distance / 1000);
         return mDistribution;
     }
 
@@ -89,6 +91,10 @@ public class PathRecord implements Parcelable {
 
     public void addPauseTime(Long newPauseTime) {
         mPauseTime += newPauseTime;
+    }
+
+    public Long getPauseTime() {
+        return mPauseTime;
     }
 
     public Long getId() {

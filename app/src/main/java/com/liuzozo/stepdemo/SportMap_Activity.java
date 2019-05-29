@@ -26,6 +26,7 @@ import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
 
+import com.amap.api.maps.AMapUtils;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
@@ -134,12 +135,6 @@ public class SportMap_Activity extends AppCompatActivity implements
             public void onFinish() {
                 super.onFinish();
                 countBackground.setVisibility(View.GONE);
-                Date date = new Date();
-                pathRecord.setStartTime(date.getTime());
-                Log.i("StartTime", sdf.format(date));
-                chronometer = (Chronometer) findViewById(R.id.cm_passTime);
-                chronometer.setBase(SystemClock.elapsedRealtime());
-                chronometer.start();
                 notCountdown = true;
             }
         }.start();
@@ -165,6 +160,12 @@ public class SportMap_Activity extends AppCompatActivity implements
 
         tvMileage = findViewById(R.id.tvMileage);
         tvDistribution = findViewById(R.id.tvDistribution);
+
+        tvSportPause.setVisibility(View.VISIBLE);
+        tvSportComplete.setVisibility(View.INVISIBLE);
+        tvSportContinue.setVisibility(View.INVISIBLE);
+
+        chronometer = (Chronometer) findViewById(R.id.cm_passTime);
     }
 
 
@@ -181,8 +182,10 @@ public class SportMap_Activity extends AppCompatActivity implements
                 Date date = new Date();
                 pathRecord.setEndTime(date.getTime());
                 pathRecord.setDateTag(dateTagFormat.format(date));
+                Log.i("StartTime", sdf.format(new Date(pathRecord.getStartTime())));
                 Log.i("EndTime", sdf.format(date));
                 Log.i("Duration", pathRecord.calculateDuration() + " ms");
+                Log.i("Pause", pathRecord.getPauseTime() + " ms");
 
                 //保存结束位置
                 List<LatLng> pathLine = pathRecord.getPathLine();
@@ -190,7 +193,8 @@ public class SportMap_Activity extends AppCompatActivity implements
                 Log.i("EndLocation", pathRecord.getEndPoint().toString());
 
                 //计算距离
-                Log.i("Distance", pathRecord.calculateDistance() + " m");
+                pathRecord.setDistance(distance);
+                Log.i("Distance", pathRecord.getDistance() + " m");
                 Log.i("Speed", pathRecord.calculateSpeed() + " km/h");
                 Log.i("Distribution", pathRecord.calculateDistribution() + " min/km");
 
@@ -211,6 +215,9 @@ public class SportMap_Activity extends AppCompatActivity implements
                 chronometer.stop();
                 pauseStart = new Date().getTime();
                 isPaused = true;
+                tvSportPause.setVisibility(View.INVISIBLE);
+                tvSportComplete.setVisibility(View.VISIBLE);
+                tvSportContinue.setVisibility(View.VISIBLE);
                 break;
 
             case R.id.tv_sport_continue:
@@ -218,6 +225,9 @@ public class SportMap_Activity extends AppCompatActivity implements
                 chronometer.start();
                 pathRecord.addPauseTime(new Date().getTime() - pauseStart);
                 isPaused = false;
+                tvSportPause.setVisibility(View.VISIBLE);
+                tvSportComplete.setVisibility(View.INVISIBLE);
+                tvSportContinue.setVisibility(View.INVISIBLE);
                 break;
 
             case R.id.tv_mode:
@@ -321,16 +331,33 @@ public class SportMap_Activity extends AppCompatActivity implements
 
                     //保存初始位置
                     if (pathRecord.getStartPoint() == null) {
+
+                        Date date = new Date();
+                        pathRecord.setStartTime(date.getTime());
+                        Log.i("StartTime", sdf.format(date));
+
+                        chronometer.setBase(SystemClock.elapsedRealtime());
+                        chronometer.start();
+
                         pathRecord.setStartPoint(currentLocation);
                         Log.i("StartLocation", pathRecord.getStartPoint().toString());
+
                     } else {
+                        LatLng previousLocationLL = new LatLng(
+                                previousLocation.getLatitude(), previousLocation.getLongitude());
+                        distance += AMapUtils.calculateLineDistance(
+                                previousLocationLL, currentLocation);
+
                         drawLines(aMapLocation); //画线
+
                         Date date = new Date();
                         pathRecord.setEndTime(date.getTime());
+
                         tvMileage.setText(getString(R.string.xliff_two,
-                                pathRecord.calculateDistance() / 1000));
+                                distance / 1000));
                         tvDistribution.setText(getString(R.string.xliff_two,
-                                pathRecord.calculateDistribution()));
+                                pathRecord.calculateDistribution(
+                                        distance, pathRecord.calculateDuration())));
                     }
 
                     //保存路径
@@ -344,9 +371,11 @@ public class SportMap_Activity extends AppCompatActivity implements
                     // 根据这些经纬度可以在地图上每三秒画点线，最终画出轨迹
 
                     Toast.makeText(this, currentLocation.toString()
-                            + "\nAccuracy: " + aMapLocation.getAccuracy(), Toast.LENGTH_SHORT).show();
-                } else
-                    Toast.makeText(this, "当前定位信号不佳", Toast.LENGTH_SHORT).show();
+                            + "\nAccuracy: " + aMapLocation.getAccuracy(), Toast.LENGTH_SHORT)
+                            .show();
+                } else if (!isPaused & notCountdown)
+                    Toast.makeText(this, "当前GPS信号不佳", Toast.LENGTH_LONG)
+                            .show();
 
                 previousLocation = aMapLocation;
             }
