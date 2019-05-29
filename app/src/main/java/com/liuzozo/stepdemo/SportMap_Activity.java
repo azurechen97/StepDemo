@@ -79,6 +79,7 @@ public class SportMap_Activity extends AppCompatActivity implements
     private Long pauseStart;
     private long timeWhenStopped = 0;
     private boolean isPaused = false;
+    private boolean countStart = false;
     private boolean countOver = false;
 
     private Double distance = 0.;
@@ -323,18 +324,18 @@ public class SportMap_Activity extends AppCompatActivity implements
                 LatLng currentLocation = new LatLng(
                         aMapLocation.getLatitude(), aMapLocation.getLongitude());
 
-                if (aMapLocation.getAccuracy() <= 25. & !countOver) { //信号不好时不会开始倒计时
+                if (aMapLocation.getAccuracy() <= 25. & !countStart) { //信号不好时不会开始倒计时
                     //倒计时
+                    countStart = true;
                     myCountTimer = new MyCountTimer(4000, 1000,
                             btnCountTimer, "End") {
                         @Override
                         public void onFinish() {
                             super.onFinish();
                             countBackground.setVisibility(View.GONE);
-                            countOver = true;
-
                             chronometer.setBase(SystemClock.elapsedRealtime());
                             chronometer.start();
+                            countOver = true;
                         }
                     };
                     myCountTimer.start();
