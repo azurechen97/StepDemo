@@ -52,11 +52,10 @@
         android:orientation="vertical">
 
         <Chronometer
-            android:id="@+id/cm_passtime"
+            android:id="@+id/cm_passTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
-            android:format="00:03:25"
             android:gravity="center"
             android:textColor="#fff"
             android:textSize="65sp"
@@ -74,7 +73,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLength="8"
-                android:text="0.12"
+                android:text="0.00"
                 android:textColor="#fff"
                 android:textSize="26sp"
                 android:textStyle="bold" />
@@ -90,13 +89,13 @@
                 android:textSize="12sp" />
 
             <TextView
-                android:id="@+id/tvSpeed"
+                android:id="@+id/tvDistribution"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:ellipsize="end"
                 android:maxLength="8"
-                android:text="3.00"
+                android:text="0.00"
                 android:textColor="#fff"
                 android:textSize="26sp"
                 android:textStyle="bold" />

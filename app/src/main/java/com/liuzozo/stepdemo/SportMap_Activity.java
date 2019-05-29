@@ -8,14 +8,17 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 
+import android.os.SystemClock;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -29,6 +32,7 @@ import com.amap.api.maps.MapView;
 
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.MyLocationStyle;
+import com.amap.api.maps.model.PolylineOptions;
 import com.liuzozo.stepdemo.bean.PathRecord;
 import com.liuzozo.stepdemo.utils.MyCountTimer;
 import com.liuzozo.stepdemo.ui.UIHelperUtil;
@@ -65,6 +69,16 @@ public class SportMap_Activity extends AppCompatActivity implements
     private AMapLocationClient mLocationClient;
     private AMapLocationClientOption mLocationOption;
 
+    private AMapLocation previousLocation;
+
+    private Chronometer chronometer;
+
+    private Long pauseStart;
+    private long timeWhenStopped = 0;
+    private boolean isPaused = false;
+    private boolean notCountdown = false;
+
+    private Double distance = 0.;
 
     TextView tv_modeText; // 地图模式与跑步模式控件
 
@@ -76,6 +90,8 @@ public class SportMap_Activity extends AppCompatActivity implements
     TextView tvSportComplete;
     TextView tvSportPause;
     TextView tvSportContinue;
+    TextView tvMileage;
+    TextView tvDistribution;
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     SimpleDateFormat dateTagFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -104,7 +120,10 @@ public class SportMap_Activity extends AppCompatActivity implements
         pathRecord = new PathRecord();
 
         initView();
+        initMap();
 
+        notCountdown = false;
+        isPaused = false;
         //倒计时
         Button btnCountTimer = (Button) findViewById(R.id.btnCountTimer);
         final LinearLayout countBackground = (LinearLayout) findViewById(R.id.countBackground);
@@ -114,11 +133,14 @@ public class SportMap_Activity extends AppCompatActivity implements
             @Override
             public void onFinish() {
                 super.onFinish();
-                initMap();
                 countBackground.setVisibility(View.GONE);
                 Date date = new Date();
                 pathRecord.setStartTime(date.getTime());
                 Log.i("StartTime", sdf.format(date));
+                chronometer = (Chronometer) findViewById(R.id.cm_passTime);
+                chronometer.setBase(SystemClock.elapsedRealtime());
+                chronometer.start();
+                notCountdown = true;
             }
         }.start();
 
@@ -134,6 +156,15 @@ public class SportMap_Activity extends AppCompatActivity implements
 
         tvSportComplete = findViewById(R.id.tv_sport_complete);
         tvSportComplete.setOnClickListener(this);
+
+        tvSportPause = findViewById(R.id.tv_sport_pause);
+        tvSportPause.setOnClickListener(this);
+
+        tvSportContinue = findViewById(R.id.tv_sport_continue);
+        tvSportContinue.setOnClickListener(this);
+
+        tvMileage = findViewById(R.id.tvMileage);
+        tvDistribution = findViewById(R.id.tvDistribution);
     }
 
 
@@ -175,18 +206,35 @@ public class SportMap_Activity extends AppCompatActivity implements
                 startActivity(intent);
                 break;
 
+            case R.id.tv_sport_pause:
+                timeWhenStopped = chronometer.getBase() - SystemClock.elapsedRealtime();
+                chronometer.stop();
+                pauseStart = new Date().getTime();
+                isPaused = true;
+                break;
+
+            case R.id.tv_sport_continue:
+                chronometer.setBase(SystemClock.elapsedRealtime() + timeWhenStopped);
+                chronometer.start();
+                pathRecord.addPauseTime(new Date().getTime() - pauseStart);
+                isPaused = false;
+                break;
+
             case R.id.tv_mode:
                 if (mode) {
                     rlMap.setVisibility(View.VISIBLE);
                     tv_modeText.setText("跑步模式");
-                    UIHelperUtil.setLeftDrawable(tv_modeText, ContextCompat.getDrawable(this, R.mipmap.run_mode));
+                    UIHelperUtil.setLeftDrawable(tv_modeText,
+                            ContextCompat.getDrawable(this, R.mipmap.run_mode));
                     mode = false;
                 } else {
                     rlMap.setVisibility(View.GONE);
                     tv_modeText.setText("地图模式");
-                    UIHelperUtil.setLeftDrawable(tv_modeText, ContextCompat.getDrawable(this, R.mipmap.map_mode));
+                    UIHelperUtil.setLeftDrawable(tv_modeText,
+                            ContextCompat.getDrawable(this, R.mipmap.map_mode));
                     mode = true;
                 }
+                break;
 
             default:
                 break;
@@ -237,7 +285,7 @@ public class SportMap_Activity extends AppCompatActivity implements
             mLocationClient.setLocationListener(this);
             mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
             //设置定位间隔 5s
-            mLocationOption.setInterval(2000);
+            mLocationOption.setInterval(3000);
             mLocationClient.setLocationOption(mLocationOption);
             // 设置定位监听
             mLocationClient.startLocation();
@@ -266,29 +314,66 @@ public class SportMap_Activity extends AppCompatActivity implements
             if (aMapLocation.getErrorCode() == 0) {
                 mListener.onLocationChanged(aMapLocation);// 显示系统圆点
 
-                LatLng currentLocation = new LatLng(
-                        aMapLocation.getLatitude(), aMapLocation.getLongitude());
+                if (aMapLocation.getLocationType() == 1 & !isPaused & notCountdown) { //限制准确度，防止飘点
 
-                //保存初始位置
-                if (pathRecord.getStartPoint() == null) {
-                    pathRecord.setStartPoint(currentLocation);
-                    Log.i("StartLocation", pathRecord.getStartPoint().toString());
-                }
+                    LatLng currentLocation = new LatLng(
+                            aMapLocation.getLatitude(), aMapLocation.getLongitude());
 
-                //保存路径
-                pathRecord.addPoint(currentLocation);
+                    //保存初始位置
+                    if (pathRecord.getStartPoint() == null) {
+                        pathRecord.setStartPoint(currentLocation);
+                        Log.i("StartLocation", pathRecord.getStartPoint().toString());
+                    } else {
+                        drawLines(aMapLocation); //画线
+                        Date date = new Date();
+                        pathRecord.setEndTime(date.getTime());
+                        tvMileage.setText(getString(R.string.xliff_two,
+                                pathRecord.calculateDistance() / 1000));
+                        tvDistribution.setText(getString(R.string.xliff_two,
+                                pathRecord.calculateDistribution()));
+                    }
 
-                // 每5秒打印一次 经度纬度 地MyLocationStyle 址 城市
-                // pathRecord.addpoint(new LatLng(aMapLocation.getLatitude(),aMapLocation.getLongitude() ));
-                Log.i("TAG", currentLocation.toString());
-                Log.i("TAG", aMapLocation.getAddress());
-                Log.i("TAG", aMapLocation.getCity());
-                // 根据这些经纬度可以在地图上每五秒画点线，最终画出轨迹
+                    //保存路径
+                    pathRecord.addPoint(currentLocation);
+
+                    // 每5秒打印一次 经度纬度 地MyLocationStyle 址 城市
+                    // pathRecord.addpoint(new LatLng(aMapLocation.getLatitude(),aMapLocation.getLongitude() ));
+                    Log.i("TAG", currentLocation.toString());
+                    Log.i("TAG", aMapLocation.getAddress());
+                    Log.i("TAG", aMapLocation.getCity());
+                    // 根据这些经纬度可以在地图上每三秒画点线，最终画出轨迹
+
+                    Toast.makeText(this, currentLocation.toString()
+                            + "\nAccuracy: " + aMapLocation.getAccuracy(), Toast.LENGTH_SHORT).show();
+                } else
+                    Toast.makeText(this, "当前定位信号不佳", Toast.LENGTH_SHORT).show();
+
+                previousLocation = aMapLocation;
             }
         } else {
             String errText = "定位失败" + aMapLocation.getErrorCode() + ":" + aMapLocation.getErrorInfo();
             Log.e("AmapError", errText);
         }
+    }
+
+    /**
+     * 绘制运动路线
+     *
+     * @param curLocation
+     */
+    public void drawLines(AMapLocation curLocation) {
+
+        if (null == previousLocation) {
+            return;
+        }
+        PolylineOptions options = new PolylineOptions();
+        //上一个点的经纬度
+        options.add(new LatLng(previousLocation.getLatitude(), previousLocation.getLongitude()));
+        //当前的经纬度
+        options.add(new LatLng(curLocation.getLatitude(), curLocation.getLongitude()));
+        options.width(10).geodesic(true).color(Color.GREEN);
+        aMap.addPolyline(options);
+
     }
 
 

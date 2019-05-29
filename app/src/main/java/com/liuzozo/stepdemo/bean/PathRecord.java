@@ -41,6 +41,8 @@ public class PathRecord implements Parcelable {
     //日期标记
     private String mDateTag;
 
+    private Long mPauseTime = Long.valueOf(0);
+
     public PathRecord() {
 
     }
@@ -58,7 +60,7 @@ public class PathRecord implements Parcelable {
     }
 
     public Long calculateDuration() {
-        mDuration = mEndTime - mStartTime;
+        mDuration = mEndTime - mStartTime - mPauseTime;
         return mDuration;
     }
 
@@ -83,6 +85,10 @@ public class PathRecord implements Parcelable {
     public Double calculateCalorie(double weight) {
         mCalorie = StepUtils.calculationCalorie(weight, mDistance / 1000);
         return mCalorie;
+    }
+
+    public void addPauseTime(Long newPauseTime) {
+        mPauseTime += newPauseTime;
     }
 
     public Long getId() {
