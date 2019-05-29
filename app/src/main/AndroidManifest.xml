@@ -71,7 +71,7 @@
         <!-- 到高德地图设置你自己的key -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="625f4f387a7a95d6a2d1b429e9ff6016" />
+            android:value="104630ff266fe565d6395b2aa9ee15d9" />
 
         <!-- 适配全面屏 -->
         <meta-data
