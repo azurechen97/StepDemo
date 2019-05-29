@@ -2,6 +2,7 @@ package com.liuzozo.stepdemo;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
@@ -26,6 +27,7 @@ import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
 
+import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.liuzozo.stepdemo.bean.PathRecord;
 import com.liuzozo.stepdemo.utils.MyCountTimer;
@@ -33,7 +35,9 @@ import com.liuzozo.stepdemo.ui.UIHelperUtil;
 
 
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -69,9 +73,12 @@ public class SportMap_Activity extends AppCompatActivity implements
 
     PathRecord pathRecord; // PathRecord 类记录本次运行的所有路径
 
-    TextView tvSportComplate;
+    TextView tvSportComplete;
     TextView tvSportPause;
     TextView tvSportContinue;
+
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    SimpleDateFormat dateTagFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     /**
      * 需要进行检测的权限数组
@@ -83,7 +90,7 @@ public class SportMap_Activity extends AppCompatActivity implements
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.READ_PHONE_STATE
     };
-    private static final int PERMISSON_REQUESTCODE = 0;
+    private static final int PERMISSION_REQUEST_CODE = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,15 +101,26 @@ public class SportMap_Activity extends AppCompatActivity implements
         mapView = findViewById(R.id.stepMap);
         mapView.onCreate(savedInstanceState);//
 
-        Button btnCountTimer = (Button) findViewById(R.id.btnCountTimer);
-        LinearLayout countBackground = (LinearLayout) findViewById(R.id.countBackground);
-        //倒计时总时间为10S，时间防止从9s开始显示
-        MyCountTimer myCountTimer = new MyCountTimer(4000, 1000,
-                btnCountTimer, "End", countBackground);
-        myCountTimer.start();
+        pathRecord = new PathRecord();
 
-        initMap();
         initView();
+
+        //倒计时
+        Button btnCountTimer = (Button) findViewById(R.id.btnCountTimer);
+        final LinearLayout countBackground = (LinearLayout) findViewById(R.id.countBackground);
+        //倒计时总时间为10S，时间防止从9s开始显示
+        new MyCountTimer(4000, 1000,
+                btnCountTimer, "End") {
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                initMap();
+                countBackground.setVisibility(View.GONE);
+                Date date = new Date();
+                pathRecord.setStartTime(date.getTime());
+                Log.i("StartTime", sdf.format(date));
+            }
+        }.start();
 
     }
 
@@ -112,10 +130,10 @@ public class SportMap_Activity extends AppCompatActivity implements
         tv_modeText.setOnClickListener(this);
 
         rlMap = findViewById(R.id.rlMap);
-        rlMap.setVisibility(View.GONE); // 刚开始不现实地图
+        rlMap.setVisibility(View.GONE); // 刚开始不显示地图
 
-        tvSportComplate = findViewById(R.id.tv_sport_complate);
-        tvSportComplate.setOnClickListener(this);
+        tvSportComplete = findViewById(R.id.tv_sport_complete);
+        tvSportComplete.setOnClickListener(this);
     }
 
 
@@ -127,10 +145,36 @@ public class SportMap_Activity extends AppCompatActivity implements
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.tv_sport_complate:
+            case R.id.tv_sport_complete:
+                //结束时间戳
+                Date date = new Date();
+                pathRecord.setEndTime(date.getTime());
+                pathRecord.setDateTag(dateTagFormat.format(date));
+                Log.i("EndTime", sdf.format(date));
+                Log.i("Duration", pathRecord.calculateDuration() + " ms");
+
+                //保存结束位置
+                List<LatLng> pathLine = pathRecord.getPathLine();
+                pathRecord.setEndPoint(pathLine.get(pathLine.size() - 1));
+                Log.i("EndLocation", pathRecord.getEndPoint().toString());
+
+                //计算距离
+                Log.i("Distance", pathRecord.calculateDistance() + " m");
+                Log.i("Speed", pathRecord.calculateSpeed() + " km/h");
+                Log.i("Distribution", pathRecord.calculateDistribution() + " min/km");
+
+                //计算卡路里
+                SharedPreferences preferences = this.getSharedPreferences(
+                        "BMI-data", MODE_PRIVATE);
+                Log.i("Calorie", pathRecord.calculateCalorie(
+                        (double) preferences.getFloat("weight", (float) 0.)) + " kCal");
+
+                Log.i("Record", pathRecord.toString());
+
                 Intent intent = new Intent(this, SportResult_Activity.class);
                 startActivity(intent);
                 break;
+
             case R.id.tv_mode:
                 if (mode) {
                     rlMap.setVisibility(View.VISIBLE);
@@ -143,6 +187,7 @@ public class SportMap_Activity extends AppCompatActivity implements
                     UIHelperUtil.setLeftDrawable(tv_modeText, ContextCompat.getDrawable(this, R.mipmap.map_mode));
                     mode = true;
                 }
+
             default:
                 break;
         }
@@ -192,7 +237,7 @@ public class SportMap_Activity extends AppCompatActivity implements
             mLocationClient.setLocationListener(this);
             mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
             //设置定位间隔 5s
-            mLocationOption.setInterval(5000);
+            mLocationOption.setInterval(2000);
             mLocationClient.setLocationOption(mLocationOption);
             // 设置定位监听
             mLocationClient.startLocation();
@@ -215,14 +260,27 @@ public class SportMap_Activity extends AppCompatActivity implements
     @Override
     public void onLocationChanged(AMapLocation aMapLocation) {
         if (mListener != null && aMapLocation != null) {
-            // code 12 is no premission
+            // code 12 is no permission
             Log.i("TAG", aMapLocation.getErrorCode() + "");
+
             if (aMapLocation.getErrorCode() == 0) {
                 mListener.onLocationChanged(aMapLocation);// 显示系统圆点
 
+                LatLng currentLocation = new LatLng(
+                        aMapLocation.getLatitude(), aMapLocation.getLongitude());
+
+                //保存初始位置
+                if (pathRecord.getStartPoint() == null) {
+                    pathRecord.setStartPoint(currentLocation);
+                    Log.i("StartLocation", pathRecord.getStartPoint().toString());
+                }
+
+                //保存路径
+                pathRecord.addPoint(currentLocation);
+
                 // 每5秒打印一次 经度纬度 地MyLocationStyle 址 城市
                 // pathRecord.addpoint(new LatLng(aMapLocation.getLatitude(),aMapLocation.getLongitude() ));
-                Log.i("TAG", aMapLocation.getLatitude() + "   :   " + aMapLocation.getLongitude());
+                Log.i("TAG", currentLocation.toString());
                 Log.i("TAG", aMapLocation.getAddress());
                 Log.i("TAG", aMapLocation.getCity());
                 // 根据这些经纬度可以在地图上每五秒画点线，最终画出轨迹
@@ -297,7 +355,7 @@ public class SportMap_Activity extends AppCompatActivity implements
                     Method method = getClass().getMethod("requestPermissions", new Class[]{String[].class,
                             int.class});
 
-                    method.invoke(this, array, PERMISSON_REQUESTCODE);
+                    method.invoke(this, array, PERMISSION_REQUEST_CODE);
                 }
             }
         } catch (Throwable e) {

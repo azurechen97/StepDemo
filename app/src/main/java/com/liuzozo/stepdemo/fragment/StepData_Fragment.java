@@ -37,7 +37,7 @@ public class StepData_Fragment extends Fragment {
 
 
     TextView mTextYear;
-    TextView mTextMongthDay;
+    TextView mTextMonthDay;
     TextView mTextLunar;
 
     TextView mTextCurrentDay;
@@ -74,8 +74,8 @@ public class StepData_Fragment extends Fragment {
         mTextYear.setText(String.valueOf(mYear));
 
         String monthAndDay = mCalendarView.getCurMonth() + "月" + mCalendarView.getCurDay() + "日";
-        mTextMongthDay = view.findViewById(R.id.tv_month_day);
-        mTextMongthDay.setText(monthAndDay);
+        mTextMonthDay = view.findViewById(R.id.tv_month_day);
+        mTextMonthDay.setText(monthAndDay);
 
         mTextLunar = view.findViewById(R.id.tv_lunar);
         mTextLunar.setText("今日");

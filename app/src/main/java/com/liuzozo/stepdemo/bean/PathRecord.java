@@ -4,7 +4,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.amap.api.location.AMapLocation;
+import com.amap.api.maps.AMapUtils;
 import com.amap.api.maps.model.LatLng;
+import com.liuzozo.stepdemo.utils.StepUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +19,7 @@ public class PathRecord implements Parcelable {
     //主键
     private Long id;
     //运动开始点
-    private LatLng mStartPoint;
+    private LatLng mStartPoint; //
     //运动结束点
     private LatLng mEndPoint;
     //运动轨迹
@@ -43,6 +45,46 @@ public class PathRecord implements Parcelable {
 
     }
 
+    public Double calculateDistance() {
+        Double total = 0.;
+
+        if (mPathLinePoints.size() != 0)
+            for (int i = 0; i < mPathLinePoints.size() - 1; i++)
+                total += AMapUtils.calculateLineDistance(
+                        mPathLinePoints.get(i), mPathLinePoints.get(i + 1));
+
+        mDistance = total;
+        return mDistance;
+    }
+
+    public Long calculateDuration() {
+        mDuration = mEndTime - mStartTime;
+        return mDuration;
+    }
+
+    public Double calculateSpeed() {
+        if (mDistance == null)
+            calculateDistance();
+        if (mDuration == null)
+            calculateDuration();
+        mSpeed = (mDistance / 1000) / ((double) mDuration / 1000 / 3600);
+        return mSpeed;
+    }
+
+    public Double calculateDistribution() {
+        if (mDistance == null)
+            calculateDistance();
+        if (mDuration == null)
+            calculateDuration();
+        mDistribution = ((double) mDuration / 1000 / 60) / (mDistance / 1000);
+        return mDistribution;
+    }
+
+    public Double calculateCalorie(double weight) {
+        mCalorie = StepUtils.calculationCalorie(weight, mDistance / 1000);
+        return mCalorie;
+    }
+
     public Long getId() {
         return id;
     }
@@ -51,28 +93,28 @@ public class PathRecord implements Parcelable {
         this.id = id;
     }
 
-    public LatLng getStartpoint() {
+    public LatLng getStartPoint() {
         return mStartPoint;
     }
 
-    public void setStartpoint(LatLng startpoint) {
-        this.mStartPoint = startpoint;
+    public void setStartPoint(LatLng startPoint) {
+        this.mStartPoint = startPoint;
     }
 
-    public LatLng getEndpoint() {
+    public LatLng getEndPoint() {
         return mEndPoint;
     }
 
-    public void setEndpoint(LatLng endpoint) {
+    public void setEndPoint(LatLng endpoint) {
         this.mEndPoint = endpoint;
     }
 
-    public List<LatLng> getPathline() {
+    public List<LatLng> getPathLine() {
         return mPathLinePoints;
     }
 
-    public void setPathline(List<LatLng> pathline) {
-        this.mPathLinePoints = pathline;
+    public void setPathLine(List<LatLng> pathLine) {
+        this.mPathLinePoints = pathLine;
     }
 
     public Double getDistance() {
@@ -107,7 +149,7 @@ public class PathRecord implements Parcelable {
         this.mEndTime = mEndTime;
     }
 
-    public void addpoint(LatLng point) {
+    public void addPoint(LatLng point) {
         mPathLinePoints.add(point);
     }
 
@@ -146,9 +188,9 @@ public class PathRecord implements Parcelable {
     @Override
     public String toString() {
         StringBuilder record = new StringBuilder();
-        record.append("recordSize:" + getPathline().size() + ", ");
+        record.append("recordSize:" + getPathLine().size() + ", ");
         record.append("distance:" + getDistance() + "m, ");
-        record.append("duration:" + getDuration() + "s");
+        record.append("duration:" + getDuration() + "ms");
         return record.toString();
     }
 

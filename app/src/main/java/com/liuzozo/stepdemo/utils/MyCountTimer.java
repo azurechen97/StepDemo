@@ -14,7 +14,6 @@ public class MyCountTimer extends CountDownTimer {
     private static final int TIME_COUNT = 31000;//倒计时总时间为31S，时间防止从29s开始显示（以倒计时30s为例子）
     private TextView btn;
     private String endStrRid;
-    private LinearLayout bg;
 
     /**
      * 参数 millisInFuture         倒计时总时间（如30s,60S，120s等）
@@ -23,11 +22,10 @@ public class MyCountTimer extends CountDownTimer {
      * 参数 endStrRid   倒计时结束后，按钮对应显示的文字
      */
     public MyCountTimer(long millisInFuture, long countDownInterval, TextView btn,
-                        String endStrRid, LinearLayout bg) {
+                        String endStrRid) {
         super(millisInFuture, countDownInterval);
         this.btn = btn;
         this.endStrRid = endStrRid;
-        this.bg = bg;
     }
 
     /**
@@ -37,7 +35,6 @@ public class MyCountTimer extends CountDownTimer {
         super(TIME_COUNT, 1000);
         this.btn = btn;
         this.endStrRid = endStrRid;
-        this.bg = bg;
     }
 
     /**
@@ -46,7 +43,6 @@ public class MyCountTimer extends CountDownTimer {
     @Override
     public void onFinish() {
         btn.setText(endStrRid);
-        bg.setVisibility(View.GONE);
     }
 
     /**
