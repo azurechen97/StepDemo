@@ -77,7 +77,7 @@ public class SportMap_Activity extends AppCompatActivity implements
     private AMapLocation previousLocation;
 
     private Chronometer chronometer;
-    CountDownTimer myCountTimer;
+    private CountDownTimer myCountTimer;
 
     private Long pauseStart;
     private long timeWhenStopped = 0;
@@ -87,25 +87,24 @@ public class SportMap_Activity extends AppCompatActivity implements
 
     private Double distance = 0.;
 
-    TextView tv_modeText; // 地图模式与跑步模式控件
+    private TextView tv_modeText; // 地图模式与跑步模式控件
 
-    RelativeLayout rlMap; // 控制地图布局显示与否
-    boolean mode = true; // true 跑步模式, false 地图模式
+    private RelativeLayout rlMap; // 控制地图布局显示与否
+    private boolean mode = true; // true 跑步模式, false 地图模式
 
-    PathRecord pathRecord; // PathRecord 类记录本次运行的所有路径
+    private PathRecord pathRecord; // PathRecord 类记录本次运行的所有路径
 
-    TextView tvSportComplete;
-    TextView tvSportPause;
-    TextView tvSportContinue;
-    TextView tvMileage;
-    TextView tvDistribution;
+    private TextView tvSportComplete;
+    private TextView tvSportPause;
+    private TextView tvSportContinue;
+    private TextView tvMileage;
+    private TextView tvDistribution;
 
-    Button btnCountTimer;
-    LinearLayout countBackground;
+    private Button btnCountTimer;
+    private LinearLayout countBackground;
 
-
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    SimpleDateFormat dateTagFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private SimpleDateFormat dateTagFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     private MyDatabaseHelper dbHelper;
     private SQLiteDatabase db;

@@ -30,11 +30,11 @@ import static android.content.Context.MODE_PRIVATE;
 public class Sport_Fragment extends Fragment {
 
     // 开始运动按钮
-    Button startBtn;
-    TextView sportMile;
-    TextView sportCount;
-    TextView sportTime;
-    MyDatabaseHelper databaseHelper;
+    private Button startBtn;
+    private TextView sportMile;
+    private TextView sportCount;
+    private TextView sportTime;
+    private MyDatabaseHelper databaseHelper;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

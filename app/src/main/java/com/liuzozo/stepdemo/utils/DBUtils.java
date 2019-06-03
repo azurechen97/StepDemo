@@ -54,9 +54,9 @@ public class DBUtils {
     }
 
     // 查询
-    public static void getBook(SQLiteDatabase db) {
+    public static void getRecord(SQLiteDatabase db) {
         // select * from book where name='xxx'
-        Cursor cursor = db.rawQuery("select * from book", null);
+        Cursor cursor = db.rawQuery("select * from sport_record", null);
         while (cursor.moveToNext()) {
             String name = cursor.getString(cursor.getColumnIndex("author"));
             int pages = cursor.getInt(cursor.getColumnIndex("pages"));
@@ -66,16 +66,15 @@ public class DBUtils {
     }
 
     // 删除
-    public static void deleteBook(SQLiteDatabase db, String authorName) {
-        db.execSQL("delete from book where author = " + authorName);
-        db.execSQL("delete from book where author =  'ssasa' ");
-    }
+//    public static void deleteRecord(SQLiteDatabase db, int id) {
+//        db.execSQL("delete from sport_record where id = " + id);
+////        db.execSQL("delete from book where author =  'ssasa' ");
+//    }
 
     // 修改
-    public static void updateBook(SQLiteDatabase db) {
-        db.execSQL("update book set pages = '120' where author = 'lu jia zui' ");
-    }
-
+//    public static void updateRecord(SQLiteDatabase db) {
+//        db.execSQL("update book set pages = '120' where author = 'lu jia zui' ");
+//    }
 
     /**
      *  根据日期  获取运动数
