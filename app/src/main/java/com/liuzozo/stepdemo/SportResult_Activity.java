@@ -46,13 +46,23 @@ public class SportResult_Activity extends AppCompatActivity implements
         AMap.OnMapLoadedListener {
 
     private TextView textView;
+
     private List<LatLng> pathLine = new ArrayList<LatLng>();
+    private double distance = 0.;
+    private double duration = 0.;
+    private int durationHour = 0;
+    private int durationMin = 0;
+    private int durationSec = 0;
+    private double calorie = 0.;
+    private double speed = 0.;
+
+    private int score;
 
     private MapView mapView = null;
     private AMap amap = null;
-    private Polyline mOriginPolyline, mkalmanPolyline;
-    private CheckBox mOriginbtn, mkalmanbtn;
-    private PathSmoothTool mpathSmoothTool;
+    private Polyline mOriginPolyline, mKalmanPolyline;
+    private CheckBox mOriginBtn, mKalmanBtn;
+    private PathSmoothTool mPathSmoothTool;
 
     private MyDatabaseHelper dbHelper;
     private SQLiteDatabase db;
@@ -62,17 +72,51 @@ public class SportResult_Activity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sport_result);
 
-        textView = findViewById(R.id.tv_shared);
-        textView.setOnClickListener(this);
+        init();
 
         initDB();
+        Cursor cursor = db.query("sport_record",
+                null, null, null,
+                null, null, null);
+
+        boolean succeed = (cursor.moveToLast()); //查询最近的记录
+
+        if (succeed) {
+            String pathLineStr = cursor.getString(cursor.getColumnIndex("path_line"));
+            pathLine = StepUtils.parseLatLngLocations(pathLineStr);
+
+            Double distanceM = cursor.getDouble(cursor.getColumnIndex("distance"));
+            distance = distanceM / 1000;
+
+            Long durationMs = cursor.getLong(cursor.getColumnIndex("duration"));
+            duration = (double) durationMs / 1000 / 60;
+            durationHour = (int) (durationMs / 1000 / 3600);
+            durationMin = (int) (durationMs / 1000 / 60) % 60;
+            durationSec = (int) (durationMs / 1000) % 60;
+
+            calorie = cursor.getDouble(cursor.getColumnIndex("calorie"));
+
+            speed = cursor.getDouble(cursor.getColumnIndex("speed"));
+
+        }
+        cursor.close();
 
         mapView = (MapView) findViewById(R.id.map_result);
         mapView.onCreate(savedInstanceState);
         initMap();
-        mpathSmoothTool = new PathSmoothTool();
-        mpathSmoothTool.setIntensity(4);
+        mPathSmoothTool = new PathSmoothTool();
+        mPathSmoothTool.setIntensity(4);
         addPathLine();
+    }
+
+    private void init() {
+        textView = findViewById(R.id.tv_shared);
+        textView.setOnClickListener(this);
+
+        mOriginBtn = (CheckBox) findViewById(R.id.record_show_activity_origin_button);
+        mKalmanBtn = (CheckBox) findViewById(R.id.record_show_activity_kalman_button);
+        mOriginBtn.setOnCheckedChangeListener(this);
+        mKalmanBtn.setOnCheckedChangeListener(this);
     }
 
     private void initMap() {
@@ -80,10 +124,6 @@ public class SportResult_Activity extends AppCompatActivity implements
             amap = mapView.getMap();
         }
         amap.setOnMapLoadedListener(this);
-        mOriginbtn = (CheckBox) findViewById(R.id.record_show_activity_origin_button);
-        mkalmanbtn = (CheckBox) findViewById(R.id.record_show_activity_kalman_button);
-        mOriginbtn.setOnCheckedChangeListener(this);
-        mkalmanbtn.setOnCheckedChangeListener(this);
     }
 
     public void initDB() {
@@ -103,8 +143,8 @@ public class SportResult_Activity extends AppCompatActivity implements
                 }
                 break;
             case R.id.record_show_activity_kalman_button:
-                if (mkalmanPolyline != null) {
-                    mkalmanPolyline.setVisible(b);
+                if (mKalmanPolyline != null) {
+                    mKalmanPolyline.setVisible(b);
                 }
                 break;
         }
@@ -115,18 +155,6 @@ public class SportResult_Activity extends AppCompatActivity implements
     }
 
     private void addPathLine() {
-        Cursor cursor = db.query("sport_record",
-                null, null, null,
-                null, null, null);
-
-        //查之前先把Cursor位置移到第一   从第一条开始查
-        boolean succeed = (cursor.moveToLast());
-
-        if (succeed) {
-            String pathLineStr = cursor.getString(cursor.getColumnIndex("path_line"));
-            pathLine = StepUtils.parseLatLngLocations(pathLineStr);
-        }
-        cursor.close();
 
         if (pathLine != null && pathLine.size() > 0) {
             mOriginPolyline = amap.addPolyline(new PolylineOptions().addAll(pathLine).color(Color.GREEN));
@@ -149,8 +177,8 @@ public class SportResult_Activity extends AppCompatActivity implements
     }
 
     public List<LatLng> pathOptimize(List<LatLng> originList) {
-        List<LatLng> pathOptimizeList = mpathSmoothTool.pathOptimize(originList);
-        mkalmanPolyline = amap.addPolyline(new PolylineOptions().addAll(pathOptimizeList)
+        List<LatLng> pathOptimizeList = mPathSmoothTool.pathOptimize(originList);
+        mKalmanPolyline = amap.addPolyline(new PolylineOptions().addAll(pathOptimizeList)
                 .color(Color.parseColor("#FFC125")));
         return pathOptimizeList;
     }
@@ -169,7 +197,8 @@ public class SportResult_Activity extends AppCompatActivity implements
         switch (view.getId()) {
             case R.id.tv_shared:
 
-                final View textView = LayoutInflater.from(this).inflate(R.layout.activity_sport_result, null);
+                final View textView = LayoutInflater.from(this).inflate(
+                        R.layout.activity_sport_result, null);
                 View rootView = textView.findViewById(R.id.root_pic_id);
                 Bitmap bitmap = getBitmapByView(rootView);
                 Bitmap img = compressImage(bitmap);
