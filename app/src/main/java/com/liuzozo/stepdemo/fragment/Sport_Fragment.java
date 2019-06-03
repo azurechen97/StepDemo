@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -35,6 +34,7 @@ public class Sport_Fragment extends Fragment {
     TextView sportMile;
     TextView sportCount;
     TextView sportTime;
+    MyDatabaseHelper databaseHelper;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,7 +51,7 @@ public class Sport_Fragment extends Fragment {
         long duration = 0;
         int count = 0;
 
-        MyDatabaseHelper databaseHelper = new MyDatabaseHelper(
+        databaseHelper = new MyDatabaseHelper(
                 getActivity(), "sport_record.db", null, 1);
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
 
@@ -83,13 +83,13 @@ public class Sport_Fragment extends Fragment {
         cursor.close();
 
         sportMile = (TextView) view.findViewById(R.id.tv_sport_mile);
-        sportMile.setText(distance + "");
+        sportMile.setText(getString(R.string.xliff_two, distance / 1000));
 
         sportCount = (TextView) view.findViewById(R.id.tv_sport_count);
         sportCount.setText(count + "");
 
         sportTime = (TextView) view.findViewById(R.id.tv_sport_time);
-        sportTime.setText(duration + "");
+        sportTime.setText(getString(R.string.xliff_two, (double) duration / 60000));
 
         //开始按钮相关操作
         startBtn = (Button) view.findViewById(R.id.btnStart);

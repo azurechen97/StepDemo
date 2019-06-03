@@ -17,7 +17,7 @@ import java.util.List;
 public class PathRecord implements Parcelable {
 
     //主键
-    private Long id;
+    private Long id = 0L;
     //运动开始点
     private LatLng mStartPoint; //
     //运动结束点
@@ -41,6 +41,7 @@ public class PathRecord implements Parcelable {
     //日期标记
     private String mDateTag;
 
+    //暂停时长
     private Long mPauseTime = Long.valueOf(0);
 
     public PathRecord() {

@@ -15,7 +15,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     public static final String CREATE_SPORT_TABLE =
             "create table sport_record (" +
                     "id integer primary key autoincrement," +
-                    "user_id int, " +
                     "distance double, " +
                     "duration integer, " +
                     "path_line text, " +

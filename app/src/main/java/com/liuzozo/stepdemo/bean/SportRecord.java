@@ -14,9 +14,6 @@ public class SportRecord implements Serializable {
     // 主键
     private Long id;
 
-    //user ID  固定的一个值
-    private int userId;
-
     //运动距离
     private Double distance;
 
@@ -37,10 +34,10 @@ public class SportRecord implements Serializable {
     private String endPoint;
 
     //运动开始时间
-    private Long mStartTime;
+    private Long startTime;
 
     //运动结束时间
-    private Long mEndTime;
+    private Long endTime;
 
     //消耗卡路里
     private Double calorie;
@@ -64,14 +61,6 @@ public class SportRecord implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
     }
 
     public Double getDistance() {
@@ -114,20 +103,20 @@ public class SportRecord implements Serializable {
         this.endPoint = endPoint;
     }
 
-    public Long getmStartTime() {
-        return mStartTime;
+    public Long getStartTime() {
+        return startTime;
     }
 
-    public void setmStartTime(Long mStartTime) {
-        this.mStartTime = mStartTime;
+    public void setStartTime(Long startTime) {
+        this.startTime = startTime;
     }
 
-    public Long getmEndTime() {
-        return mEndTime;
+    public Long getEndTime() {
+        return endTime;
     }
 
-    public void setmEndTime(Long mEndTime) {
-        this.mEndTime = mEndTime;
+    public void setEndTime(Long endTime) {
+        this.endTime = endTime;
     }
 
     public Double getCalorie() {

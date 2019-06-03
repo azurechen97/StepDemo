@@ -1,0 +1,10 @@
+package com.liuzozo.stepdemo.utils;
+
+/**
+ * 保存 app 的 一些常量
+ */
+public class ConstantUtils {
+
+    public String APP_NAME = "乐跑圈";
+    public String AUTHOR = "陈傲雪";
+}

@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -36,8 +37,10 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.maps.model.PolylineOptions;
 import com.liuzozo.stepdemo.bean.PathRecord;
+import com.liuzozo.stepdemo.utils.DBUtils;
 import com.liuzozo.stepdemo.utils.MyCountTimer;
 import com.liuzozo.stepdemo.ui.UIHelperUtil;
+import com.liuzozo.stepdemo.utils.MyDatabaseHelper;
 
 
 import java.lang.reflect.Method;
@@ -104,6 +107,10 @@ public class SportMap_Activity extends AppCompatActivity implements
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     SimpleDateFormat dateTagFormat = new SimpleDateFormat("yyyy-MM-dd");
 
+    private MyDatabaseHelper dbHelper;
+    private SQLiteDatabase db;
+
+
     /**
      * 需要进行检测的权限数组
      */
@@ -130,6 +137,7 @@ public class SportMap_Activity extends AppCompatActivity implements
         countOver = false;
         isPaused = false;
 
+        initDB();
         initView();
         initMap();
     }
@@ -163,6 +171,13 @@ public class SportMap_Activity extends AppCompatActivity implements
         //倒计时
         btnCountTimer = (Button) findViewById(R.id.btnCountTimer);
         countBackground = (LinearLayout) findViewById(R.id.countBackground);
+    }
+
+    //   获得一个数据库的引用，以便操作数据库
+    public void initDB() {
+        dbHelper = new MyDatabaseHelper(this, DBUtils.SPORT_DB_STORE, null, 1);
+        dbHelper.getWritableDatabase(); // 执行、真正创建数据库文件, 不会删除已有的数据
+        db = dbHelper.getWritableDatabase();
     }
 
 
@@ -202,6 +217,9 @@ public class SportMap_Activity extends AppCompatActivity implements
                         (double) preferences.getFloat("weight", (float) 0.)) + " kCal");
 
                 Log.i("Record", pathRecord.toString());
+
+                //存储到数据表
+                DBUtils.insert(db, pathRecord);
 
                 Intent intent = new Intent(this, SportResult_Activity.class);
                 startActivity(intent);

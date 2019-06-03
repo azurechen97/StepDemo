@@ -3,7 +3,10 @@ package com.liuzozo.stepdemo.utils;
 import com.amap.api.location.AMapLocation;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.trace.TraceLocation;
+import com.liuzozo.stepdemo.bean.PathRecord;
+import com.liuzozo.stepdemo.bean.SportRecord;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -214,5 +217,43 @@ public class StepUtils {
         String ss = (seconds % 3600) % 60 > 9 ? (seconds % 3600) % 60 + ""
                 : "0" + (seconds % 3600) % 60;
         return hh + ":" + mm + ":" + ss;
+    }
+
+    public static SportRecord parseSportRecord(PathRecord pathRecord) {
+        SportRecord sportRecord = new SportRecord();
+
+        sportRecord.setId(pathRecord.getId());
+        sportRecord.setDistance(pathRecord.getDistance());
+        sportRecord.setDuration(pathRecord.getDuration());
+        sportRecord.setPathLine(getLatLngPathLineString(pathRecord.getPathLine()));
+        sportRecord.setStartPoint(amapLocationToString(pathRecord.getStartPoint()));
+        sportRecord.setEndPoint(amapLocationToString(pathRecord.getEndPoint()));
+        sportRecord.setStartTime(pathRecord.getStartTime());
+        sportRecord.setEndTime(pathRecord.getEndTime());
+        sportRecord.setCalorie(pathRecord.getCalorie());
+        sportRecord.setSpeed(pathRecord.getSpeed());
+        sportRecord.setDistribution(pathRecord.getDistribution());
+        sportRecord.setDateTag(pathRecord.getDateTag());
+
+        return sportRecord;
+    }
+
+    public static PathRecord parsePathRecord(SportRecord sportRecord) {
+        PathRecord pathRecord = new PathRecord();
+
+        pathRecord.setId(sportRecord.getId());
+        pathRecord.setDistance(sportRecord.getDistance());
+        pathRecord.setDuration(sportRecord.getDuration());
+        pathRecord.setPathLine(parseLatLngLocations(sportRecord.getPathLine()));
+        pathRecord.setStartPoint(parseLatLngLocation(sportRecord.getStartPoint()));
+        pathRecord.setEndPoint(parseLatLngLocation(sportRecord.getEndPoint()));
+        pathRecord.setStartTime(sportRecord.getStartTime());
+        pathRecord.setEndTime(sportRecord.getEndTime());
+        pathRecord.setCalorie(sportRecord.getCalorie());
+        pathRecord.setSpeed(sportRecord.getSpeed());
+        pathRecord.setDistribution(sportRecord.getDistribution());
+        pathRecord.setDateTag(sportRecord.getDateTag());
+
+        return pathRecord;
     }
 }

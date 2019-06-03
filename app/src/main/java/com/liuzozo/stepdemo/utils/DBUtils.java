@@ -3,6 +3,9 @@ package com.liuzozo.stepdemo.utils;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.liuzozo.stepdemo.bean.PathRecord;
+import com.liuzozo.stepdemo.bean.SportRecord;
+
 
 /**
  * 封装操作数据库的工具类 和相关常量
@@ -10,7 +13,7 @@ import android.database.sqlite.SQLiteDatabase;
 public class DBUtils {
 
     // 表保存的db 文件
-    static final String BOOK_DB_STORE = "BookStore.db";
+    public static final String SPORT_DB_STORE = "sport_record.db";
 
 
     /**
@@ -26,14 +29,32 @@ public class DBUtils {
 //    }
 
     // 添加
-    public void insert(SQLiteDatabase db, String author, String bookPages) {
-        db.execSQL("insert into book( author, pages) values('panda fang', 35)");
-        db.execSQL("insert into book( author, pages) values(?, ?)", new String[]{author, bookPages});
+    public static void insert(SQLiteDatabase db, Double distance, Long duration,
+                              String pathLine, String startPoint, String endPoint, Long startTime,
+                              Long endTime, Double calorie, Double speed, Double distribution,
+                              String dateTag) {
+        db.execSQL("insert into sport_record(distance, duration, path_line," +
+                "start_point, end_point, start_time, end_time, calorie, speed, " +
+                "distribution, date_tag)" +
+                "values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", new Object[]{distance, duration,
+                pathLine, startPoint, endPoint, startTime, endTime, calorie, speed, distribution,
+                dateTag});
 
     }
 
+    public static void insert(SQLiteDatabase db, SportRecord sportRecord) {
+        insert(db, sportRecord.getDistance(), sportRecord.getDuration(), sportRecord.getPathLine(),
+                sportRecord.getStartPoint(), sportRecord.getEndPoint(), sportRecord.getStartTime(),
+                sportRecord.getEndTime(), sportRecord.getCalorie(), sportRecord.getSpeed(),
+                sportRecord.getDistribution(), sportRecord.getDateTag());
+    }
+
+    public static void insert(SQLiteDatabase db, PathRecord pathRecord) {
+        insert(db, StepUtils.parseSportRecord(pathRecord));
+    }
+
     // 查询
-    public void getBook(SQLiteDatabase db) {
+    public static void getBook(SQLiteDatabase db) {
         // select * from book where name='xxx'
         Cursor cursor = db.rawQuery("select * from book", null);
         while (cursor.moveToNext()) {
@@ -45,13 +66,13 @@ public class DBUtils {
     }
 
     // 删除
-    public void deleteBook(SQLiteDatabase db, String authorName) {
+    public static void deleteBook(SQLiteDatabase db, String authorName) {
         db.execSQL("delete from book where author = " + authorName);
         db.execSQL("delete from book where author =  'ssasa' ");
     }
 
     // 修改
-    public void updateBook(SQLiteDatabase db) {
+    public static void updateBook(SQLiteDatabase db) {
         db.execSQL("update book set pages = '120' where author = 'lu jia zui' ");
     }
 
