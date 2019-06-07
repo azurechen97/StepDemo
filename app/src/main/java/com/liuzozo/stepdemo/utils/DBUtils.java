@@ -7,6 +7,8 @@ import com.liuzozo.stepdemo.bean.PathRecord;
 import com.liuzozo.stepdemo.bean.SportRecord;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -59,7 +61,6 @@ public class DBUtils {
     public static PathRecord getRecordById(SQLiteDatabase db, int id) {
         SportRecord sportRecord = new SportRecord();
 
-
         Cursor cursor = db.rawQuery("SELECT * FROM sport_record WHERE id = ?"
                 , new String[]{String.valueOf(id)});
 
@@ -84,6 +85,37 @@ public class DBUtils {
         PathRecord pathRecord = StepUtils.parsePathRecord(sportRecord);
 
         return pathRecord;
+    }
+
+    public static List<PathRecord> getRecordsByDate(SQLiteDatabase db, int year, int month, int day) {
+        List<PathRecord> sportList = new ArrayList<>(0);
+
+        Cursor cursor = db.rawQuery("SELECT * FROM sport_record WHERE date_tag = ?"
+                , new String[]{String.format("%4d-%02d-%02d", year, month, day)});
+
+        boolean succeed = (cursor.moveToFirst());
+
+        if (succeed) {
+            do {
+                SportRecord sportRecord = new SportRecord();
+                sportRecord.setId(cursor.getLong(cursor.getColumnIndex("id")));
+                sportRecord.setDistance(cursor.getDouble(cursor.getColumnIndex("distance")));
+                sportRecord.setDuration(cursor.getLong(cursor.getColumnIndex("duration")));
+                sportRecord.setPathLine(cursor.getString(cursor.getColumnIndex("path_line")));
+                sportRecord.setStartPoint(cursor.getString(cursor.getColumnIndex("start_point")));
+                sportRecord.setEndPoint(cursor.getString(cursor.getColumnIndex("end_point")));
+                sportRecord.setStartTime(cursor.getLong(cursor.getColumnIndex("start_time")));
+                sportRecord.setEndTime(cursor.getLong(cursor.getColumnIndex("end_time")));
+                sportRecord.setCalorie(cursor.getDouble(cursor.getColumnIndex("calorie")));
+                sportRecord.setSpeed(cursor.getDouble(cursor.getColumnIndex("speed")));
+                sportRecord.setDistribution(cursor.getDouble(cursor.getColumnIndex("distribution")));
+                sportRecord.setDateTag(cursor.getString(cursor.getColumnIndex("date_tag")));
+                sportList.add(StepUtils.parsePathRecord(sportRecord));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+
+        return sportList;
     }
 
     // 删除

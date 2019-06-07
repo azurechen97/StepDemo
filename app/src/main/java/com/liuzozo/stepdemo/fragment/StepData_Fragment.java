@@ -59,6 +59,7 @@ public class StepData_Fragment extends Fragment {
     private List<PathRecord> sportList = new ArrayList<>(0);
 
     private MyDatabaseHelper databaseHelper;
+    private SQLiteDatabase db;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,6 +68,11 @@ public class StepData_Fragment extends Fragment {
                 false);
 
         initView(view);
+
+        databaseHelper = new MyDatabaseHelper(
+                getActivity(), "sport_record.db", null, 1);
+        db = databaseHelper.getWritableDatabase();
+
         return view;
     }
 
@@ -153,10 +159,6 @@ public class StepData_Fragment extends Fragment {
 
         Map<String, Calendar> map = new HashMap<>();
 
-        databaseHelper = new MyDatabaseHelper(
-                getActivity(), "sport_record.db", null, 1);
-        SQLiteDatabase db = databaseHelper.getWritableDatabase();
-
         Cursor cursor = db.query("sport_record",
                 null, null, null,
                 null, null, null);
@@ -184,20 +186,13 @@ public class StepData_Fragment extends Fragment {
         // todo 本应该查询数据库
         sportList.clear(); // 清除之前的数据
         sportCalendarAdapter.notifyDataSetChanged();// 更新显示
-
         PathRecord pathRecord = new PathRecord();
-        pathRecord.setId(1L);
-        pathRecord.setDistance(12.23);
-        pathRecord.setDuration(12232L);
-//        pathRecord.setPathline(StepUtils.parseLatLngLocations(record.getPathLine()));
-//        pathRecord.setStartpoint(StepUtils.parseLatLngLocation(record.getStratPoint()));
-//        pathRecord.setEndpoint(StepUtils.parseLatLngLocation(record.getEndPoint()));
-//        pathRecord.setStartTime(new );
-//        pathRecord.setEndTime(record.getmEndTime());
-        pathRecord.setCalorie(23d);
-//        pathRecord.setSpeed(record.getSpeed());
-//        pathRecord.setDistribution(record.getDistribution());
-//        pathRecord.setDateTag(record.getDateTag());
+
+        Cursor cursor = db.query("sport_record",
+                null, null, null,
+                null, null, null);
+
+
 
         sportList.add(pathRecord);
 
