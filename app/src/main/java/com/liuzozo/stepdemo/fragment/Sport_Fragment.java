@@ -73,7 +73,7 @@ public class Sport_Fragment extends Fragment {
 
                 distance += cursor.getDouble(cursor.getColumnIndex("distance"));
                 duration += cursor.getLong(cursor.getColumnIndex("duration"));
-                count += 1;
+                count = cursor.getCount();
 
                 //查完一条之后调用cursor.moveToNext()把cursor的位置移动到下一条
             } while (cursor.moveToNext());
