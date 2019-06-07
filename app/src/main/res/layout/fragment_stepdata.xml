@@ -159,7 +159,7 @@
                                 android:background="#fff"
                                 android:gravity="center_vertical"
                                 android:paddingStart="20dp"
-                                android:text="跑步成绩"
+                                android:text="跑步记录"
                                 android:textColor="#333333"
                                 android:textSize="16sp" />
 
@@ -190,7 +190,7 @@
                             android:paddingLeft="15dp"
                             android:paddingRight="15dp"
                             android:paddingBottom="20dp"
-                            android:text="刚开始不要追求跑步速度和距离,一坚持更久为目的吧!"
+                            android:text="刚开始不要追求跑步速度和距离，以坚持更久为目的吧！"
                             android:textColor="#666666"
                             android:textSize="14sp" />
                     </LinearLayout>

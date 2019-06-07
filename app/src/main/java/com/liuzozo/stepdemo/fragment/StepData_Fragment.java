@@ -191,10 +191,11 @@ public class StepData_Fragment extends Fragment {
     }
 
     public void setRecycleViewSportData(int year, int month, int day) {
-        // todo 本应该查询数据库
+
         sportList.clear(); // 清除之前的数据
         sportCalendarAdapter.notifyDataSetChanged();// 更新显示
 
+        //数据库查询
         Cursor cursor = db.rawQuery("SELECT * FROM sport_record WHERE date_tag = ?"
                 , new String[]{String.format("%4d-%02d-%02d", year, month, day)});
 
