@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.amap.api.maps.AMap;
@@ -46,6 +47,9 @@ public class SportResult_Activity extends AppCompatActivity implements
         AMap.OnMapLoadedListener {
 
     private TextView textView;
+    private ImageView star1;
+    private ImageView star2;
+    private ImageView star3;
 
     private List<LatLng> pathLine = new ArrayList<LatLng>();
     private double distance = 0.;
@@ -55,8 +59,6 @@ public class SportResult_Activity extends AppCompatActivity implements
     private int durationSec = 0;
     private double calorie = 0.;
     private double speed = 0.;
-
-    private int score;
 
     private MapView mapView = null;
     private AMap amap = null;
@@ -101,6 +103,15 @@ public class SportResult_Activity extends AppCompatActivity implements
         }
         cursor.close();
 
+        if (distance > 0) {
+            star1.setVisibility(View.VISIBLE);
+            if (duration > 40) {
+                star2.setVisibility(View.VISIBLE);
+                if (speed >= 3 & speed <= 6)
+                    star3.setVisibility(View.VISIBLE);
+            }
+        }
+
         mapView = (MapView) findViewById(R.id.map_result);
         mapView.onCreate(savedInstanceState);
         initMap();
@@ -117,6 +128,13 @@ public class SportResult_Activity extends AppCompatActivity implements
         mKalmanBtn = (CheckBox) findViewById(R.id.record_show_activity_kalman_button);
         mOriginBtn.setOnCheckedChangeListener(this);
         mKalmanBtn.setOnCheckedChangeListener(this);
+
+        star1 = (ImageView) findViewById(R.id.star_1);
+        star1.setVisibility(View.INVISIBLE);
+        star2 = (ImageView) findViewById(R.id.star_2);
+        star2.setVisibility(View.INVISIBLE);
+        star3 = (ImageView) findViewById(R.id.star_3);
+        star3.setVisibility(View.INVISIBLE);
     }
 
     private void initMap() {
