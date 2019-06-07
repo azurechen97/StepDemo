@@ -12,6 +12,7 @@ import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -50,6 +51,7 @@ public class SportResult_Activity extends AppCompatActivity implements
     private ImageView star1;
     private ImageView star2;
     private ImageView star3;
+    private Button returnMain;
 
     private List<LatLng> pathLine = new ArrayList<LatLng>();
     private double distance = 0.;
@@ -135,6 +137,9 @@ public class SportResult_Activity extends AppCompatActivity implements
         star2.setVisibility(View.INVISIBLE);
         star3 = (ImageView) findViewById(R.id.star_3);
         star3.setVisibility(View.INVISIBLE);
+
+        returnMain = (Button) findViewById(R.id.return_result);
+        returnMain.setOnClickListener(this);
     }
 
     private void initMap() {
@@ -231,6 +236,11 @@ public class SportResult_Activity extends AppCompatActivity implements
                     startActivity(Intent.createChooser(shareIntent, "分享图片"));
                 }
                 break;
+
+            case R.id.return_result:
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+
             default:
                 break;
         }

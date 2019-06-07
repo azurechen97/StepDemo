@@ -341,7 +341,9 @@ public class SportMap_Activity extends AppCompatActivity implements
                 LatLng currentLocation = new LatLng(
                         aMapLocation.getLatitude(), aMapLocation.getLongitude());
 
-                if (aMapLocation.getAccuracy() <= 25. & !countStart) { //信号不好时不会开始倒计时
+                if (!countStart
+//                && aMapLocation.getAccuracy() <= 25.
+                ) { //信号不好时不会开始倒计时
                     //倒计时
                     countStart = true;
                     myCountTimer = new MyCountTimer(4000, 1000,
@@ -358,7 +360,9 @@ public class SportMap_Activity extends AppCompatActivity implements
                     myCountTimer.start();
                 }
 
-                if (aMapLocation.getAccuracy() <= 25. & !isPaused & countOver) { //限制准确度，防止飘点
+                if (countOver && !isPaused
+//                && aMapLocation.getAccuracy() <= 25.
+                ) { //限制准确度，防止飘点
 
                     if (pathRecord.getStartPoint() == null) {
                         //初始时间
