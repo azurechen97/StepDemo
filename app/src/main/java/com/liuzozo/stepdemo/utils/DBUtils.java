@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 import com.liuzozo.stepdemo.bean.PathRecord;
 import com.liuzozo.stepdemo.bean.SportRecord;
 
+import java.nio.file.Path;
+
 
 /**
  * 封装操作数据库的工具类 和相关常量
@@ -54,15 +56,34 @@ public class DBUtils {
     }
 
     // 查询
-    public static void getRecord(SQLiteDatabase db) {
-        // select * from book where name='xxx'
-        Cursor cursor = db.rawQuery("select * from sport_record", null);
-        while (cursor.moveToNext()) {
-            String name = cursor.getString(cursor.getColumnIndex("author"));
-            int pages = cursor.getInt(cursor.getColumnIndex("pages"));
-            System.out.println(name + "======" + pages);
+    public static PathRecord getRecordById(SQLiteDatabase db, int id) {
+        SportRecord sportRecord = new SportRecord();
+
+
+        Cursor cursor = db.rawQuery("SELECT * FROM sport_record WHERE id = ?"
+                , new String[]{String.valueOf(id)});
+
+        boolean succeed = (cursor.moveToFirst());
+
+        if (succeed) {
+            sportRecord.setId(cursor.getLong(cursor.getColumnIndex("id")));
+            sportRecord.setDistance(cursor.getDouble(cursor.getColumnIndex("distance")));
+            sportRecord.setDuration(cursor.getLong(cursor.getColumnIndex("duration")));
+            sportRecord.setPathLine(cursor.getString(cursor.getColumnIndex("path_line")));
+            sportRecord.setStartPoint(cursor.getString(cursor.getColumnIndex("start_point")));
+            sportRecord.setEndPoint(cursor.getString(cursor.getColumnIndex("end_point")));
+            sportRecord.setStartTime(cursor.getLong(cursor.getColumnIndex("start_time")));
+            sportRecord.setEndTime(cursor.getLong(cursor.getColumnIndex("end_time")));
+            sportRecord.setCalorie(cursor.getDouble(cursor.getColumnIndex("calorie")));
+            sportRecord.setSpeed(cursor.getDouble(cursor.getColumnIndex("speed")));
+            sportRecord.setDistribution(cursor.getDouble(cursor.getColumnIndex("distribution")));
+            sportRecord.setDateTag(cursor.getString(cursor.getColumnIndex("date_tag")));
         }
         cursor.close();
+
+        PathRecord pathRecord = StepUtils.parsePathRecord(sportRecord);
+
+        return pathRecord;
     }
 
     // 删除
