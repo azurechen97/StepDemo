@@ -44,6 +44,7 @@ import com.liuzozo.stepdemo.utils.MyDatabaseHelper;
 
 
 import java.lang.reflect.Method;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -108,6 +109,8 @@ public class SportMap_Activity extends AppCompatActivity implements
 
     private MyDatabaseHelper dbHelper;
     private SQLiteDatabase db;
+
+    private DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
 
     /**
@@ -383,9 +386,8 @@ public class SportMap_Activity extends AppCompatActivity implements
                         Date date = new Date();
                         pathRecord.setEndTime(date.getTime());
 
-                        tvMileage.setText(getString(R.string.xliff_two,
-                                distance / 1000));
-                        tvDistribution.setText(getString(R.string.xliff_two,
+                        tvMileage.setText(decimalFormat.format(distance / 1000));
+                        tvDistribution.setText(decimalFormat.format(
                                 pathRecord.calculateDistribution(
                                         distance, pathRecord.calculateDuration())));
                     }

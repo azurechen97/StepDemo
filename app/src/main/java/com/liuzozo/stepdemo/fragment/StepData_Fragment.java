@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +24,11 @@ import com.liuzozo.stepdemo.R;
 import com.liuzozo.stepdemo.SportRecordDetails_Activity;
 import com.liuzozo.stepdemo.adapter.SportCalendarAdapter;
 import com.liuzozo.stepdemo.bean.PathRecord;
+import com.liuzozo.stepdemo.bean.SportRecord;
 import com.liuzozo.stepdemo.calendarview.custom.FullyLinearLayoutManager;
+import com.liuzozo.stepdemo.utils.DBUtils;
 import com.liuzozo.stepdemo.utils.MyDatabaseHelper;
+import com.liuzozo.stepdemo.utils.StepUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -67,11 +71,11 @@ public class StepData_Fragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_stepdata, container,
                 false);
 
-        initView(view);
-
         databaseHelper = new MyDatabaseHelper(
                 getActivity(), "sport_record.db", null, 1);
         db = databaseHelper.getWritableDatabase();
+
+        initView(view);
 
         return view;
     }
@@ -107,10 +111,8 @@ public class StepData_Fragment extends Fragment {
         });
         mRecycleView.addItemDecoration(new SpaceItemDecoration(getResources().getDimensionPixelSize(R.dimen.line)));
 
-
         sportCalendarAdapter = new SportCalendarAdapter(R.layout.item_sport_calendar, sportList);
         mRecycleView.setAdapter(sportCalendarAdapter);
-
 
         // 加载数据
         loadSportData();
@@ -135,7 +137,7 @@ public class StepData_Fragment extends Fragment {
             @Override
             public void onCalendarSelect(Calendar calendar, boolean isClick) {
                 // 点击时加载数据
-                loadSportData();
+                loadSportData(calendar);
             }
         });
     }
@@ -145,9 +147,15 @@ public class StepData_Fragment extends Fragment {
      * 1. 查询所有跑步数据，设置日历标记
      * 2  根据年月日参数，查询某一天的数据，设置recycleview 的条目
      */
+    private void loadSportData(Calendar calendar) {
+        setCalendarSportData();
+        setRecycleViewSportData(calendar.getYear(), calendar.getMonth(), calendar.getDay());
+    }
+
     private void loadSportData() {
         setCalendarSportData();
-        setRecycleViewSportData(mCalendarView.getCurYear(), mCalendarView.getCurMonth(), mCalendarView.getCurDay());
+        setRecycleViewSportData(mCalendarView.getCurYear(), mCalendarView.getCurMonth(),
+                mCalendarView.getCurDay());
     }
 
     public void setCalendarSportData() {
@@ -186,15 +194,34 @@ public class StepData_Fragment extends Fragment {
         // todo 本应该查询数据库
         sportList.clear(); // 清除之前的数据
         sportCalendarAdapter.notifyDataSetChanged();// 更新显示
-        PathRecord pathRecord = new PathRecord();
 
-        Cursor cursor = db.query("sport_record",
-                null, null, null,
-                null, null, null);
+        Cursor cursor = db.rawQuery("SELECT * FROM sport_record WHERE date_tag = ?"
+                , new String[]{String.format("%4d-%02d-%02d", year, month, day)});
 
+        boolean succeed = (cursor.moveToFirst());
 
+        if (succeed) {
+            do {
+                SportRecord sportRecord = new SportRecord();
+                sportRecord.setId(cursor.getLong(cursor.getColumnIndex("id")));
+                sportRecord.setDistance(cursor.getDouble(cursor.getColumnIndex("distance")));
+                sportRecord.setDuration(cursor.getLong(cursor.getColumnIndex("duration")));
+                sportRecord.setPathLine(cursor.getString(cursor.getColumnIndex("path_line")));
+                sportRecord.setStartPoint(cursor.getString(cursor.getColumnIndex("start_point")));
+                sportRecord.setEndPoint(cursor.getString(cursor.getColumnIndex("end_point")));
+                sportRecord.setStartTime(cursor.getLong(cursor.getColumnIndex("start_time")));
+                sportRecord.setEndTime(cursor.getLong(cursor.getColumnIndex("end_time")));
+                sportRecord.setCalorie(cursor.getDouble(cursor.getColumnIndex("calorie")));
+                sportRecord.setSpeed(cursor.getDouble(cursor.getColumnIndex("speed")));
+                sportRecord.setDistribution(cursor.getDouble(cursor.getColumnIndex("distribution")));
+                sportRecord.setDateTag(cursor.getString(cursor.getColumnIndex("date_tag")));
 
-        sportList.add(pathRecord);
+                sportList.add(StepUtils.parsePathRecord(sportRecord));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        Log.i("sportList", sportList.size() + "");
+        Log.i("sportList", sportList.get(0).getDistance() + "");
 
         if (sportList.size() > 0) {
             sport_record_listLayout.setVisibility(View.VISIBLE);

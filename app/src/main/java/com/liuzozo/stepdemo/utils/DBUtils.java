@@ -110,6 +110,7 @@ public class DBUtils {
                 sportRecord.setSpeed(cursor.getDouble(cursor.getColumnIndex("speed")));
                 sportRecord.setDistribution(cursor.getDouble(cursor.getColumnIndex("distribution")));
                 sportRecord.setDateTag(cursor.getString(cursor.getColumnIndex("date_tag")));
+
                 sportList.add(StepUtils.parsePathRecord(sportRecord));
             } while (cursor.moveToNext());
         }

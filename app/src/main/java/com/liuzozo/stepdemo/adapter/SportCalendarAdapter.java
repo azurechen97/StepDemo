@@ -24,7 +24,7 @@ public class SportCalendarAdapter extends BaseQuickAdapter<PathRecord, BaseViewH
     protected void convert(BaseViewHolder helper, PathRecord item) {
         // 子item 布局上的三个控件
         helper.setText(R.id.distance, decimalFormat.format(item.getDistance() / 1000d));
-        helper.setText(R.id.duration, StepUtils.formatseconds(item.getDuration()));
+        helper.setText(R.id.duration, StepUtils.formatMilliseconds(item.getDuration()));
         helper.setText(R.id.calorie, intFormat.format(item.getCalorie()));
     }
 }

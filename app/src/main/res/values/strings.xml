@@ -17,8 +17,4 @@
         <xliff:g id="bmi">%1$1.1f</xliff:g> BMI
     </string>
 
-    <string name="xliff_two">
-        <xliff:g id="mileage">%1$1.2f</xliff:g>
-    </string>
-
 </resources>

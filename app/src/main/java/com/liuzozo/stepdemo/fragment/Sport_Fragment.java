@@ -21,6 +21,8 @@ import com.liuzozo.stepdemo.R;
 import com.liuzozo.stepdemo.SportMap_Activity;
 import com.liuzozo.stepdemo.utils.MyDatabaseHelper;
 
+import java.text.DecimalFormat;
+
 import static android.content.Context.MODE_PRIVATE;
 
 /**
@@ -35,6 +37,8 @@ public class Sport_Fragment extends Fragment {
     private TextView sportCount;
     private TextView sportTime;
     private MyDatabaseHelper databaseHelper;
+
+    private DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -83,13 +87,13 @@ public class Sport_Fragment extends Fragment {
         cursor.close();
 
         sportMile = (TextView) view.findViewById(R.id.tv_sport_mile);
-        sportMile.setText(getString(R.string.xliff_two, distance / 1000));
+        sportMile.setText(decimalFormat.format(distance / 1000));
 
         sportCount = (TextView) view.findViewById(R.id.tv_sport_count);
         sportCount.setText(count + "");
 
         sportTime = (TextView) view.findViewById(R.id.tv_sport_time);
-        sportTime.setText(getString(R.string.xliff_two, (double) duration / 60000));
+        sportTime.setText(decimalFormat.format((double) duration / 60000));
 
         //开始按钮相关操作
         startBtn = (Button) view.findViewById(R.id.btnStart);

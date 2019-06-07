@@ -209,7 +209,7 @@ public class StepUtils {
         return weight * distance * 1.036;
     }
 
-    public static String formatseconds(long seconds) {
+    public static String formatSeconds(long seconds) {
         String hh = seconds / 3600 > 9 ? seconds / 3600 + "" : "0" + seconds
                 / 3600;
         String mm = (seconds % 3600) / 60 > 9 ? (seconds % 3600) / 60 + ""
@@ -217,6 +217,10 @@ public class StepUtils {
         String ss = (seconds % 3600) % 60 > 9 ? (seconds % 3600) % 60 + ""
                 : "0" + (seconds % 3600) % 60;
         return hh + ":" + mm + ":" + ss;
+    }
+
+    public static String formatMilliseconds(long milliseconds) {
+        return formatSeconds(milliseconds / 1000);
     }
 
     public static SportRecord parseSportRecord(PathRecord pathRecord) {
