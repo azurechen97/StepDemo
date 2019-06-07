@@ -1,6 +1,8 @@
 package com.liuzozo.stepdemo.fragment;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Rect;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -22,6 +24,7 @@ import com.liuzozo.stepdemo.SportRecordDetails_Activity;
 import com.liuzozo.stepdemo.adapter.SportCalendarAdapter;
 import com.liuzozo.stepdemo.bean.PathRecord;
 import com.liuzozo.stepdemo.calendarview.custom.FullyLinearLayoutManager;
+import com.liuzozo.stepdemo.utils.MyDatabaseHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,6 +58,7 @@ public class StepData_Fragment extends Fragment {
     private int mYear;
     private List<PathRecord> sportList = new ArrayList<>(0);
 
+    private MyDatabaseHelper databaseHelper;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -136,16 +140,41 @@ public class StepData_Fragment extends Fragment {
      * 2  根据年月日参数，查询某一天的数据，设置recycleview 的条目
      */
     private void loadSportData() {
-
         setCalendarSportData();
         setRecycleViewSportData(mCalendarView.getCurYear(), mCalendarView.getCurMonth(), mCalendarView.getCurDay());
     }
 
     public void setCalendarSportData() {
         // 给日历做有记录的标记, 需要查询出有跑步记录的年月日
+        String date;
+        int year;
+        int month;
+        int day;
+
         Map<String, Calendar> map = new HashMap<>();
-        map.put(getSchemeCalendar(2019, 5, 5, 0xFFCC0000, "记").toString(),
-                getSchemeCalendar(2019, 5, 6, 0xFFCC0000, "记"));
+
+        databaseHelper = new MyDatabaseHelper(
+                getActivity(), "sport_record.db", null, 1);
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+
+        Cursor cursor = db.query("sport_record",
+                null, null, null,
+                null, null, null);
+
+        boolean succeed = (cursor.moveToFirst());
+
+        if (succeed) {
+            do {
+                date = cursor.getString(cursor.getColumnIndex("date_tag"));
+                year = Integer.parseInt(date.substring(0, 4));
+                month = Integer.parseInt(date.substring(5, 7));
+                day = Integer.parseInt(date.substring(8));
+                map.put(getSchemeCalendar(year, month, day, 0xFFCC0000, "记").toString(),
+                        getSchemeCalendar(year, month, day, 0xFFCC0000, "记"));
+            } while (cursor.moveToNext());
+
+        }
+        cursor.close();
 
         //此方法在巨大的数据量上不影响遍历性能，推荐使用
         mCalendarView.setSchemeDate(map);
