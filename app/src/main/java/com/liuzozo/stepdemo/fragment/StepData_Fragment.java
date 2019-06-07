@@ -220,8 +220,6 @@ public class StepData_Fragment extends Fragment {
             } while (cursor.moveToNext());
         }
         cursor.close();
-        Log.i("sportList", sportList.size() + "");
-        Log.i("sportList", sportList.get(0).getDistance() + "");
 
         if (sportList.size() > 0) {
             sport_record_listLayout.setVisibility(View.VISIBLE);
