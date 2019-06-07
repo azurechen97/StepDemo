@@ -14,6 +14,7 @@ public class MyCountTimer extends CountDownTimer {
     private static final int TIME_COUNT = 31000;//倒计时总时间为31S，时间防止从29s开始显示（以倒计时30s为例子）
     private TextView btn;
     private String endStrRid;
+    private int count = 3;
 
     /**
      * 参数 millisInFuture         倒计时总时间（如30s,60S，120s等）
@@ -53,7 +54,7 @@ public class MyCountTimer extends CountDownTimer {
         btn.setEnabled(false);
         //每隔一秒修改一次UI
         if (millisUntilFinished > 1000)
-            btn.setText(millisUntilFinished / 1000 + "");
+            btn.setText(count + "");
         else
             btn.setText(R.string.countdown_over);
 
@@ -68,5 +69,7 @@ public class MyCountTimer extends CountDownTimer {
                 Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         scaleAnimation.setDuration(1000);
         btn.startAnimation(scaleAnimation);
+
+        count -= 1;
     }
 }
