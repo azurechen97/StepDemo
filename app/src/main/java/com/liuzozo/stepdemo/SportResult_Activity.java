@@ -56,10 +56,10 @@ public class SportResult_Activity extends AppCompatActivity implements
     private List<LatLng> pathLine = new ArrayList<LatLng>();
     private double distance = 0.;
     private double duration = 0.;
-    private int durationHour = 0;
-    private int durationMin = 0;
-    private int durationSec = 0;
-    private double calorie = 0.;
+    //    private int durationHour = 0;
+//    private int durationMin = 0;
+//    private int durationSec = 0;
+//    private double calorie = 0.;
     private double speed = 0.;
 
     private MapView mapView = null;
@@ -94,11 +94,11 @@ public class SportResult_Activity extends AppCompatActivity implements
 
             Long durationMs = cursor.getLong(cursor.getColumnIndex("duration"));
             duration = (double) durationMs / 1000 / 60;
-            durationHour = (int) (durationMs / 1000 / 3600);
-            durationMin = (int) (durationMs / 1000 / 60) % 60;
-            durationSec = (int) (durationMs / 1000) % 60;
+//            durationHour = (int) (durationMs / 1000 / 3600);
+//            durationMin = (int) (durationMs / 1000 / 60) % 60;
+//            durationSec = (int) (durationMs / 1000) % 60;
 
-            calorie = cursor.getDouble(cursor.getColumnIndex("calorie"));
+//            calorie = cursor.getDouble(cursor.getColumnIndex("calorie"));
 
             speed = cursor.getDouble(cursor.getColumnIndex("speed"));
 

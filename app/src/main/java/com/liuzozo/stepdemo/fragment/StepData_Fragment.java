@@ -35,6 +35,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.liuzozo.stepdemo.SportRecordDetails_Activity.SPORT_DATA;
+
 /**
  * sport data  page
  * 1. 根据日期 查询数据库， 在日历上标记，下方显示 日历某一天的跑步记录
@@ -122,6 +124,8 @@ public class StepData_Fragment extends Fragment {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Intent intent = new Intent();
+                PathRecord pathRecord = sportList.get(position);
+                intent.putExtra(SPORT_DATA, pathRecord);
                 intent.setClass(getContext(), SportRecordDetails_Activity.class);
                 startActivity(intent);
             }

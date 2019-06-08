@@ -65,7 +65,7 @@ public class SportRecordDetails_Activity extends AppCompatActivity {
         bundle.putParcelable(SPORT_DATA, pathRecord);
         for (int i = 0, size = mTitles.length; i < size; i++) {
             mTabEntities.add(new TabEntity(mTitles[i], 0, 0));
-            // 设置跳转到这个Fragmnet 的值
+            // 设置跳转到这个Fragment 的值
             mFragments.get(i).setArguments(bundle);
 
         }
