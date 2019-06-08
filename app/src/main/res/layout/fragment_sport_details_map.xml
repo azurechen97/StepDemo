@@ -26,11 +26,12 @@
         android:orientation="horizontal">
 
         <TextView
+            android:id="@+id/detail_map_distance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:textColor="#fff"
-            android:text="0.21公里" />
+            android:text="0.21 公里" />
 
         <View
             android:layout_width="0dp"
@@ -38,6 +39,7 @@
             android:layout_height="12dp" />
 
         <TextView
+            android:id="@+id/detail_map_duration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"

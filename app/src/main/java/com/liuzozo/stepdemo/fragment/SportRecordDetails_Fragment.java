@@ -55,10 +55,10 @@ public class SportRecordDetails_Fragment extends Fragment {
     }
 
     private void initView(View view) {
-        detailDistance = view.findViewById(R.id.detail_distance);
-        detailDuration = view.findViewById(R.id.detail_duration);
-        detailSpeed = view.findViewById(R.id.detail_speed);
-        detailDistribution = view.findViewById(R.id.detail_distribution);
-        detailCalorie = view.findViewById(R.id.detail_calorie);
+        detailDistance = (TextView) view.findViewById(R.id.detail_distance);
+        detailDuration = (TextView) view.findViewById(R.id.detail_duration);
+        detailSpeed = (TextView) view.findViewById(R.id.detail_speed);
+        detailDistribution = (TextView) view.findViewById(R.id.detail_distribution);
+        detailCalorie = (TextView) view.findViewById(R.id.detail_calorie);
     }
 }

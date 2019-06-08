@@ -56,7 +56,6 @@ public class SportRecordDetails_Activity extends AppCompatActivity {
 
 
         // 接收跳转到这个界面的pathRecord值，把这个值分发到不同的Fragment 进行显示即可
-        // TODO ： pathRecord 值为从日历下列表里面传来的
         if (getIntent().hasExtra(SPORT_DATA)) {
             pathRecord = getIntent().getParcelableExtra(SPORT_DATA);
         }
