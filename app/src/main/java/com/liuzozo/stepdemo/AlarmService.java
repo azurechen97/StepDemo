@@ -32,11 +32,11 @@ public class AlarmService extends Service {
     }
 
     // 添加通知
-    public static void addNotification(int delayTime, String tickerText,
+    public static void addNotification(long alarmTime, String tickerText,
                                        String contentTitle, String contentText) {
         Intent intent = new Intent(PlanSetting_Activity.getContext(),
                 AlarmService.class);
-        intent.putExtra("delayTime", delayTime);
+        intent.putExtra("alarmTime", alarmTime);
         intent.putExtra("tickerText", tickerText);
         intent.putExtra("contentTitle", contentTitle);
         intent.putExtra("contentText", contentText);
@@ -82,8 +82,13 @@ public class AlarmService extends Service {
     public int onStartCommand(final Intent intent, int flags, int startId) {
 
         long period = 24 * 60 * 60 * 1000; // 24小时一个周期
-        int delay = intent.getIntExtra("delayTime", 0);
+        long alarmTime = intent.getLongExtra("alarmTime", 0);
+        Log.e("Alarm", "alarmTime = " + alarmTime);
+        int delay = (int) (alarmTime - System.currentTimeMillis());
         Log.e("Alarm", "delay = " + delay);
+        if (delay < 0)
+            delay += period;
+
         if (null == timer) {
             timer = new Timer();
         }

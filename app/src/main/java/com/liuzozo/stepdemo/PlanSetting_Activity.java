@@ -93,8 +93,8 @@ public class PlanSetting_Activity extends AppCompatActivity
                         Toast.makeText(getApplicationContext(), "今天该时间已过",
                                 Toast.LENGTH_SHORT).show();
                     }
-                    int delayTime = (int) (value - value2);
-                    AlarmService.addNotification(delayTime,
+//                    int delayTime = (int) (value - value2);
+                    AlarmService.addNotification(value,
                             "tick", "title", "text");
                 } else {
                     AlarmService.cleanAllNotification();
