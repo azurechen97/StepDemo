@@ -138,7 +138,7 @@ public class AlarmService extends Service {
             }
         }, delay, period);
 
-        return super.onStartCommand(intent, flags, startId);
+        return START_REDELIVER_INTENT;
     }
 
     @Override
