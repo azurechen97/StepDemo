@@ -2,11 +2,13 @@ package com.liuzozo.stepdemo;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import java.util.Timer;
@@ -64,15 +66,25 @@ public class AlarmService extends Service {
 
             @Override
             public void run() {
-                NotificationManager mn = (NotificationManager) AlarmService.this
+                Log.e("Alarm", "TimeUp");
+                NotificationManager notificationManager = (NotificationManager) AlarmService.this
                         .getSystemService(NOTIFICATION_SERVICE);
+
+                String id = "my_channel_01";
+                String name = "我是渠道名字";
+                //适配安卓8.0+
+                NotificationChannel mChannel = new NotificationChannel(id, name, NotificationManager.IMPORTANCE_HIGH);
+                notificationManager.createNotificationChannel(mChannel);
+
                 Notification.Builder builder = new Notification.Builder(
                         AlarmService.this);
+                Log.i("Alarm", mChannel.toString());
 
                 Intent notificationIntent = new Intent(AlarmService.this,
                         MainActivity.class);// 点击跳转位置
                 PendingIntent contentIntent = PendingIntent.getActivity(
                         AlarmService.this, 0, notificationIntent, 0);
+                builder.setChannelId(id);
                 builder.setContentIntent(contentIntent);
                 builder.setSmallIcon(R.mipmap.ic_launcher);// 设置通知图标
                 builder.setTicker(intent.getStringExtra("tickerText")); // 测试通知栏标题
@@ -88,7 +100,7 @@ public class AlarmService extends Service {
                 // builder.addAction("图标", title, intent); //此处可设置点击后 打开某个页面
                 Notification notification = builder.build();
                 notification.flags = notification.FLAG_INSISTENT;// 声音无限循环
-                mn.notify((int) System.currentTimeMillis(), notification);
+                notificationManager.notify((int) System.currentTimeMillis(), notification);
             }
         }, delay, period);
 

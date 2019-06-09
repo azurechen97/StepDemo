@@ -93,16 +93,8 @@ public class PlanSetting_Activity extends AppCompatActivity
                                 Toast.LENGTH_SHORT).show();
                     }
                     int delayTime = (int) (value - value2);
-//                    AlarmService.addNotification(delayTime,
-//                            "tick","title","text");
-                    Intent intent = new Intent(PlanSetting_Activity.this,
-                            AlarmService.class);
-                    intent.putExtra("delayTime", delayTime);
-                    intent.putExtra("tickerText", "tick");
-                    intent.putExtra("contentTitle", "title");
-                    intent.putExtra("contentText", "text");
-                    startService(intent);
-                    Log.e("Service", "started");
+                    AlarmService.addNotification(delayTime,
+                            "tick", "title", "text");
                 } else {
                     AlarmService.cleanAllNotification();
                 }

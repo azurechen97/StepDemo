@@ -72,8 +72,7 @@
 
         <service
             android:name=".AlarmService"
-            android:enabled="true"
-            android:process="system"></service>
+            android:enabled="true"></service>
 
         <!-- 到高德地图设置你自己的key -->
         <meta-data
