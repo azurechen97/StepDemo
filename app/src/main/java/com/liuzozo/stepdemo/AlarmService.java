@@ -7,6 +7,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -39,13 +40,37 @@ public class AlarmService extends Service {
         intent.putExtra("tickerText", tickerText);
         intent.putExtra("contentTitle", contentTitle);
         intent.putExtra("contentText", contentText);
-        PlanSetting_Activity.getContext().startService(intent);
+        PlanSetting_Activity.getContext().startForegroundService(intent);
         Log.e("Service", "started");
     }
 
     @Override
     public void onCreate() {
+        super.onCreate();
+        String id = "alert_service_01";
+        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        NotificationChannel mChannel = new NotificationChannel(id, "提醒服务", NotificationManager.IMPORTANCE_HIGH);
+        mChannel.setShowBadge(true);//显示logo
+        mChannel.setDescription("可以在指定时间提醒");//设置描述
+        mChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC); //设置锁屏可见 VISIBILITY_PUBLIC=可见
+        manager.createNotificationChannel(mChannel);
+
+        Notification notification = new Notification.Builder(this)
+                .setChannelId(id)
+                .setContentTitle("闹钟服务")//标题
+                .setContentText("运行中...")//内容
+                .setWhen(System.currentTimeMillis())
+                .setSmallIcon(R.mipmap.ic_launcher)
+                //小图标一定需要设置,否则会报错(如果不设置它启动服务前台化不会报错,
+                // 但是你会发现这个通知不会启动),如果是普通通知,不设置必然报错
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
+                .build();
+        startForeground(1, notification);
+        //服务前台化只能使用startForeground()方法,
+        // 不能使用 notificationManager.notify(1,notification);
+        // 这个只是启动通知使用的,使用这个方法你只需要等待几秒就会发现报错了
         Log.e("addNotification", "===========create=======");
+
     }
 
     @Override
@@ -107,7 +132,7 @@ public class AlarmService extends Service {
                 builder.setDefaults(Notification.DEFAULT_ALL);// 设置使用系统默认声音
                 // builder.addAction("图标", title, intent); //此处可设置点击后 打开某个页面
                 Notification notification = builder.build();
-                notification.flags = notification.FLAG_INSISTENT;// 声音无限循环
+                notification.flags = notification.FLAG_AUTO_CANCEL;// 声音无限循环
 
                 notificationManager.notify((int) System.currentTimeMillis(), notification);
             }
