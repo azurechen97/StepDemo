@@ -57,6 +57,8 @@
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
+    <!-- 震动权限 -->
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -67,6 +69,11 @@
         android:theme="@style/AppTheme">
 
         <service android:name="com.amap.api.location.APSService"></service>
+
+        <service
+            android:name=".AlarmService"
+            android:enabled="true"
+            android:process="system"></service>
 
         <!-- 到高德地图设置你自己的key -->
         <meta-data
