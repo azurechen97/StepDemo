@@ -70,6 +70,7 @@ public class PlanSetting_Activity extends AppCompatActivity
                     if (TextUtils.isEmpty(mTime)) {
                         Toast.makeText(getApplicationContext(), "请选择提醒时间",
                                 Toast.LENGTH_SHORT).show();
+                        alarmSwitch.setChecked(false);
                         break;
                     }
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
