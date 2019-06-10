@@ -29,6 +29,7 @@ public class AlarmService extends Service {
             timer.cancel();
             timer = null;
         }
+        //停止整个服务
         Intent stopIntent = new Intent(PlanSetting_Activity.getContext(),
                 AlarmService.class);
         stopIntent.putExtra("endKey", 1);

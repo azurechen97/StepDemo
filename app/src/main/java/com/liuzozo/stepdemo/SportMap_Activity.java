@@ -363,9 +363,8 @@ public class SportMap_Activity extends AppCompatActivity implements
                     myCountTimer.start();
                 }
 
-                if (countOver && !isPaused
-//                && aMapLocation.getAccuracy() <= 25.
-                ) { //限制准确度，防止飘点
+                if (countOver && !isPaused && aMapLocation.getAccuracy() <= 100.) {
+                    //限制准确度，防止飘点
 
                     if (pathRecord.getStartPoint() == null) {
                         //初始时间
@@ -402,9 +401,9 @@ public class SportMap_Activity extends AppCompatActivity implements
                     Log.i("TAG", aMapLocation.getCity());
                     // 根据这些经纬度可以在地图上每三秒画点线，最终画出轨迹
 
-                    Toast.makeText(this, currentLocation.toString()
-                            + "\nAccuracy: " + aMapLocation.getAccuracy(), Toast.LENGTH_SHORT)
-                            .show();
+//                    Toast.makeText(this, currentLocation.toString()
+//                            + "\nAccuracy: " + aMapLocation.getAccuracy(), Toast.LENGTH_SHORT)
+//                            .show();
                 } else if (!isPaused & countOver)
                     Toast.makeText(this, "当前GPS信号不佳", Toast.LENGTH_LONG)
                             .show();

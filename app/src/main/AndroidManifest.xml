@@ -75,6 +75,8 @@
         <service
             android:name=".AlarmService"
             android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE"
             android:process=":step_alarm"></service>
 
         <!-- 到高德地图设置你自己的key -->
