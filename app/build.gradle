@@ -40,4 +40,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation files('libs/AMap3DMap_6.7.0_AMapSearch_6.5.0_AMapLocation_4.4.0_20190213.jar')
+    implementation files('libs/hellocharts-library-1.5.8.jar')
 }

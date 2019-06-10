@@ -105,7 +105,8 @@ public class StepData_Fragment extends Fragment {
 
         mRecycleView = view.findViewById(R.id.recyclerView);
 
-        mRecycleView.setLayoutManager(new FullyLinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false) {
+        mRecycleView.setLayoutManager(new FullyLinearLayoutManager(getContext(),
+                LinearLayoutManager.VERTICAL, false) {
             @Override
             public boolean canScrollVertically() {
                 return false;
