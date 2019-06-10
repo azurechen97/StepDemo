@@ -29,18 +29,22 @@ public class AlarmService extends Service {
             timer.cancel();
             timer = null;
         }
+        Intent stopIntent = new Intent(PlanSetting_Activity.getContext(),
+                AlarmService.class);
+        stopIntent.putExtra("endKey", 1);
+        PlanSetting_Activity.getContext().startForegroundService(stopIntent);
     }
 
     // 添加通知
     public static void addNotification(long alarmTime, String tickerText,
                                        String contentTitle, String contentText) {
-        Intent intent = new Intent(PlanSetting_Activity.getContext(),
+        Intent startIntent = new Intent(PlanSetting_Activity.getContext(),
                 AlarmService.class);
-        intent.putExtra("alarmTime", alarmTime);
-        intent.putExtra("tickerText", tickerText);
-        intent.putExtra("contentTitle", contentTitle);
-        intent.putExtra("contentText", contentText);
-        PlanSetting_Activity.getContext().startForegroundService(intent);
+        startIntent.putExtra("alarmTime", alarmTime);
+        startIntent.putExtra("tickerText", tickerText);
+        startIntent.putExtra("contentTitle", contentTitle);
+        startIntent.putExtra("contentText", contentText);
+        PlanSetting_Activity.getContext().startForegroundService(startIntent);
         Log.e("Service", "started");
     }
 
@@ -80,68 +84,73 @@ public class AlarmService extends Service {
 
     @Override
     public int onStartCommand(final Intent intent, int flags, int startId) {
+        if (intent.hasExtra("endKey")) {
+            stopForeground(true);
+            stopSelf(); //停止服务
+        } else {
+            long period = 24 * 60 * 60 * 1000; // 24小时一个周期
+            long alarmTime = intent.getLongExtra("alarmTime", 0);
+            Log.e("Alarm", "alarmTime = " + alarmTime);
+            int delay = (int) (alarmTime - System.currentTimeMillis());
+            Log.e("Alarm", "delay = " + delay);
+            if (delay < 0)
+                delay += period;
 
-        long period = 24 * 60 * 60 * 1000; // 24小时一个周期
-        long alarmTime = intent.getLongExtra("alarmTime", 0);
-        Log.e("Alarm", "alarmTime = " + alarmTime);
-        int delay = (int) (alarmTime - System.currentTimeMillis());
-        Log.e("Alarm", "delay = " + delay);
-        if (delay < 0)
-            delay += period;
-
-        if (null == timer) {
-            timer = new Timer();
-        }
-        timer.schedule(new TimerTask() {
-
-            @Override
-            public void run() {
-                Log.e("Alarm", "TimeUp");
-                NotificationManager notificationManager = (NotificationManager) AlarmService.this
-                        .getSystemService(NOTIFICATION_SERVICE);
-
-                String id = "step_01";
-                String name = "乐跑圈";
-
-                //适配安卓8.0+
-                NotificationChannel mChannel = new NotificationChannel(id,
-                        name, NotificationManager.IMPORTANCE_HIGH);
-                mChannel.enableVibration(true);
-                mChannel.setVibrationPattern(new long[]{
-                        100, 200, 300, 400, 500, 400, 300, 200, 400});
-
-                notificationManager.createNotificationChannel(mChannel);
-                Log.i("Alarm", mChannel.toString());
-
-                Notification.Builder builder = new Notification.Builder(
-                        AlarmService.this);
-                builder.setChannelId(id);
-
-                Intent notificationIntent = new Intent(AlarmService.this,
-                        MainActivity.class);// 点击跳转位置
-                PendingIntent contentIntent = PendingIntent.getActivity(
-                        AlarmService.this, 0, notificationIntent, 0);
-
-                builder.setContentIntent(contentIntent);
-
-                builder.setSmallIcon(R.mipmap.ic_launcher);// 设置通知图标
-                builder.setTicker(intent.getStringExtra("tickerText")); // 测试通知栏标题
-                builder.setContentText(intent.getStringExtra("contentText")); // 下拉通知啦内容
-                builder.setContentTitle(intent.getStringExtra("contentTitle"));// 下拉通知栏标题
-                builder.setAutoCancel(true);// 点击弹出的通知后,让通知将自动取消
-//                builder.setVibrate(new long[]{0, 2000, 1000, 4000}); // 震动需要真机测试-延迟0秒震动2秒延迟1秒震动4秒
-                // builder.setSound(Uri.withAppendedPath(Audio.Media.INTERNAL_CONTENT_URI,
-                // "5"));//获取Android多媒体库内的铃声
-                // builder.setSound(Uri.parse("file:///sdcard/xx/xx.mp3"))
-                // ;//自定义铃声
-                builder.setDefaults(Notification.DEFAULT_ALL);// 设置使用系统默认声音
-                // builder.addAction("图标", title, intent); //此处可设置点击后 打开某个页面
-                Notification notification = builder.build();
-                notification.flags = notification.FLAG_AUTO_CANCEL;// 声音无限循环
-
-                notificationManager.notify((int) System.currentTimeMillis(), notification);
+            if (null == timer) {
+                timer = new Timer();
             }
-        }, delay, period);
+            timer.schedule(new TimerTask() {
+
+                @Override
+                public void run() {
+                    Log.e("Alarm", "TimeUp");
+                    NotificationManager notificationManager = (NotificationManager) AlarmService.this
+                            .getSystemService(NOTIFICATION_SERVICE);
+
+                    String id = "step_01";
+                    String name = "乐跑圈";
+
+                    //适配安卓8.0+
+                    NotificationChannel mChannel = new NotificationChannel(id,
+                            name, NotificationManager.IMPORTANCE_HIGH);
+                    mChannel.enableVibration(true);
+                    mChannel.setVibrationPattern(new long[]{
+                            100, 200, 300, 400, 500, 400, 300, 200, 400});
+
+                    notificationManager.createNotificationChannel(mChannel);
+                    Log.i("Alarm", mChannel.toString());
+
+                    Notification.Builder builder = new Notification.Builder(
+                            AlarmService.this);
+                    builder.setChannelId(id);
+
+                    Intent notificationIntent = new Intent(AlarmService.this,
+                            MainActivity.class);// 点击跳转位置
+                    PendingIntent contentIntent = PendingIntent.getActivity(
+                            AlarmService.this, 0, notificationIntent, 0);
+
+                    builder.setContentIntent(contentIntent);
+
+                    builder.setSmallIcon(R.mipmap.ic_launcher);// 设置通知图标
+                    builder.setTicker(intent.getStringExtra("tickerText")); // 测试通知栏标题
+                    builder.setContentText(intent.getStringExtra("contentText")); // 下拉通知啦内容
+                    builder.setContentTitle(intent.getStringExtra("contentTitle"));// 下拉通知栏标题
+                    builder.setAutoCancel(true);// 点击弹出的通知后,让通知将自动取消
+//                builder.setVibrate(new long[]{0, 2000, 1000, 4000}); // 震动需要真机测试-延迟0秒震动2秒延迟1秒震动4秒
+                    // builder.setSound(Uri.withAppendedPath(Audio.Media.INTERNAL_CONTENT_URI,
+                    // "5"));//获取Android多媒体库内的铃声
+                    // builder.setSound(Uri.parse("file:///sdcard/xx/xx.mp3"))
+                    // ;//自定义铃声
+                    builder.setDefaults(Notification.DEFAULT_ALL);// 设置使用系统默认声音
+                    // builder.addAction("图标", title, intent); //此处可设置点击后 打开某个页面
+                    Notification notification = builder.build();
+                    notification.flags = notification.FLAG_AUTO_CANCEL;// 声音无限循环
+
+                    notificationManager.notify((int) System.currentTimeMillis(), notification);
+                }
+            }, delay, period);
+        }
+
 
         return START_REDELIVER_INTENT;
     }

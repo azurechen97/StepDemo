@@ -31,6 +31,7 @@ public class PlanSetting_Activity extends AppCompatActivity
     private Switch alarmSwitch;
     private String mTime;
     private String mDate;
+    private String mMileage;
 
 
     public static Context getContext() {
@@ -69,9 +70,17 @@ public class PlanSetting_Activity extends AppCompatActivity
                     mDate = dateFormat.format(curDate); //当前日期
 
                     mTime = time.getText().toString();
+                    mMileage = mileage.getText().toString();
+
                     Log.e("xx", "日期= " + mDate + "  时间= " + mTime);
                     if (TextUtils.isEmpty(mTime)) {
                         Toast.makeText(getApplicationContext(), "请选择提醒时间",
+                                Toast.LENGTH_SHORT).show();
+                        alarmSwitch.setChecked(false);
+                        break;
+                    }
+                    if (TextUtils.isEmpty(mMileage)) {
+                        Toast.makeText(getApplicationContext(), "请设置计划跑步距离",
                                 Toast.LENGTH_SHORT).show();
                         alarmSwitch.setChecked(false);
                         break;
@@ -98,9 +107,9 @@ public class PlanSetting_Activity extends AppCompatActivity
                     }
 //                    int delayTime = (int) (value - value2);
                     AlarmService.addNotification(value,
-                            "跑步时间到！今天您计划跑" + mileage.getText().toString() + "米",
+                            "跑步时间到！今天您计划跑" + mMileage + "米",
                             "乐跑圈",
-                            "跑步时间到！今天您计划跑" + mileage.getText().toString() + "米");
+                            "跑步时间到！今天您计划跑" + mMileage + "米");
                 } else {
                     AlarmService.cleanAllNotification();
                 }

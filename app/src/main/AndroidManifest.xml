@@ -47,6 +47,7 @@
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <!-- 用于读取手机当前的状态 -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -73,7 +74,8 @@
 
         <service
             android:name=".AlarmService"
-            android:enabled="true"></service>
+            android:enabled="true"
+            android:process=":step_alarm"></service>
 
         <!-- 到高德地图设置你自己的key -->
         <meta-data
