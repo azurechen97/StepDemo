@@ -10,7 +10,10 @@ import android.view.View;
 
 import com.liuzozo.stepdemo.utils.MyDatabaseHelper;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import lecho.lib.hellocharts.gesture.ContainerScrollType;
@@ -32,7 +35,8 @@ import lecho.lib.hellocharts.view.LineChartView;
  */
 public class WeekRecord_Activity extends AppCompatActivity {
 
-    private LineChartView lineChart;
+    private LineChartView lineChart1;
+    private LineChartView lineChart2;
 
     private MyDatabaseHelper databaseHelper;
     private SQLiteDatabase db;
@@ -42,15 +46,34 @@ public class WeekRecord_Activity extends AppCompatActivity {
 
     private ArrayList<String> date = new ArrayList<>();
     private ArrayList<Double> distance = new ArrayList<>();
+    private ArrayList<Double> calorie = new ArrayList<>();
 
     private List<PointValue> mPointValues = new ArrayList<PointValue>();
     private List<AxisValue> mAxisXValues = new ArrayList<AxisValue>();
+
+    private SimpleDateFormat dateTagFormat = new SimpleDateFormat("yyyy-MM-dd");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_week_record);
 
+        initDB();
+
+        lineChart1 = (LineChartView) findViewById(R.id.line_chart_1);
+        lineChart2 = (LineChartView) findViewById(R.id.line_chart_2);
+
+        getAxisXLabels();//获取x轴的标注
+
+        getAxisPoints(distance);//获取坐标点
+        initLineChart(lineChart1);//初始化
+
+        getAxisPoints(calorie);//获取坐标点
+        initLineChart(lineChart2);//初始化
+    }
+
+    private void initDB() {
         databaseHelper = new MyDatabaseHelper(
                 this, "sport_record.db", null, 1);
         db = databaseHelper.getWritableDatabase();
@@ -59,32 +82,82 @@ public class WeekRecord_Activity extends AppCompatActivity {
                 null, null, null,
                 null, null, null);
 
-        boolean succeed = (cursor.moveToFirst());
+        String lastDateTag = new String();
 
+        boolean succeed = (cursor.moveToFirst());
         if (succeed) {
             do {
-                String aDate = cursor.getString(cursor.getColumnIndex("date_tag")).substring(5);
+                String aDate = cursor.getString(cursor.getColumnIndex("date_tag"));
                 double aDistance = cursor.getDouble(cursor.getColumnIndex("distance"));
+                double aCalorie = cursor.getDouble(cursor.getColumnIndex("calorie"));
                 if (date.contains(aDate)) {
                     int i = date.indexOf(aDate);
                     distance.set(i, distance.get(i) + aDistance);
+                    calorie.set(i, calorie.get(i) + aCalorie);
                     Log.e("date", date.get(i));
                     Log.e("distance", distance.get(i) + "");
                 } else {
+                    //填充中间日期
+                    long gap = 0L;
+                    long value1 = 0L;
+                    long value2 = 0L;
+                    try {
+                        value1 = dateTagFormat.parse(lastDateTag).getTime();
+                        value2 = dateTagFormat.parse(aDate).getTime();
+                        gap = value2 - value1;
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    while (gap > 24 * 3600 * 1000L) {
+                        value1 += 24 * 3600 * 1000L;
+                        String interval = dateTagFormat.format(new Date(value1));
+                        date.add(interval);
+                        distance.add(0.);
+                        calorie.add(0.);
+                        gap = value2 - value1;
+                        Log.e("date", interval);
+                        Log.e("distance", "0");
+                    }
+
                     date.add(aDate);
                     distance.add(aDistance);
+                    calorie.add(aCalorie);
                     int i = date.indexOf(aDate);
                     Log.e("date", date.get(i));
                     Log.e("distance", distance.get(i) + "");
                 }
+                lastDateTag = aDate;
             } while (cursor.moveToNext());
         }
         cursor.close();
 
-        lineChart = (LineChartView) findViewById(R.id.line_chart);
-        getAxisXLabels();//获取x轴的标注
-        getAxisPoints();//获取坐标点
-        initLineChart();//初始化
+        //填充到今天为止
+        long gap = 0L;
+        long value1 = 0L;
+        String today = dateTagFormat.format(new Date());
+        long value2 = 0L;
+
+        try {
+            value1 = dateTagFormat.parse(lastDateTag).getTime();
+            value2 = dateTagFormat.parse(today).getTime();
+            gap = value2 - value1;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        while (gap > 0) {
+            value1 += 24 * 3600 * 1000L;
+            String interval = dateTagFormat.format(new Date(value1));
+            date.add(interval);
+            distance.add(0.);
+            calorie.add(0.);
+            gap = value2 - value1;
+            Log.e("date", interval);
+            Log.e("distance", "0");
+        }
+
+        for (int i = 0; i < date.size(); i++)
+            date.set(i, date.get(i).substring(5));
     }
 
     /**
@@ -99,18 +172,19 @@ public class WeekRecord_Activity extends AppCompatActivity {
     /**
      * 图表的每个点的显示
      */
-    private void getAxisPoints() {
-        for (int i = 0; i < distance.size(); i++) {
-            mPointValues.add(new PointValue(i, Math.round(distance.get(i))));
+    private void getAxisPoints(ArrayList<Double> list) {
+        mPointValues = new ArrayList<PointValue>();
+        for (int i = 0; i < list.size(); i++) {
+            mPointValues.add(new PointValue(i, Math.round(list.get(i))));
         }
     }
 
-    private void initLineChart() {
+    private void initLineChart(LineChartView lineChart) {
         Line line = new Line(mPointValues).setColor(Color.parseColor("#FFCD41"));  //折线的颜色（橙色）
         List<Line> lines = new ArrayList<Line>();
         line.setShape(ValueShape.CIRCLE);//折线图上每个数据点的形状  这里是圆形 （有三种 ：ValueShape.SQUARE  ValueShape.CIRCLE  ValueShape.DIAMOND）
         line.setCubic(false);//曲线是否平滑，即是曲线还是折线
-        line.setFilled(false);//是否填充曲线的面积
+        line.setFilled(true);//是否填充曲线的面积
         line.setHasLabels(true);//曲线的数据坐标是否加上备注
 //      line.setHasLabelsOnlyForSelected(true);//点击数据坐标提示数据（设置了这个line.setHasLabels(true);就无效）
         line.setHasLines(true);//是否用线显示。如果为false 则没有曲线只有点显示
@@ -146,12 +220,10 @@ public class WeekRecord_Activity extends AppCompatActivity {
         lineChart.setContainerScrollEnabled(true, ContainerScrollType.HORIZONTAL);
         lineChart.setLineChartData(data);
         lineChart.setVisibility(View.VISIBLE);
-        /**注：下面的7，10只是代表一个数字去类比而已
-         * 当时是为了解决X轴固定数据个数。见（http://forum.xda-developers.com/tools/programming/library-hellocharts-charting-library-t2904456/page2）;
-         */
+
+
         Viewport v = new Viewport(lineChart.getMaximumViewport());
-        v.left = 0;
-        v.right = 7;
-        lineChart.setCurrentViewport(v);
+        v.left = v.right - 6;//从右端开始，显示最近七天
+        lineChart.setCurrentViewportWithAnimation(v);
     }
 }
