@@ -57,7 +57,7 @@ public class AlarmService extends Service {
 
         Notification notification = new Notification.Builder(this)
                 .setChannelId(id)
-                .setContentTitle("闹钟服务")//标题
+                .setContentTitle("乐跑圈闹钟服务")//标题
                 .setContentText("运行中...")//内容
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.mipmap.ic_launcher)

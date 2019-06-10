@@ -27,9 +27,11 @@ public class PlanSetting_Activity extends AppCompatActivity
 
     private static Context sContext = null;
     private EditText time;
+    private EditText mileage;
     private Switch alarmSwitch;
     private String mTime;
     private String mDate;
+
 
     public static Context getContext() {
         return sContext;
@@ -46,6 +48,7 @@ public class PlanSetting_Activity extends AppCompatActivity
 
     private void initView() {
         time = (EditText) findViewById(R.id.alarm_time);
+        mileage = (EditText) findViewById(R.id.alarm_mileage);
         alarmSwitch = (Switch) findViewById(R.id.alarm_switch);
     }
 
@@ -90,12 +93,14 @@ public class PlanSetting_Activity extends AppCompatActivity
                     Log.e("Current Time", value2 + "");
                     if (value <= value2) {
                         value += 24 * 3600 * 1000;
-                        Toast.makeText(getApplicationContext(), "今天该时间已过",
+                        Toast.makeText(getApplicationContext(), "今天该时间已过，从明天开始",
                                 Toast.LENGTH_SHORT).show();
                     }
 //                    int delayTime = (int) (value - value2);
                     AlarmService.addNotification(value,
-                            "tick", "title", "text");
+                            "跑步时间到！今天您计划跑" + mileage.getText().toString() + "米",
+                            "乐跑圈",
+                            "跑步时间到！今天您计划跑" + mileage.getText().toString() + "米");
                 } else {
                     AlarmService.cleanAllNotification();
                 }
