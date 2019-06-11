@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.liuzozo.stepdemo.utils.ConstantUtils;
 
@@ -17,6 +18,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -84,14 +87,15 @@ public class Settings_Activity extends AppCompatActivity implements View.OnClick
         if (resultCode == RESULT_OK) {
             if (requestCode == 101) {// 获得未裁剪的照片 --------------->101
 
+                String filePath;
                 if (data != null) {
-                    crop(data.getData());
+                    Uri uri = data.getData();
+                    filePath = uri.getPath();
                 } else {
                     // 相机拍照
-                    crop(ConstantUtils.bgFile);
+                    filePath = cameraPath;
                 }
-
-                System.out.println("---111111111------");
+                crop(filePath);// 裁剪
 
             }
             if (requestCode == 102) {// 裁剪点击确定后执行 --------------->102
@@ -112,42 +116,31 @@ public class Settings_Activity extends AppCompatActivity implements View.OnClick
      *
      */
 
-    private void crop(Uri uri) {
-        Log.e("URI", uri.getPath());
-        // 隐式intent 
+    private void crop(String filePath) {
+        // 隐式intent
         Intent intent = new Intent("com.android.camera.action.CROP");
-        // 设置剪裁数据 150*150 
+
+
+        String[] dataStr = filePath.split("/");
+        String fileTruePath = "sdcard0";
+        fileTruePath = filePath.substring(0, 13) + fileTruePath + filePath.substring(24);
+
+        Uri data = Uri.fromFile(new File(fileTruePath));
+
+        Log.e("VirtualPath", filePath);
+        Log.e("TruePath", data.getPath());
+
+        // 设置剪裁数据 150*150
+        intent.setDataAndType(data, "image/*");
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-        intent.setDataAndType(uri, "image/*");
         intent.putExtra("crop", true);
         intent.putExtra("return-data", true);
         intent.putExtra("aspectX", 1);
         intent.putExtra("aspectY", 1);
         intent.putExtra("outputX", 150);
         intent.putExtra("outputY", 150);
-        startActivityForResult(intent, 102);
+        startActivityForResult(intent, 102);// --------------->102
     }
-
-    private void crop(File file) {
-        Log.e("FILE", file.getPath());
-        // 隐式intent 
-        Uri uri = FileProvider.getUriForFile(this, "com.liuzozo.stepdemo.fileprovider", file);
-        // 隐式intent 
-        Intent intent = new Intent("com.android.camera.action.CROP");
-
-        // 设置剪裁数据 150*150 
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-        intent.setDataAndType(uri, "image/*");
-        intent.putExtra("crop", true);
-        intent.putExtra("return-data", true);
-        intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 1);
-        intent.putExtra("outputX", 150);
-        intent.putExtra("outputY", 150);
-        startActivityForResult(intent, 102);
-    }
-
 
 }
