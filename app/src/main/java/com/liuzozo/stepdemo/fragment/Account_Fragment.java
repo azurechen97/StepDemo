@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import com.liuzozo.stepdemo.PlanSetting_Activity;
 import com.liuzozo.stepdemo.R;
+import com.liuzozo.stepdemo.Settings_Activity;
 import com.liuzozo.stepdemo.SportMap_Activity;
 import com.liuzozo.stepdemo.TuLinTalk_Activity;
 import com.liuzozo.stepdemo.WeekRecord_Activity;
@@ -209,7 +210,7 @@ public class Account_Fragment extends Fragment implements View.OnClickListener {
 
     private void setAvatar() {
         Intent intent = new Intent(getActivity(),
-                SportMap_Activity.class);
+                Settings_Activity.class);
         startActivity(intent);
     }
 
