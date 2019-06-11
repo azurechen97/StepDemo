@@ -24,12 +24,15 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.liuzozo.stepdemo.PlanSetting_Activity;
 import com.liuzozo.stepdemo.R;
 import com.liuzozo.stepdemo.Settings_Activity;
 import com.liuzozo.stepdemo.SportMap_Activity;
 import com.liuzozo.stepdemo.TuLinTalk_Activity;
 import com.liuzozo.stepdemo.WeekRecord_Activity;
+import com.liuzozo.stepdemo.utils.PermissionUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -77,8 +80,16 @@ public class Account_Fragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_account, container,
                 false);
+        PermissionUtils.verifyStoragePermissions(getActivity());
         initView(view);
+        initShared();
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initShared();
     }
 
     private void initView(View view) {
@@ -104,6 +115,9 @@ public class Account_Fragment extends Fragment implements View.OnClickListener {
         unit = (TextView) dialogView.findViewById(R.id.unit);
         editText = (EditText) dialogView.findViewById(R.id.editText);
 
+    }
+
+    private void initShared() {
         SharedPreferences preferences = getActivity().getSharedPreferences(
                 "BMI-data", MODE_PRIVATE);
         float height = preferences.getFloat("height", (float) 175.);
@@ -115,6 +129,20 @@ public class Account_Fragment extends Fragment implements View.OnClickListener {
         editor = getActivity().getSharedPreferences(
                 "BMI-data", MODE_PRIVATE).edit();
 
+        SharedPreferences settings = getActivity().getSharedPreferences(
+                "settings", MODE_PRIVATE);
+        if (settings.contains("portrait")) {
+            String path = settings.getString("portrait", null);
+            Uri uri = Uri.parse(path);
+
+            Glide.with(this)
+                    .load(uri)
+                    .placeholder(R.mipmap.man_pic)
+                    .error(R.mipmap.ic_launcher)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .override(300, 300)//指定图片大小
+                    .into(icon);
+        }
     }
 
     @Override
