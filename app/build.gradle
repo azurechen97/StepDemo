@@ -50,5 +50,6 @@ dependencies {
     implementation files('libs/volley.jar')
 
     implementation 'com.jakewharton:butterknife:6.1.0'
+    implementation 'de.hdodenhof:circleimageview:2.1.0'
 
 }
