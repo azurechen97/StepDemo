@@ -84,7 +84,7 @@
             app:civ_border_color="#00000000" />
 
         <Button
-            android:id="@+id/iv_icon_set"
+            android:id="@+id/btn_icon_set"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
