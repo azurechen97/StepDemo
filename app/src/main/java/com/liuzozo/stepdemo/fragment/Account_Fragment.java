@@ -70,7 +70,6 @@ public class Account_Fragment extends Fragment implements View.OnClickListener {
     SharedPreferences.Editor editor;
 
     private CircleImageView icon;
-    private Button setIcon;
 
 
     @Override
@@ -90,7 +89,7 @@ public class Account_Fragment extends Fragment implements View.OnClickListener {
         tvWeight = view.findViewById(R.id.tv_weight);
         tvBMI = view.findViewById(R.id.tv_bmi);
         icon = (CircleImageView) view.findViewById(R.id.iv_icon);
-        setIcon = (Button) view.findViewById(R.id.btn_icon_set);
+
         // 设置对应的监听事件
         planSettingLayout.setOnClickListener(this);
         weekRecordLayout.setOnClickListener(this);
@@ -98,7 +97,7 @@ public class Account_Fragment extends Fragment implements View.OnClickListener {
         tvHeight.setOnClickListener(this);
         tvWeight.setOnClickListener(this);
         tvBMI.setOnClickListener(this);
-        setIcon.setOnClickListener(this);
+        icon.setOnClickListener(this);
 
         layoutInflater = LayoutInflater.from(getActivity());
         dialogView = layoutInflater.inflate(R.layout.dialog_parameters, null);
@@ -199,19 +198,15 @@ public class Account_Fragment extends Fragment implements View.OnClickListener {
                         .show();
                 break;
 
-            case R.id.btn_icon_set:
-                setAvatar();
+            case R.id.iv_icon:
+                Intent intent = new Intent(getActivity(),
+                        Settings_Activity.class);
+                startActivity(intent);
                 break;
 
             default:
                 break;
         }
-    }
-
-    private void setAvatar() {
-        Intent intent = new Intent(getActivity(),
-                Settings_Activity.class);
-        startActivity(intent);
     }
 
 }
