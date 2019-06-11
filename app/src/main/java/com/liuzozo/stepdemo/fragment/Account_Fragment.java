@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import com.liuzozo.stepdemo.PlanSetting_Activity;
 import com.liuzozo.stepdemo.R;
+import com.liuzozo.stepdemo.SportMap_Activity;
 import com.liuzozo.stepdemo.TuLinTalk_Activity;
 import com.liuzozo.stepdemo.WeekRecord_Activity;
 
@@ -67,24 +68,9 @@ public class Account_Fragment extends Fragment implements View.OnClickListener {
 
     SharedPreferences.Editor editor;
 
-    private Context mContext;
-
     private CircleImageView icon;
     private Button setIcon;
-    String cameraPath;// 拍摄头像照片时SD卡的路径
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        mContext = context;
-        Log.e("mContext", mContext.toString());
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mContext = null;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -222,88 +208,10 @@ public class Account_Fragment extends Fragment implements View.OnClickListener {
     }
 
     private void setAvatar() {
-        Intent intent1 = new Intent(Intent.ACTION_PICK);
-        intent1.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-
-        Intent intent2 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File file = new File(
-                Environment
-                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                System.currentTimeMillis() + ".jpg");
-        cameraPath = file.getAbsolutePath();
-//        Uri uri = Uri.fromFile(file);
-        Log.e("mContext", mContext.toString());
-        Uri uri = FileProvider.getUriForFile(mContext,
-                "com.liuzozo.stepdemo.fragment.fileprovider",
-                file);
-        intent2.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-        Intent chooser = Intent.createChooser(intent1, "选择头像");
-        chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{intent2});
-        startActivityForResult(chooser, 101);// --------------->101
+        Intent intent = new Intent(getActivity(),
+                SportMap_Activity.class);
+        startActivity(intent);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        try {
-            super.onActivityResult(requestCode, resultCode, data);
-            if (resultCode == RESULT_OK) {
-                Log.e("request", "Success");
-                if (requestCode == 101) {// 获得未裁剪的照片 --------------->101
-                    Log.e("code", "101");
-                    String filePath;
-                    if (data != null) {
-                        Uri uri = data.getData();
-                        filePath = uri.getPath();
-                    } else {
-                        // 相机拍照
-                        filePath = cameraPath;
-                    }
-                    crop(filePath);// 裁剪
-                }
-                if (requestCode == 102) {// 裁剪点击确定后执行 --------------->102
-                    Log.e("code", "102");
-                    // 获得了系统截图程序返回的截取后的图片
-                    final Bitmap bitmap = data.getParcelableExtra("data");
-                    // 上传前，要将bitmap保存到SD卡
-                    // 获得保存路径后，再上传
-                    final File file = new File(
-                            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                            System.currentTimeMillis() + ".jpg");
-                    OutputStream stream = new FileOutputStream(file);
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                    // 上传头像数据并显示头像操作
-                    // showProgressDialog();
-                    // uploading();
-                    // Glide.with(SetActivity.this).load(file.getPath()).into(icon);
-                    // closeProgressDialog();
-                }
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * 调用安卓的图片剪裁程序对用户选择的头像进行剪裁
-     *
-     * @param filePath 用户选取的头像在SD上的地址
-     */
-    private void crop(String filePath) {
-        // 隐式intent
-        Intent intent = new Intent("com.android.camera.action.CROP");
-//        Uri data = Uri.fromFile(new File(filePath));
-        Uri data = FileProvider.getUriForFile(mContext,
-                "com.liuzozo.stepdemo.fragment.fileprovider",
-                new File(filePath));
-        // 设置剪裁数据 150*150
-        intent.setDataAndType(data, "image/*");
-        intent.putExtra("crop", true);
-        intent.putExtra("return-data", true);
-        intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 1);
-        intent.putExtra("outputX", 150);
-        intent.putExtra("outputY", 150);
-        startActivityForResult(intent, 102);// --------------->102
-    }
 }
 
