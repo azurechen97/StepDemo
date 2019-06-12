@@ -1,12 +1,8 @@
 package com.liuzozo.stepdemo.calendarview.custom;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.view.LayoutInflater;
 
-import com.haibin.calendarview.Calendar;
 import com.haibin.calendarview.WeekBar;
-import com.liuzozo.stepdemo.R;
 
 /**
  * 自定义英文栏

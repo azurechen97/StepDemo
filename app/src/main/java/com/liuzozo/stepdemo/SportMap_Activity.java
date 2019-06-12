@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-
 import android.os.CountDownTimer;
 import android.os.SystemClock;
 import android.support.v4.content.ContextCompat;
@@ -27,21 +26,18 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
-
 import com.amap.api.maps.AMapUtils;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
-
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.maps.model.PolylineOptions;
 import com.liuzozo.stepdemo.bean.PathRecord;
+import com.liuzozo.stepdemo.ui.UIHelperUtil;
 import com.liuzozo.stepdemo.utils.DBUtils;
 import com.liuzozo.stepdemo.utils.MyCountTimer;
-import com.liuzozo.stepdemo.ui.UIHelperUtil;
 import com.liuzozo.stepdemo.utils.MyDatabaseHelper;
-
 
 import java.lang.reflect.Method;
 import java.text.DecimalFormat;
@@ -52,17 +48,17 @@ import java.util.List;
 
 /**
  * 开始跑步页面  ,分跑步模式和地图模式
- *
- *    当开始跑步时 倒计时3秒，
- *    同时利用 PathRecord 设置 startTime 、记录路径的经纬度，
- *    可以通过记录的两个经纬度的距离计算跑了多少公里
- *    数据库里面保存:
- *    当前时间的时间戳，  距离， 时长， 开始时间， 结束时间， 开始位置的经纬度， 结束位置的经纬度，路线的经纬度
- *    根据体重计算的卡路里， 平均时速（公里/小时） 平均配速（分钟/公里）
- *
- *  tips:
- *  onLocationChanged 可以每隔几秒钟获得一次当前位置的经纬度，你可以把它保存到List 里面，
- *  当跑完步把list 保存到PathRecord 类，从而保存到数据库
+ * <p>
+ * 当开始跑步时 倒计时3秒，
+ * 同时利用 PathRecord 设置 startTime 、记录路径的经纬度，
+ * 可以通过记录的两个经纬度的距离计算跑了多少公里
+ * 数据库里面保存:
+ * 当前时间的时间戳，  距离， 时长， 开始时间， 结束时间， 开始位置的经纬度， 结束位置的经纬度，路线的经纬度
+ * 根据体重计算的卡路里， 平均时速（公里/小时） 平均配速（分钟/公里）
+ * <p>
+ * tips:
+ * onLocationChanged 可以每隔几秒钟获得一次当前位置的经纬度，你可以把它保存到List 里面，
+ * 当跑完步把list 保存到PathRecord 类，从而保存到数据库
  */
 
 public class SportMap_Activity extends AppCompatActivity implements

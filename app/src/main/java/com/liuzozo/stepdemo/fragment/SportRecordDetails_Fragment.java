@@ -11,7 +11,6 @@ import com.liuzozo.stepdemo.R;
 import com.liuzozo.stepdemo.bean.PathRecord;
 import com.liuzozo.stepdemo.utils.StepUtils;
 
-import java.nio.file.Path;
 import java.text.DecimalFormat;
 
 import static com.liuzozo.stepdemo.SportRecordDetails_Activity.SPORT_DATA;

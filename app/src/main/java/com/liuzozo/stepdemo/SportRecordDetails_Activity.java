@@ -19,7 +19,7 @@ import com.liuzozo.stepdemo.ui.AMapScrollViewPager;
 import java.util.ArrayList;
 
 /**
- *  运动详情页面： 包括两个Fragment , 分别接收从日历列表传来的 某一条记录的数据，显示到界面上
+ * 运动详情页面： 包括两个Fragment , 分别接收从日历列表传来的 某一条记录的数据，显示到界面上
  */
 public class SportRecordDetails_Activity extends AppCompatActivity {
 

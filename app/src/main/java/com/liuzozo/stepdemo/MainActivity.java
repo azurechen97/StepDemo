@@ -1,8 +1,8 @@
 package com.liuzozo.stepdemo;
 
+import android.os.Bundle;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,8 +14,8 @@ import com.liuzozo.stepdemo.fragment.Sport_Fragment;
 import com.liuzozo.stepdemo.fragment.StepData_Fragment;
 
 /**
- *  app 主界面
- *  用于放三个Fragment 子布局
+ * app 主界面
+ * 用于放三个Fragment 子布局
  */
 public class MainActivity extends AppCompatActivity {
 

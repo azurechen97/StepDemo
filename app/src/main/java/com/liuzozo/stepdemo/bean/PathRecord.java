@@ -4,7 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.amap.api.location.AMapLocation;
-import com.amap.api.maps.AMapUtils;
 import com.amap.api.maps.model.LatLng;
 import com.liuzozo.stepdemo.utils.StepUtils;
 

@@ -13,11 +13,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
             <RelativeLayout
                 android:id="@+id/rl_tool"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
                 android:background="#FFF">
+
                 <TextView
                     android:id="@+id/tv_month_day"
                     android:layout_width="wrap_content"
@@ -27,6 +29,7 @@
                     android:textColor="#000"
                     android:textSize="26sp"
                     android:textStyle="bold" />
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"

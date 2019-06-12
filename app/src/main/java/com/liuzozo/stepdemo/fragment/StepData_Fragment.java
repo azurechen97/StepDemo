@@ -4,15 +4,13 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Rect;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -26,7 +24,6 @@ import com.liuzozo.stepdemo.adapter.SportCalendarAdapter;
 import com.liuzozo.stepdemo.bean.PathRecord;
 import com.liuzozo.stepdemo.bean.SportRecord;
 import com.liuzozo.stepdemo.calendarview.custom.FullyLinearLayoutManager;
-import com.liuzozo.stepdemo.utils.DBUtils;
 import com.liuzozo.stepdemo.utils.MyDatabaseHelper;
 import com.liuzozo.stepdemo.utils.StepUtils;
 

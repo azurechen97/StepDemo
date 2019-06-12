@@ -1,7 +1,6 @@
 package com.liuzozo.stepdemo.utils;
 
 import android.os.CountDownTimer;
-import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;

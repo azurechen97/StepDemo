@@ -6,7 +6,6 @@ import com.amap.api.trace.TraceLocation;
 import com.liuzozo.stepdemo.bean.PathRecord;
 import com.liuzozo.stepdemo.bean.SportRecord;
 
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -110,6 +109,7 @@ public class StepUtils {
 
     /**
      * 将数据库里面保存的String 转为对应的LatLng ,以便显示在地图上
+     *
      * @param latLonStr
      * @return
      */
@@ -127,6 +127,7 @@ public class StepUtils {
 
     /**
      * 把地图上的经纬度转为String , 以便于保存
+     *
      * @return
      */
     public static String getLatLngPathLineString(List<LatLng> list) {

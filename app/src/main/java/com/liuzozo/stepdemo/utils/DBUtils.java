@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 import com.liuzozo.stepdemo.bean.PathRecord;
 import com.liuzozo.stepdemo.bean.SportRecord;
 
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
