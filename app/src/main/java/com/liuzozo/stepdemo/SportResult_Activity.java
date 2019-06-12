@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -228,7 +229,7 @@ public class SportResult_Activity extends AppCompatActivity implements
                 File file = bitMap2File(img);
                 if (file != null && file.exists() && file.isFile()) {
                     //由文件得到uri
-                    Uri imageUri = Uri.fromFile(file);
+                    Uri imageUri = FileProvider.getUriForFile(this, "com.liuzozo.stepdemo.fileprovider", file);
                     Intent shareIntent = new Intent();
                     shareIntent.setAction(Intent.ACTION_SEND);
                     shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
