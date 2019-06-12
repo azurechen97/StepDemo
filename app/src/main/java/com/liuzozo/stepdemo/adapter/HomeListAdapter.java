@@ -1,13 +1,20 @@
 package com.liuzozo.stepdemo.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.media.Image;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.liuzozo.stepdemo.R;
 import com.liuzozo.stepdemo.bean.HomeListBean;
 
@@ -15,6 +22,8 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+
+import static android.content.Context.MODE_PRIVATE;
 
 
 /**
@@ -33,6 +42,8 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.MyView
     private Context mContext;
     private OnItemClickLitener mOnItemClickLitener;
 
+    private SharedPreferences settings;
+
     public HomeListAdapter(Context context, List<HomeListBean> datas) {
         this.mDatas = datas;
         this.mContext = context;
@@ -42,16 +53,42 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.MyView
         this.mOnItemClickLitener = mOnItemClickLitener;
     }
 
+    public void setIcon(ImageView icon) {
+
+        settings = mContext.getSharedPreferences(
+                "settings", MODE_PRIVATE);
+        if (settings.contains("portrait")) {
+            String path = settings.getString("portrait", null);
+            Uri uri = Uri.parse(path);
+
+            Log.e("savedUri", uri.toString());
+
+
+            Glide.with(mContext)
+                    .load(uri)
+                    .placeholder(R.mipmap.man_pic)
+                    .error(R.mipmap.icon_app)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .override(100, 100)//指定图片大小
+                    .into(icon);
+        }
+    }
+
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         MyViewHolder holder = new MyViewHolder(LayoutInflater.from(mContext).inflate(
                 R.layout.item_home_list, parent, false));
+
         return holder;
     }
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         homeListBeen = mDatas.get(position);
+
+        ImageView icon = holder.ivHomeRightIc;
+
+        setIcon(icon);
 
         //test 仅供显示
         if (position == 0) {
