@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -41,6 +42,8 @@ public class PlanSetting_Activity extends AppCompatActivity
     private RelativeLayout timeLayout;
 
     private SharedPreferences.Editor editor;
+
+    private DecimalFormat format = new DecimalFormat("00");
 
 
     public static Context getContext() {
@@ -171,7 +174,7 @@ public class PlanSetting_Activity extends AppCompatActivity
 //                    int delayTime = (int) (value - value2);
                     AlarmService.addNotification(value,
                             "跑步时间到！今天您计划跑" + mMileage + "米",
-                            "乐跑圈",
+                            "icon_app",
                             "跑步时间到！今天您计划跑" + mMileage + "米");
                 } else {
                     editor.putBoolean("checked", false);
@@ -201,7 +204,7 @@ public class PlanSetting_Activity extends AppCompatActivity
 
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                        time.setText(selectedHour + ":" + selectedMinute);
+                        time.setText(format.format(selectedHour) + ":" + format.format(selectedMinute));
                     }
                 }, hour, minute, true).show();
 

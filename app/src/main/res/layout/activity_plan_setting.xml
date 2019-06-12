@@ -77,7 +77,7 @@
                     android:text="5000"
                     android:textSize="30sp"
                     android:textColor="#fff"
-                    android:hint="请输入计划里程"
+                    android:hint="请输入"
                     android:textStyle="bold" />
 
                 <TextView

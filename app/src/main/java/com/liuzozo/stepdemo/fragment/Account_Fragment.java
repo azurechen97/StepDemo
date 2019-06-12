@@ -122,7 +122,7 @@ public class Account_Fragment extends Fragment implements View.OnClickListener {
             Glide.with(this)
                     .load(uri)
                     .placeholder(R.mipmap.man_pic)
-                    .error(R.mipmap.ic_launcher)
+                    .error(R.mipmap.icon_app)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .override(300, 300)//指定图片大小
                     .into(icon);

@@ -24,7 +24,7 @@
             android:id="@+id/iv_home_left_ic"
             android:layout_width="42dp"
             android:layout_height="42dp"
-            android:src="@mipmap/ic_launcher_round" />
+            android:src="@mipmap/icon_app_round" />
 
         <TextView
             android:id="@+id/tv_home_left_content"
@@ -49,7 +49,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:src="@mipmap/ic_launcher_round"
+            android:src="@mipmap/icon_app_round"
             android:visibility="gone" />
 
         <TextView

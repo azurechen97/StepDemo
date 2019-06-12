@@ -67,7 +67,7 @@ public class Settings_Activity extends AppCompatActivity implements View.OnClick
                 @Override
                 public boolean onLoadFailed(@Nullable GlideException e, Object model, Target target, boolean isFirstResource) {
                     Log.e("GlideFailed", "onException: " + e.toString() + "  model:" + model + " isFirstResource: " + isFirstResource);
-                    icon.setImageResource(R.mipmap.ic_launcher);
+                    icon.setImageResource(R.mipmap.icon_app);
                     return false;
                 }
 
@@ -82,7 +82,7 @@ public class Settings_Activity extends AppCompatActivity implements View.OnClick
             Glide.with(this)
                     .load(uri)
                     .placeholder(R.mipmap.man_pic)
-                    .error(R.mipmap.ic_launcher)
+                    .error(R.mipmap.icon_app)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .override(300, 300)//指定图片大小
                     .listener(mRequestListener)
@@ -153,7 +153,7 @@ public class Settings_Activity extends AppCompatActivity implements View.OnClick
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target target, boolean isFirstResource) {
                         Log.e("Glide", "onException: " + e.toString() + "  model:" + model + " isFirstResource: " + isFirstResource);
-                        icon.setImageResource(R.mipmap.ic_launcher);
+                        icon.setImageResource(R.mipmap.icon_app);
                         return false;
                     }
 
@@ -170,7 +170,7 @@ public class Settings_Activity extends AppCompatActivity implements View.OnClick
                     Glide.with(this)
                             .load(uri)
                             .placeholder(R.mipmap.man_pic)
-                            .error(R.mipmap.ic_launcher)
+                            .error(R.mipmap.icon_app)
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .override(300, 300)//指定图片大小
                             .addListener(mRequestListener)
