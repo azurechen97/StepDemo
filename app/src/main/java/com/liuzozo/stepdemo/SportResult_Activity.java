@@ -11,13 +11,16 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdateFactory;
@@ -29,6 +32,7 @@ import com.liuzozo.stepdemo.utils.MyDatabaseHelper;
 import com.liuzozo.stepdemo.utils.PathSmoothTool;
 import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
+import com.liuzozo.stepdemo.utils.ScreenShotHelper;
 import com.liuzozo.stepdemo.utils.StepUtils;
 
 import java.io.ByteArrayInputStream;
@@ -46,7 +50,7 @@ import java.util.List;
  */
 public class SportResult_Activity extends AppCompatActivity implements
         View.OnClickListener, CompoundButton.OnCheckedChangeListener,
-        AMap.OnMapLoadedListener {
+        AMap.OnMapLoadedListener, AMap.OnMapScreenShotListener {
 
     private TextView textView;
     private ImageView star1;
@@ -71,6 +75,9 @@ public class SportResult_Activity extends AppCompatActivity implements
 
     private MyDatabaseHelper dbHelper;
     private SQLiteDatabase db;
+
+    private ViewGroup mViewGroupContainer;
+    private View mScreenShotView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,6 +136,7 @@ public class SportResult_Activity extends AppCompatActivity implements
 
         mOriginBtn = (CheckBox) findViewById(R.id.record_show_activity_origin_button);
         mKalmanBtn = (CheckBox) findViewById(R.id.record_show_activity_kalman_button);
+
         mOriginBtn.setOnCheckedChangeListener(this);
         mKalmanBtn.setOnCheckedChangeListener(this);
 
@@ -141,6 +149,9 @@ public class SportResult_Activity extends AppCompatActivity implements
 
         returnMain = (Button) findViewById(R.id.return_result);
         returnMain.setOnClickListener(this);
+
+        mViewGroupContainer = (ViewGroup) findViewById(R.id.root_pic_id);
+        mScreenShotView = (View) findViewById(R.id.screenshot_view);
     }
 
     private void initMap() {
@@ -220,16 +231,21 @@ public class SportResult_Activity extends AppCompatActivity implements
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_shared:
+                amap.getMapScreenShot(this);
 
-                final View textView = LayoutInflater.from(this).inflate(
-                        R.layout.activity_sport_result, null);
-                View rootView = textView.findViewById(R.id.root_pic_id);
-                Bitmap bitmap = getBitmapByView(rootView);
-                Bitmap img = compressImage(bitmap);
-                File file = bitMap2File(img);
+//                final View textView = LayoutInflater.from(this).inflate(
+//                        R.layout.activity_sport_result, null);
+//                View rootView = textView.findViewById(R.id.root_pic_id);
+//                Bitmap bitmap = getBitmapByView(rootView);
+//                Bitmap img = compressImage(bitmap);
+//                File file = bitMap2File(img);
+                File file = new File(Environment.getExternalStorageDirectory().
+                        getAbsolutePath() + File.separator + "share.png");
+                Log.e("File", file.getAbsolutePath() + " exist = " + file.exists());
                 if (file != null && file.exists() && file.isFile()) {
                     //由文件得到uri
-                    Uri imageUri = FileProvider.getUriForFile(this, "com.liuzozo.stepdemo.fileprovider", file);
+                    Uri imageUri = FileProvider.getUriForFile(
+                            this, "com.liuzozo.stepdemo.fileprovider", file);
                     Intent shareIntent = new Intent();
                     shareIntent.setAction(Intent.ACTION_SEND);
                     shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
@@ -341,5 +357,17 @@ public class SportResult_Activity extends AppCompatActivity implements
     protected void onDestroy() {
         super.onDestroy();
         mapView.onDestroy();
+    }
+
+    @Override
+    public void onMapScreenShot(Bitmap bitmap) {
+        ScreenShotHelper.saveScreenShot(bitmap, mViewGroupContainer, mapView, mScreenShotView);
+        Toast.makeText(getApplicationContext(), "已截图", Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void onMapScreenShot(Bitmap bitmap, int i) {
+
     }
 }
