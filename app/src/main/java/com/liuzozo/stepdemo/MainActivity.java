@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private int imageViewArray[] = {R.drawable.account_change_icon,
             R.drawable.data_change_icon, R.drawable.account_change_icon};
     // Tab 选项卡的文字
-    private String textViewArray[] = {"sports", "data", "account"};
+    private String textViewArray[] = {"运动", "记录", "我"};
 
 
     @Override

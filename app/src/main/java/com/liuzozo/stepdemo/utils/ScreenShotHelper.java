@@ -25,7 +25,8 @@ public class ScreenShotHelper {
      * @param mapView       MapView控件
      * @param views         其他想要在截图中显示的控件
      */
-    public static void saveScreenShot(final Bitmap bitmap, final ViewGroup viewContainer, final MapView mapView, final View... views) {
+    public static void saveScreenShot(final Bitmap bitmap, final ViewGroup viewContainer,
+                                      final MapView mapView, final View... views) {
         new Thread() {
             public void run() {
 
@@ -65,7 +66,8 @@ public class ScreenShotHelper {
      * @param mapView       MapView控件
      * @param views         其他想要在截图中显示的控件
      */
-    public static Bitmap getMapAndViewScreenShot(Bitmap bitmap, ViewGroup viewContainer, MapView mapView, View... views) {
+    public static Bitmap getMapAndViewScreenShot(Bitmap bitmap, ViewGroup viewContainer,
+                                                 MapView mapView, View... views) {
         int width = viewContainer.getWidth();
         int height = viewContainer.getHeight();
         final Bitmap screenBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);

@@ -4,155 +4,304 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:id="@+id/root_pic_id">
 
-    <com.amap.api.maps.MapView
-        android:id="@+id/map_result"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"></com.amap.api.maps.MapView>
-
-    <LinearLayout
-        android:id="@+id/record_show_activity_trace_group"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="20dp"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <CheckBox
-                android:id="@+id/record_show_activity_origin_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:text="原始轨迹" />
-
-            <View
-                android:layout_width="15dp"
-                android:layout_height="5dp"
-                android:layout_gravity="center_vertical"
-                android:background="#00EE00"
-                android:paddingLeft="15dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <CheckBox
-                android:id="@+id/record_show_activity_kalman_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:text="平滑轨迹" />
-
-            <View
-                android:layout_width="15dp"
-                android:layout_height="5dp"
-                android:layout_gravity="center_vertical"
-                android:background="#FFC125"
-                android:paddingLeft="15dp" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="right|top"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="运动效果页面，此页面自己实现啊" />
-
-
-        <TextView
-            android:id="@+id/tv_shared"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="分享朋友圈" />
-
-    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="350dp"
+        android:background="@mipmap/sport_bg"
         android:id="@+id/screenshot_view">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <RelativeLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:gravity="center_horizontal|center_vertical"
-            android:orientation="horizontal">
+            android:id="@+id/star_layout">
 
-            <ImageView
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:gravity="center_horizontal|center_vertical"
+                android:orientation="horizontal"
+                android:id="@+id/stars">
+
+                <ImageView
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    app:srcCompat="@mipmap/big_no_star" />
+
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    app:srcCompat="@mipmap/big_no_star" />
+
+                <ImageView
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    app:srcCompat="@mipmap/big_no_star" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:gravity="center_horizontal|center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/star_1"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    app:srcCompat="@mipmap/big_star"
+                    tools:visibility="invisible" />
+
+                <ImageView
+                    android:id="@+id/star_2"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    app:srcCompat="@mipmap/big_star"
+                    tools:visibility="invisible" />
+
+                <ImageView
+                    android:id="@+id/star_3"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    app:srcCompat="@mipmap/big_star"
+                    tools:visibility="invisible" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/hint_icon"
+                android:clickable="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@mipmap/big_no_star" />
+                android:layout_marginTop="10dp"
+                android:layout_below="@id/stars"
+                android:layout_centerHorizontal="true"
+                android:gravity="center_vertical">
 
-            <ImageView
+                <TextView
+                    android:id="@+id/comments"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="根本就没跑几步吧？"
+                    android:textColor="#FFFFFFFF" />
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:src="@drawable/vector_drawable_tishi" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/hint_card"
+            app:cardCornerRadius="5sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/star_layout"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="11dp"
+            android:visibility="invisible">
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@mipmap/big_no_star" />
+                android:layout_margin="10dp">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@mipmap/big_no_star" />
+                <TextView
+                    android:id="@+id/hint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxWidth="250sp"
+                    android:text="尝试跑起来吧，或者到信号好一点的地方试试？"
+                    android:textColor="#666666"
+                    android:textSize="12sp" />
 
-        </LinearLayout>
+            </LinearLayout>
 
-        <LinearLayout
+
+        </android.support.v7.widget.CardView>
+
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center_horizontal|center_vertical"
-            android:orientation="horizontal">
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
+            android:padding="25dp">
 
-            <ImageView
-                android:id="@+id/star_1"
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@mipmap/big_star"
-                tools:visibility="invisible" />
+                android:layout_alignParentBottom="true">
 
-            <ImageView
-                android:id="@+id/star_2"
+                <TextView
+                    android:id="@+id/result_distance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text="0.00"
+                    android:textColor="#fff"
+                    android:textSize="28sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/result_distance"
+                    android:layout_centerHorizontal="true"
+                    android:text="公里"
+                    android:textColor="#fff"
+                    android:textSize="12sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@mipmap/big_star"
-                tools:visibility="invisible" />
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true">
 
-            <ImageView
-                android:id="@+id/star_3"
+                <TextView
+                    android:id="@+id/result_duration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text="00:00:00"
+                    android:textColor="#fff"
+                    android:textSize="28sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/result_duration"
+                    android:layout_centerHorizontal="true"
+                    android:text="跑步时间"
+                    android:textColor="#fff"
+                    android:textSize="12sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@mipmap/big_star"
-                tools:visibility="invisible" />
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true">
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/result_calorie"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text="0"
+                    android:textColor="#fff"
+                    android:textSize="28sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/result_calorie"
+                    android:layout_centerHorizontal="true"
+                    android:text="大卡"
+                    android:textColor="#fff"
+                    android:textSize="12sp" />
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:orientation="horizontal"
+            android:padding="15dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:orientation="horizontal"
+                android:id="@+id/tv_shared"
+                android:clickable="true">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/vector_drawable_fenxiang"
+                    android:layout_gravity="center_vertical" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:textColor="#DDFFFFFF"
+                    android:layout_gravity="center_vertical"
+                    android:text="  分享" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/return_result"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:orientation="horizontal"
+                android:clickable="true">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/vector_drawable_fanhui"
+                    android:layout_gravity="center_vertical" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" 返回"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:textColor="#DDFFFFFF"
+                    android:layout_gravity="center_vertical" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
 
     </RelativeLayout>
 
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+    <com.amap.api.maps.MapView
+        android:id="@+id/map_result"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/screenshot_view">
 
-        <Button
-            android:id="@+id/return_result"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="返回"></Button>
-    </LinearLayout>
+    </com.amap.api.maps.MapView>
+
+
+    <CheckBox
+        android:id="@+id/record_show_activity_kalman_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/map_result"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="15dp"
+        android:checked="false"
+        android:text="平滑轨迹 " />
 
 
 </RelativeLayout>

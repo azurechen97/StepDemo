@@ -11,13 +11,16 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +43,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,11 +55,22 @@ public class SportResult_Activity extends AppCompatActivity implements
         View.OnClickListener, CompoundButton.OnCheckedChangeListener,
         AMap.OnMapLoadedListener, AMap.OnMapScreenShotListener {
 
-    private TextView textView;
+    private LinearLayout share;
     private ImageView star1;
     private ImageView star2;
     private ImageView star3;
-    private Button returnMain;
+    private LinearLayout returnMain;
+    private TextView comments;
+    private TextView distanceText;
+    private TextView durationText;
+    private TextView calorieText;
+    private CardView hintCard;
+    private TextView hint;
+    private LinearLayout hintIcon;
+    private boolean hintShown = false;
+
+    private DecimalFormat decimalFormat = new DecimalFormat("0.00");
+    private DecimalFormat intFormat = new DecimalFormat("0");
 
     private List<LatLng> pathLine = new ArrayList<LatLng>();
     private double distance = 0.;
@@ -63,13 +78,16 @@ public class SportResult_Activity extends AppCompatActivity implements
     //    private int durationHour = 0;
 //    private int durationMin = 0;
 //    private int durationSec = 0;
-//    private double calorie = 0.;
+    private double calorie = 0.;
     private double speed = 0.;
+
+    private Double distanceM;
+    private Long durationMs;
 
     private MapView mapView = null;
     private AMap amap = null;
     private Polyline mOriginPolyline, mKalmanPolyline;
-    private CheckBox mOriginBtn, mKalmanBtn;
+    private CheckBox mKalmanBtn;
     private PathSmoothTool mPathSmoothTool;
 
     private MyDatabaseHelper dbHelper;
@@ -86,40 +104,27 @@ public class SportResult_Activity extends AppCompatActivity implements
         init();
 
         initDB();
-        Cursor cursor = db.query("sport_record",
-                null, null, null,
-                null, null, null);
 
-        boolean succeed = (cursor.moveToLast()); //查询最近的记录
-
-        if (succeed) {
-            String pathLineStr = cursor.getString(cursor.getColumnIndex("path_line"));
-            pathLine = StepUtils.parseLatLngLocations(pathLineStr);
-
-            Double distanceM = cursor.getDouble(cursor.getColumnIndex("distance"));
-            distance = distanceM / 1000;
-
-            Long durationMs = cursor.getLong(cursor.getColumnIndex("duration"));
-            duration = (double) durationMs / 1000 / 60;
-//            durationHour = (int) (durationMs / 1000 / 3600);
-//            durationMin = (int) (durationMs / 1000 / 60) % 60;
-//            durationSec = (int) (durationMs / 1000) % 60;
-
-//            calorie = cursor.getDouble(cursor.getColumnIndex("calorie"));
-
-            speed = cursor.getDouble(cursor.getColumnIndex("speed"));
-
-        }
-        cursor.close();
 
         if (distance > 0) {
             star1.setVisibility(View.VISIBLE);
+            comments.setText("跑步效果一般");
+            hint.setText("跑步时间不足40分钟，试着跑久一点吧");
             if (duration > 40) {
                 star2.setVisibility(View.VISIBLE);
-                if (speed >= 3 & speed <= 6)
+                comments.setText("跑步效果不错");
+                hint.setText("尝试把速度控制在3-6公里每小时会得到更好的锻炼效果");
+                if (speed >= 3 & speed <= 6) {
                     star3.setVisibility(View.VISIBLE);
+                    comments.setText("跑步效果很OK");
+                    hint.setText("您的跑步技术已经登峰造极");
+                }
             }
         }
+
+        distanceText.setText(decimalFormat.format(distance));
+        durationText.setText(StepUtils.formatMilliseconds(durationMs));
+        calorieText.setText(intFormat.format(calorie));
 
         mapView = (MapView) findViewById(R.id.map_result);
         mapView.onCreate(savedInstanceState);
@@ -130,13 +135,11 @@ public class SportResult_Activity extends AppCompatActivity implements
     }
 
     private void init() {
-        textView = findViewById(R.id.tv_shared);
-        textView.setOnClickListener(this);
+        share = findViewById(R.id.tv_shared);
+        share.setOnClickListener(this);
 
-        mOriginBtn = (CheckBox) findViewById(R.id.record_show_activity_origin_button);
         mKalmanBtn = (CheckBox) findViewById(R.id.record_show_activity_kalman_button);
 
-        mOriginBtn.setOnCheckedChangeListener(this);
         mKalmanBtn.setOnCheckedChangeListener(this);
 
         star1 = (ImageView) findViewById(R.id.star_1);
@@ -146,11 +149,21 @@ public class SportResult_Activity extends AppCompatActivity implements
         star3 = (ImageView) findViewById(R.id.star_3);
         star3.setVisibility(View.INVISIBLE);
 
-        returnMain = (Button) findViewById(R.id.return_result);
+        comments = findViewById(R.id.comments);
+        distanceText = findViewById(R.id.result_distance);
+        durationText = findViewById(R.id.result_duration);
+        calorieText = findViewById(R.id.result_calorie);
+
+        returnMain = (LinearLayout) findViewById(R.id.return_result);
         returnMain.setOnClickListener(this);
 
         mViewGroupContainer = (ViewGroup) findViewById(R.id.root_pic_id);
         mScreenShotView = (View) findViewById(R.id.screenshot_view);
+
+        hintCard = findViewById(R.id.hint_card);
+        hint = findViewById(R.id.hint);
+        hintIcon = findViewById(R.id.hint_icon);
+        hintIcon.setOnClickListener(this);
     }
 
     private void initMap() {
@@ -164,6 +177,33 @@ public class SportResult_Activity extends AppCompatActivity implements
         dbHelper = new MyDatabaseHelper(this, DBUtils.SPORT_DB_STORE, null, 1);
         dbHelper.getWritableDatabase(); // 执行、真正创建数据库文件, 不会删除已有的数据
         db = dbHelper.getWritableDatabase();
+
+        Cursor cursor = db.query("sport_record",
+                null, null, null,
+                null, null, null);
+
+        boolean succeed = (cursor.moveToLast()); //查询最近的记录
+
+        if (succeed) {
+            String pathLineStr = cursor.getString(cursor.getColumnIndex("path_line"));
+            pathLine = StepUtils.parseLatLngLocations(pathLineStr);
+
+
+            distanceM = cursor.getDouble(cursor.getColumnIndex("distance"));
+            distance = distanceM / 1000;
+
+            durationMs = cursor.getLong(cursor.getColumnIndex("duration"));
+            duration = (double) durationMs / 1000 / 60;
+//            durationHour = (int) (durationMs / 1000 / 3600);
+//            durationMin = (int) (durationMs / 1000 / 60) % 60;
+//            durationSec = (int) (durationMs / 1000) % 60;
+
+            calorie = cursor.getDouble(cursor.getColumnIndex("calorie"));
+
+            speed = cursor.getDouble(cursor.getColumnIndex("speed"));
+
+        }
+        cursor.close();
     }
 
 
@@ -171,12 +211,10 @@ public class SportResult_Activity extends AppCompatActivity implements
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
         int id = compoundButton.getId();
         switch (id) {
-            case R.id.record_show_activity_origin_button:
-                if (mOriginPolyline != null) {
-                    mOriginPolyline.setVisible(b);
-                }
-                break;
             case R.id.record_show_activity_kalman_button:
+                if (mOriginPolyline != null) {
+                    mOriginPolyline.setVisible(!b);
+                }
                 if (mKalmanPolyline != null) {
                     mKalmanPolyline.setVisible(b);
                 }
@@ -196,6 +234,7 @@ public class SportResult_Activity extends AppCompatActivity implements
 //            amap.moveCamera(CameraUpdateFactory.newLatLngZoom(mOriginList.get(0),15));
         }
         pathOptimize(pathLine);
+        mKalmanPolyline.setVisible(false);
     }
 
     private LatLngBounds getBounds(List<LatLng> pointlist) {
@@ -256,6 +295,17 @@ public class SportResult_Activity extends AppCompatActivity implements
             case R.id.return_result:
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
+                break;
+
+            case R.id.hint_icon:
+                if (hintShown) {
+                    hintCard.setVisibility(View.INVISIBLE);
+                    hintShown = false;
+                } else {
+                    hintCard.setVisibility(View.VISIBLE);
+                    hintShown = true;
+                }
+                break;
 
             default:
                 break;
@@ -369,4 +419,12 @@ public class SportResult_Activity extends AppCompatActivity implements
     public void onMapScreenShot(Bitmap bitmap, int i) {
 
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
 }
