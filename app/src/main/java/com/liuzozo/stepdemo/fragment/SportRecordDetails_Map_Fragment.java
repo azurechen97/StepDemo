@@ -6,6 +6,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.amap.api.maps.AMap;
@@ -31,7 +33,8 @@ import static com.liuzozo.stepdemo.SportRecordDetails_Activity.SPORT_DATA;
  *  运动地图记录详情页
  *  1. 在地图上根据传来的PathRecord 值的经纬度等信息，画出轨迹等
  */
-public class SportRecordDetails_Map_Fragment extends Fragment implements LocationSource {
+public class SportRecordDetails_Map_Fragment extends Fragment
+        implements LocationSource, CompoundButton.OnCheckedChangeListener {
 
     // 地图
     private AMap aMap;
@@ -42,7 +45,7 @@ public class SportRecordDetails_Map_Fragment extends Fragment implements Locatio
     TextView detailMapDuration;
 
     private Polyline mOriginPolyline, mKalmanPolyline;
-    //    private CheckBox mOriginBtn, mKalmanBtn;
+    private CheckBox mKalmanBtn;
     private PathSmoothTool mPathSmoothTool;
 
     private DecimalFormat decimalFormat = new DecimalFormat("0.00");
@@ -70,9 +73,9 @@ public class SportRecordDetails_Map_Fragment extends Fragment implements Locatio
 
     public void init(View view) {
 //        mOriginBtn = (CheckBox) view.findViewById(R.id.record_show_activity_origin_button);
-//        mKalmanBtn = (CheckBox) view.findViewById(R.id.record_show_activity_kalman_button);
+        mKalmanBtn = (CheckBox) view.findViewById(R.id.detail_kalman);
 //        mOriginBtn.setOnCheckedChangeListener(this);
-//        mKalmanBtn.setOnCheckedChangeListener(this);
+        mKalmanBtn.setOnCheckedChangeListener(this);
         detailMapDistance = (TextView) view.findViewById(R.id.detail_map_distance);
         detailMapDuration = (TextView) view.findViewById(R.id.detail_map_duration);
     }
@@ -154,6 +157,22 @@ public class SportRecordDetails_Map_Fragment extends Fragment implements Locatio
 
     @Override
     public void deactivate() {
+
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        int id = buttonView.getId();
+        switch (id) {
+            case R.id.detail_kalman:
+                if (mOriginPolyline != null) {
+                    mOriginPolyline.setVisible(!isChecked);
+                }
+                if (mKalmanPolyline != null) {
+                    mKalmanPolyline.setVisible(isChecked);
+                }
+                break;
+        }
 
     }
 }
