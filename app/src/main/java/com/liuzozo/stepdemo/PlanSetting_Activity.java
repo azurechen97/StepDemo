@@ -1,20 +1,27 @@
 package com.liuzozo.stepdemo;
 
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SwitchCompat;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
+import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -22,15 +29,16 @@ import java.util.Date;
  * 弹框  设置每天跑步目标公里， 是否提醒， 提醒时间
  */
 public class PlanSetting_Activity extends AppCompatActivity
-        implements CompoundButton.OnCheckedChangeListener {
+        implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
 
     private static Context sContext = null;
-    private EditText time;
+    private TextView time;
     private EditText mileage;
-    private Switch alarmSwitch;
+    private SwitchCompat alarmSwitch;
     private String mTime;
     private String mDate;
     private String mMileage;
+    private RelativeLayout timeLayout;
 
     private SharedPreferences.Editor editor;
 
@@ -49,9 +57,10 @@ public class PlanSetting_Activity extends AppCompatActivity
     }
 
     private void initView() {
-        time = (EditText) findViewById(R.id.alarm_time);
+        time = (TextView) findViewById(R.id.alarm_time);
         mileage = (EditText) findViewById(R.id.alarm_mileage);
-        alarmSwitch = (Switch) findViewById(R.id.alarm_switch);
+        alarmSwitch = (SwitchCompat) findViewById(R.id.alarm_switch);
+        timeLayout = (RelativeLayout) findViewById(R.id.time_layout);
 
         SharedPreferences preferences = getSharedPreferences(
                 "plan-setting", MODE_PRIVATE);
@@ -67,7 +76,7 @@ public class PlanSetting_Activity extends AppCompatActivity
 
     private void init() {
         //date.setOnClickListener(this);
-        //time.setOnClickListener(this);
+        timeLayout.setOnClickListener(this);
         alarmSwitch.setOnCheckedChangeListener(this);
 
         editor = getSharedPreferences(
@@ -127,12 +136,12 @@ public class PlanSetting_Activity extends AppCompatActivity
                     editor.apply();
 
                     Log.e("xx", "日期= " + mDate + "  时间= " + mTime);
-                    if (TextUtils.isEmpty(mTime)) {
-                        Toast.makeText(getApplicationContext(), "请选择提醒时间",
-                                Toast.LENGTH_SHORT).show();
-                        alarmSwitch.setChecked(false);
-                        break;
-                    }
+//                    if (TextUtils.isEmpty(mTime)) {
+//                        Toast.makeText(getApplicationContext(), "请选择提醒时间",
+//                                Toast.LENGTH_SHORT).show();
+//                        alarmSwitch.setChecked(false);
+//                        break;
+//                    }
                     if (TextUtils.isEmpty(mMileage)) {
                         Toast.makeText(getApplicationContext(), "请设置计划跑步距离",
                                 Toast.LENGTH_SHORT).show();
@@ -180,4 +189,28 @@ public class PlanSetting_Activity extends AppCompatActivity
     }
 
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.time_layout:
+
+                Calendar mCurrentTime = Calendar.getInstance();
+                int hour = mCurrentTime.get(Calendar.HOUR_OF_DAY);
+                int minute = mCurrentTime.get(Calendar.MINUTE);
+                new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                        time.setText(selectedHour + ":" + selectedMinute);
+                    }
+                }, hour, minute, true).show();
+
+                break;
+
+
+            default:
+                break;
+        }
+    }
 }
+

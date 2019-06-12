@@ -1,77 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="20dp">
 
-    <LinearLayout
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="0dp">
 
-        <LinearLayout
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+
+            android:background="@mipmap/sport_bg"
+            android:orientation="vertical"
+            android:padding="25dp">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:id="@+id/time_layout"
+                android:clickable="true">
+
+                <TextView
+                    android:id="@+id/alarm_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lines="1"
+                    android:text="15:00"
+                    android:textColor="#fff"
+                    android:textSize="90sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/alarm_time"
+                    android:layout_centerInParent="true"
+                    android:text="点击数字设置每日提醒时间"
+                    android:textColor="#fff"
+                    android:textSize="16sp" />
+
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:gravity="bottom">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.4"
+                    android:text="每日锻炼里程"
+                    android:textColor="#fff"
+                    android:textSize="18sp"
+
+                    />
+
+                <EditText
+                    style="?android:attr/textViewStyle"
+                    android:background="@null"
+                    android:id="@+id/alarm_mileage"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:inputType="number"
+                    android:lines="1"
+                    android:text="5000"
+                    android:textSize="30sp"
+                    android:textColor="#fff"
+                    android:hint="请输入计划里程"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="25sp"
+                    android:text=" m"
+                    android:textStyle="bold"
+                    android:textColor="#fff" />
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:layout_margin="5dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="每日锻炼里程" />
 
-            <EditText
-                android:id="@+id/alarm_mileage"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="right"
-                android:inputType="number"
-                android:lines="1"
-                android:hint="请输入每天计划的跑步里程" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:padding="20dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="米" />
-        </LinearLayout>
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/alarm_switch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="打开每日跑步提醒"
+                    android:textColor="#222222"
+                    android:textSize="18sp"
+                    android:layout_centerInParent="true" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            </RelativeLayout>
 
-            <Switch
-                android:id="@+id/alarm_switch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="提醒" />
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="提醒时间" />
-
-            <EditText
-                android:id="@+id/alarm_time"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:lines="1"
-                android:gravity="right"
-                android:hint="请输入时间（如17:45）" />
-        </LinearLayout>
-
+        </android.support.v7.widget.CardView>
 
     </LinearLayout>
-
-
-</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>
