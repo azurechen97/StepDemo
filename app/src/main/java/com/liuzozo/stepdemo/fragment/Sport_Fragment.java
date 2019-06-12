@@ -26,8 +26,8 @@ import java.text.DecimalFormat;
 import static android.content.Context.MODE_PRIVATE;
 
 /**
- * 点击开发运动的 界面
- * 需要 查询数据库，查询出所有的跑步次数，跑步总公里，总时间
+ *  点击开发运动的 界面
+ *  需要 查询数据库，查询出所有的跑步次数，跑步总公里，总时间
  */
 public class Sport_Fragment extends Fragment {
 

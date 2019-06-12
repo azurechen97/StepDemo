@@ -34,8 +34,8 @@ import static com.liuzozo.stepdemo.utils.TuLinConstants.TURING_APIKEY;
 import static com.liuzozo.stepdemo.utils.TuLinConstants.TURING_SECRET;
 
 /**
- * 调用图灵API 和 图灵机器聊天, 参考ppt 备注
- * 制作类似QQ对话框的界面
+ *   调用图灵API 和 图灵机器聊天, 参考ppt 备注
+ *   制作类似QQ对话框的界面
  */
 public class TuLinTalk_Activity extends AppCompatActivity {
 

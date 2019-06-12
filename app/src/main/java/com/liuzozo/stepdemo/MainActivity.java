@@ -14,8 +14,8 @@ import com.liuzozo.stepdemo.fragment.Sport_Fragment;
 import com.liuzozo.stepdemo.fragment.StepData_Fragment;
 
 /**
- * app 主界面
- * 用于放三个Fragment 子布局
+ *  app 主界面
+ *  用于放三个Fragment 子布局
  */
 public class MainActivity extends AppCompatActivity {
 
