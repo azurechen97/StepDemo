@@ -119,10 +119,9 @@ public class DBUtils {
     }
 
     // 删除
-//    public static void deleteRecord(SQLiteDatabase db, int id) {
-//        db.execSQL("delete from sport_record where id = " + id);
-////        db.execSQL("delete from book where author =  'ssasa' ");
-//    }
+    public static void deleteRecord(SQLiteDatabase db, Long id) {
+        db.execSQL("delete from sport_record where id = " + id);
+    }
 
     // 修改
 //    public static void updateRecord(SQLiteDatabase db) {

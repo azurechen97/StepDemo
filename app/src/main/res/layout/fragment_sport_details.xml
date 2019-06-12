@@ -210,4 +210,22 @@
 
     </LinearLayout>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom">
+
+        <Button
+            android:id="@+id/delete_record"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/btn_nor_bg_red"
+            android:text="清除该次数据"
+            android:textColor="#fff" />
+
+    </RelativeLayout>
+
+
 </LinearLayout>
