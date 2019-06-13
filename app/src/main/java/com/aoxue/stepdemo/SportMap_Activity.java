@@ -242,6 +242,13 @@ public class SportMap_Activity extends AppCompatActivity implements
         switch (view.getId()) {
             case R.id.tv_sport_complete:
                 //结束时间戳
+                if (pathRecord.getStartPoint() == null) {
+                    startBackground = false;
+                    Intent intent = new Intent(this, MainActivity.class);
+                    startActivity(intent);
+                    break;
+                }
+
                 Date date = new Date();
                 pathRecord.setEndTime(date.getTime());
                 pathRecord.setDateTag(dateTagFormat.format(date));
