@@ -63,29 +63,13 @@ public class Settings_Activity extends AppCompatActivity implements View.OnClick
 
             Log.e("savedUri", uri.toString());
 
-            RequestListener mRequestListener = new RequestListener() {
-                @Override
-                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target target, boolean isFirstResource) {
-                    Log.e("GlideFailed", "onException: " + e.toString() + "  model:" + model + " isFirstResource: " + isFirstResource);
-                    icon.setImageResource(R.mipmap.icon_app);
-                    return false;
-                }
-
-                @Override
-                public boolean onResourceReady(Object resource, Object model, Target target, DataSource dataSource, boolean isFirstResource) {
-                    Log.e("GlideFailed", "model:" + model + " isFirstResource: " + isFirstResource);
-                    return false;
-                }
-            };
-
 
             Glide.with(this)
                     .load(uri)
-                    .placeholder(R.mipmap.man_pic)
+                    .placeholder(R.mipmap.akkarin)
                     .error(R.mipmap.icon_app)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .override(300, 300)//指定图片大小
-                    .listener(mRequestListener)
                     .into(icon);
         }
 
@@ -169,7 +153,7 @@ public class Settings_Activity extends AppCompatActivity implements View.OnClick
                     editor.apply();
                     Glide.with(this)
                             .load(uri)
-                            .placeholder(R.mipmap.man_pic)
+                            .placeholder(R.mipmap.akkarin)
                             .error(R.mipmap.icon_app)
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .override(300, 300)//指定图片大小

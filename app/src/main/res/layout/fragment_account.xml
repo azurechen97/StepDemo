@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fff"
     android:orientation="vertical"
     android:padding="20dp">
 
@@ -79,7 +78,7 @@
             android:id="@+id/iv_icon"
             android:layout_width="96dp"
             android:layout_height="96dp"
-            android:src="@mipmap/man_pic"
+            android:src="@mipmap/akkarin"
             app:civ_border_width="0dp"
             app:civ_border_color="#00000000"
             android:clickable="true" />
