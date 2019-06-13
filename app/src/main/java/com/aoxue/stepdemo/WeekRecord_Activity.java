@@ -7,12 +7,17 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
+import com.aoxue.stepdemo.utils.DBUtils;
 import com.aoxue.stepdemo.utils.MyDatabaseHelper;
+import com.aoxue.stepdemo.utils.StepUtils;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -37,6 +42,7 @@ public class WeekRecord_Activity extends AppCompatActivity {
 
     private LineChartView lineChart1;
     private LineChartView lineChart2;
+    private LineChartView lineChart3;
 
     private MyDatabaseHelper databaseHelper;
     private SQLiteDatabase db;
@@ -44,14 +50,27 @@ public class WeekRecord_Activity extends AppCompatActivity {
 //    String[] date = {"10-22","11-22","12-22","1-22","6-22","5-23","5-22","6-22","5-23","5-22"};//X轴的标注
 //    int[] score= {50,42,90,33,10,74,22,18,79,20};//图表的数据点
 
-    private ArrayList<String> date = new ArrayList<>();
     private ArrayList<Double> distance = new ArrayList<>();
     private ArrayList<Double> calorie = new ArrayList<>();
+    private ArrayList<Long> duration = new ArrayList<>();
+    private ArrayList<String> tags = new ArrayList<>();
 
     private List<PointValue> mPointValues = new ArrayList<PointValue>();
     private List<AxisValue> mAxisXValues = new ArrayList<AxisValue>();
 
     private SimpleDateFormat dateTagFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+    private double totalDistance;
+    private double totalCalorie;
+    private Long totalDuration;
+
+    private DecimalFormat twoDecimal = new DecimalFormat("0.00");
+    private DecimalFormat intFormat = new DecimalFormat("#");
+
+    private TextView totalDistView;
+    private TextView avgDistView;
+    private TextView totalDurView;
+    private TextView totalCalView;
 
 
     @Override
@@ -63,14 +82,28 @@ public class WeekRecord_Activity extends AppCompatActivity {
 
         lineChart1 = (LineChartView) findViewById(R.id.line_chart_1);
         lineChart2 = (LineChartView) findViewById(R.id.line_chart_2);
+        lineChart3 = (LineChartView) findViewById(R.id.line_chart_3);
+
+        totalDistView = findViewById(R.id.record_total_dist);
+        avgDistView = findViewById(R.id.record_avg_dist);
+        totalDurView = findViewById(R.id.record_duration);
+        totalCalView = findViewById(R.id.record_calorie);
 
         getAxisXLabels();//获取x轴的标注
 
-        getAxisPoints(distance);//获取坐标点
-        initLineChart(lineChart1);//初始化
+        getAxisPointsDouble(distance);//获取坐标点
+        initLineChart(lineChart1, "#00A381");//初始化
 
-        getAxisPoints(calorie);//获取坐标点
-        initLineChart(lineChart2);//初始化
+        getAxisPointsDouble(calorie);//获取坐标点
+        initLineChart(lineChart2, "#E9546B");//初始化
+
+        getAxisPointsLong(duration);
+        initLineChart(lineChart3, "#38a1db");
+
+        totalDistView.setText(twoDecimal.format(totalDistance));
+        avgDistView.setText(twoDecimal.format(totalDistance / 7));
+        totalDurView.setText(StepUtils.formatMilliseconds(totalDuration));
+        totalCalView.setText(intFormat.format(totalCalorie));
     }
 
     private void initDB() {
@@ -78,109 +111,86 @@ public class WeekRecord_Activity extends AppCompatActivity {
                 this, "sport_record.db", null, 1);
         db = databaseHelper.getWritableDatabase();
 
-        Cursor cursor = db.query("sport_record",
-                null, null, null,
-                null, null, null);
+        Cursor cursor = db.rawQuery("SELECT SUM(distance) AS daily_dist, " +
+                "SUM(duration) AS daily_duration, SUM(calorie) AS daily_calorie, date_tag " +
+                "FROM sport_record GROUP BY date_tag ORDER BY date_tag", null);
 
-        String lastDateTag = new String();
+        long todayValue = System.currentTimeMillis();
+
+        for (int i = 0; i < 7; i++) {
+            tags.add(dateTagFormat.format(new Date(todayValue - i * 24 * 3600 * 1000L)));
+            distance.add(0.);
+            duration.add(0L);
+            calorie.add(0.);
+        }
+        Collections.reverse(tags);
 
         boolean succeed = (cursor.moveToFirst());
         if (succeed) {
             do {
                 String aDate = cursor.getString(cursor.getColumnIndex("date_tag"));
-                double aDistance = cursor.getDouble(cursor.getColumnIndex("distance"));
-                double aCalorie = cursor.getDouble(cursor.getColumnIndex("calorie"));
-                if (date.contains(aDate)) {
-                    int i = date.indexOf(aDate);
-                    distance.set(i, distance.get(i) + aDistance);
-                    calorie.set(i, calorie.get(i) + aCalorie);
-                    Log.e("date", date.get(i));
-                    Log.e("distance", distance.get(i) + "");
-                } else {
-                    //填充中间日期
-                    long gap = 0L;
-                    long value1 = 0L;
-                    long value2 = 0L;
-                    try {
-                        value1 = dateTagFormat.parse(lastDateTag).getTime();
-                        value2 = dateTagFormat.parse(aDate).getTime();
-                        gap = value2 - value1;
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    while (gap > 24 * 3600 * 1000L) {
-                        value1 += 24 * 3600 * 1000L;
-                        String interval = dateTagFormat.format(new Date(value1));
-                        date.add(interval);
-                        distance.add(0.);
-                        calorie.add(0.);
-                        gap = value2 - value1;
-                        Log.e("date", interval);
-                        Log.e("distance", "0");
-                    }
-
-                    date.add(aDate);
-                    distance.add(aDistance);
-                    calorie.add(aCalorie);
-                    int i = date.indexOf(aDate);
-                    Log.e("date", date.get(i));
-                    Log.e("distance", distance.get(i) + "");
+                double aDistance = cursor.getDouble(cursor.getColumnIndex("daily_dist"));
+                double aCalorie = cursor.getDouble(cursor.getColumnIndex("daily_calorie"));
+                long aDuration = cursor.getLong(cursor.getColumnIndex("daily_duration"));
+                if (tags.contains(aDate)) {
+                    int i = tags.indexOf(aDate);
+                    distance.set(i, aDistance);
+                    calorie.set(i, aCalorie);
+                    duration.set(i, aDuration);
                 }
-                lastDateTag = aDate;
+
             } while (cursor.moveToNext());
         }
         cursor.close();
 
-        //填充到今天为止
-        long gap = 0L;
-        long value1 = 0L;
-        String today = dateTagFormat.format(new Date());
-        long value2 = 0L;
+        totalCalorie = 0.;
+        totalDistance = 0.;
+        totalDuration = 0L;
 
-        try {
-            value1 = dateTagFormat.parse(lastDateTag).getTime();
-            value2 = dateTagFormat.parse(today).getTime();
-            gap = value2 - value1;
-        } catch (ParseException e) {
-            e.printStackTrace();
+        for (int i = 0; i < 7; i++) {
+            tags.set(i, tags.get(i).substring(5));
+            totalCalorie += calorie.get(i);
+            totalDistance += distance.get(i);
+            totalDuration += duration.get(i);
+            duration.set(i, duration.get(i) / 1000 / 60); //分钟
         }
 
-        while (gap > 0) {
-            value1 += 24 * 3600 * 1000L;
-            String interval = dateTagFormat.format(new Date(value1));
-            date.add(interval);
-            distance.add(0.);
-            calorie.add(0.);
-            gap = value2 - value1;
-            Log.e("date", interval);
-            Log.e("distance", "0");
-        }
+        totalDistance /= 1000;
 
-        for (int i = 0; i < date.size(); i++)
-            date.set(i, date.get(i).substring(5));
+
     }
 
     /**
      * 设置X 轴的显示
      */
     private void getAxisXLabels() {
-        for (int i = 0; i < date.size(); i++) {
-            mAxisXValues.add(new AxisValue(i).setLabel(date.get(i)));
+        for (int i = 0; i < tags.size(); i++) {
+            mAxisXValues.add(new AxisValue(i).setLabel(tags.get(i)));
         }
     }
 
     /**
      * 图表的每个点的显示
      */
-    private void getAxisPoints(ArrayList<Double> list) {
+    private void getAxisPointsDouble(ArrayList<Double> list) {
         mPointValues = new ArrayList<PointValue>();
         for (int i = 0; i < list.size(); i++) {
             mPointValues.add(new PointValue(i, Math.round(list.get(i))));
         }
     }
 
-    private void initLineChart(LineChartView lineChart) {
-        Line line = new Line(mPointValues).setColor(Color.parseColor("#FFCD41"));  //折线的颜色（橙色）
+    /**
+     * 图表的每个点的显示
+     */
+    private void getAxisPointsLong(ArrayList<Long> list) {
+        mPointValues = new ArrayList<PointValue>();
+        for (int i = 0; i < list.size(); i++) {
+            mPointValues.add(new PointValue(i, list.get(i)));
+        }
+    }
+
+    private void initLineChart(LineChartView lineChart, String color) {
+        Line line = new Line(mPointValues).setColor(Color.parseColor(color));  //折线的颜色（橙色）
         List<Line> lines = new ArrayList<Line>();
         line.setShape(ValueShape.CIRCLE);//折线图上每个数据点的形状  这里是圆形 （有三种 ：ValueShape.SQUARE  ValueShape.CIRCLE  ValueShape.DIAMOND）
         line.setCubic(false);//曲线是否平滑，即是曲线还是折线
