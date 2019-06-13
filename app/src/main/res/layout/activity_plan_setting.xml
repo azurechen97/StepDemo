@@ -12,10 +12,16 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="350dp"
+            android:orientation="vertical">
 
-            android:background="@mipmap/sport_bg"
-            android:orientation="vertical"
-            android:padding="25dp">
+            <ImageView
+                android:id="@+id/sport_bg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@mipmap/sport_bg"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop" />
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -52,7 +58,8 @@
                 android:orientation="horizontal"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:gravity="bottom">
+                android:gravity="bottom"
+                android:layout_margin="25dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -60,9 +67,7 @@
                     android:layout_weight="0.4"
                     android:text="每日锻炼里程"
                     android:textColor="#fff"
-                    android:textSize="18sp"
-
-                    />
+                    android:textSize="18sp" />
 
                 <EditText
                     style="?android:attr/textViewStyle"
