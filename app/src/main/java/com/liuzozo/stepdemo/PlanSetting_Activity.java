@@ -174,7 +174,7 @@ public class PlanSetting_Activity extends AppCompatActivity
 //                    int delayTime = (int) (value - value2);
                     AlarmService.addNotification(value,
                             "跑步时间到！今天您计划跑" + mMileage + "米",
-                            "icon_app",
+                            "乐跑圈闹钟",
                             "跑步时间到！今天您计划跑" + mMileage + "米");
                 } else {
                     editor.putBoolean("checked", false);

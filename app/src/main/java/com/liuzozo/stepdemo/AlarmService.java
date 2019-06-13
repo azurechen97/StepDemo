@@ -64,10 +64,10 @@ public class AlarmService extends Service {
                 .setContentTitle("乐跑圈闹钟服务")//标题
                 .setContentText("运行中...")//内容
                 .setWhen(System.currentTimeMillis())
-                .setSmallIcon(R.mipmap.icon_app)
+                .setSmallIcon(R.mipmap.icon_app_round)
                 //小图标一定需要设置,否则会报错(如果不设置它启动服务前台化不会报错,
                 // 但是你会发现这个通知不会启动),如果是普通通知,不设置必然报错
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.icon_app))
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.icon_app_round))
                 .build();
         startForeground(1, notification);
         //服务前台化只能使用startForeground()方法,
@@ -107,8 +107,8 @@ public class AlarmService extends Service {
                     NotificationManager notificationManager = (NotificationManager) AlarmService.this
                             .getSystemService(NOTIFICATION_SERVICE);
 
-                    String id = "step_01";
-                    String name = "icon_app";
+                    String id = "step_02";
+                    String name = "乐跑圈闹钟";
 
                     //适配安卓8.0+
                     NotificationChannel mChannel = new NotificationChannel(id,
@@ -116,6 +116,7 @@ public class AlarmService extends Service {
                     mChannel.enableVibration(true);
                     mChannel.setVibrationPattern(new long[]{
                             100, 200, 300, 400, 500, 400, 300, 200, 400});
+                    mChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
 
                     notificationManager.createNotificationChannel(mChannel);
                     Log.i("Alarm", mChannel.toString());
@@ -131,7 +132,8 @@ public class AlarmService extends Service {
 
                     builder.setContentIntent(contentIntent);
 
-                    builder.setSmallIcon(R.mipmap.icon_app);// 设置通知图标
+                    builder.setSmallIcon(R.mipmap.icon_app_round);// 设置通知图标
+                    builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.icon_app_round));
                     builder.setTicker(intent.getStringExtra("tickerText")); // 测试通知栏标题
                     builder.setContentText(intent.getStringExtra("contentText")); // 下拉通知啦内容
                     builder.setContentTitle(intent.getStringExtra("contentTitle"));// 下拉通知栏标题
