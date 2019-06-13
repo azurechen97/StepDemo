@@ -122,7 +122,7 @@ public class SportRecordDetails_Map_Fragment extends Fragment
 
         if (pathLine != null && pathLine.size() > 0) {
             mOriginPolyline = aMap.addPolyline(new PolylineOptions().addAll(pathLine)
-                    .color(getResources().getColor(R.color.primary_light)));
+                    .color(Color.parseColor("#00a381")));
             aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(getBounds(pathLine), 200));
 //            aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mOriginList.get(0),15));
         }

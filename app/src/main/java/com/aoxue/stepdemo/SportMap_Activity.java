@@ -490,7 +490,7 @@ public class SportMap_Activity extends AppCompatActivity implements
         options.add(new LatLng(previousLocation.getLatitude(), previousLocation.getLongitude()));
         //当前的经纬度
         options.add(new LatLng(curLocation.getLatitude(), curLocation.getLongitude()));
-        options.width(10).geodesic(true).color(getResources().getColor(R.color.primary_light));
+        options.width(10).geodesic(true).color(Color.parseColor("#00a381"));
         aMap.addPolyline(options);
 
     }

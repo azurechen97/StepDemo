@@ -230,7 +230,7 @@ public class SportResult_Activity extends AppCompatActivity implements
 
         if (pathLine != null && pathLine.size() > 0) {
             mOriginPolyline = amap.addPolyline(new PolylineOptions().addAll(pathLine)
-                    .color(getResources().getColor(R.color.primary_light)));
+                    .color(Color.parseColor("#00a381")));
             amap.moveCamera(CameraUpdateFactory.newLatLngBounds(getBounds(pathLine), 200));
 //            amap.moveCamera(CameraUpdateFactory.newLatLngZoom(mOriginList.get(0),15));
         }
