@@ -22,6 +22,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -140,11 +141,11 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.MyView
         @InjectView(R.id.tv_home_time)
         TextView tvHomeTime;
         @InjectView(R.id.iv_home_left_ic)
-        ImageView ivHomeLeftIc;
+        CircleImageView ivHomeLeftIc;
         @InjectView(R.id.tv_home_left_content)
         TextView tvHomeLeftContent;
         @InjectView(R.id.iv_home_right_ic)
-        ImageView ivHomeRightIc;
+        CircleImageView ivHomeRightIc;
         @InjectView(R.id.tv_home_right_content)
         TextView tvHomeRightContent;
 
