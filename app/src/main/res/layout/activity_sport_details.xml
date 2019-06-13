@@ -19,7 +19,7 @@
         tl:tl_textUnselectColor="#666666"
         tl:tl_textsize="15sp" />
 
-    <com.liuzozo.stepdemo.ui.AMapScrollViewPager
+    <com.aoxue.stepdemo.ui.AMapScrollViewPager
         android:id="@+id/vp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

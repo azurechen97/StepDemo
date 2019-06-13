@@ -9,7 +9,7 @@ android {
 //        }
 //    }
     defaultConfig {
-        applicationId "com.liuzozo.stepdemo"
+        applicationId "com.aoxue.stepdemo"
         minSdkVersion 19
         targetSdkVersion 28
         versionCode 1
