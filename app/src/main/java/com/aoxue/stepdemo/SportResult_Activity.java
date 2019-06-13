@@ -229,7 +229,8 @@ public class SportResult_Activity extends AppCompatActivity implements
     private void addPathLine() {
 
         if (pathLine != null && pathLine.size() > 0) {
-            mOriginPolyline = amap.addPolyline(new PolylineOptions().addAll(pathLine).color(Color.GREEN));
+            mOriginPolyline = amap.addPolyline(new PolylineOptions().addAll(pathLine)
+                    .color(getResources().getColor(R.color.primary_light)));
             amap.moveCamera(CameraUpdateFactory.newLatLngBounds(getBounds(pathLine), 200));
 //            amap.moveCamera(CameraUpdateFactory.newLatLngZoom(mOriginList.get(0),15));
         }
@@ -252,7 +253,7 @@ public class SportResult_Activity extends AppCompatActivity implements
     public List<LatLng> pathOptimize(List<LatLng> originList) {
         List<LatLng> pathOptimizeList = mPathSmoothTool.pathOptimize(originList);
         mKalmanPolyline = amap.addPolyline(new PolylineOptions().addAll(pathOptimizeList)
-                .color(Color.parseColor("#FFC125")));
+                .color(getResources().getColor(R.color.accent)));
         return pathOptimizeList;
     }
 

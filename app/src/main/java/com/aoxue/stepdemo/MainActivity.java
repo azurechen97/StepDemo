@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private Class fragmentArray[] = {Sport_Fragment.class,
             StepData_Fragment.class, Account_Fragment.class};
     // 定义数组来存放导航图标
-    private int imageViewArray[] = {R.drawable.account_change_icon,
+    private int imageViewArray[] = {R.drawable.run_change_icon,
             R.drawable.data_change_icon, R.drawable.account_change_icon};
     // Tab 选项卡的文字
     private String textViewArray[] = {"运动", "记录", "我"};

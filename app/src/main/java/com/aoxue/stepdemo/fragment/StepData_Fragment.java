@@ -1,8 +1,11 @@
 package com.aoxue.stepdemo.fragment;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,8 +14,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.haibin.calendarview.Calendar;
@@ -52,7 +57,7 @@ public class StepData_Fragment extends Fragment {
     CalendarView mCalendarView;
     RecyclerView mRecycleView;
 
-    CalendarLayout calendarLayout;
+    CalendarLayout mCalendarLayout;
 
     private SportCalendarAdapter sportCalendarAdapter;
 
@@ -82,6 +87,8 @@ public class StepData_Fragment extends Fragment {
     private void initView(View view) {
         mCalendarView = view.findViewById(R.id.calendarView);
         mYear = mCalendarView.getCurYear();
+
+        mCalendarLayout = (CalendarLayout) view.findViewById(R.id.calendarLayout);
 
         mTextYear = view.findViewById(R.id.tv_year);
         mTextYear.setText(String.valueOf(mYear));
@@ -114,6 +121,35 @@ public class StepData_Fragment extends Fragment {
         sportCalendarAdapter = new SportCalendarAdapter(R.layout.item_sport_calendar, sportList);
         mRecycleView.setAdapter(sportCalendarAdapter);
 
+        mTextMonthDay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!mCalendarLayout.isExpand()) {
+                    mCalendarLayout.expand();
+                    return;
+                }
+
+                new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        mCalendarView.scrollToCalendar(year, month + 1, dayOfMonth);
+                    }
+                }, mCalendarView.getCurYear(), mCalendarView.getCurMonth() - 1,
+                        mCalendarView.getCurDay()).show();
+//                mCalendarView.showYearSelectLayout(mYear);
+//                mTextLunar.setVisibility(View.GONE);
+//                mTextYear.setVisibility(View.GONE);
+//                mTextMonthDay.setText(String.valueOf(mYear));
+            }
+        });
+
+        view.findViewById(R.id.fl_current).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCalendarView.scrollToCurrent();
+            }
+        });
+
         // 加载数据
         loadSportData();
 
@@ -138,6 +174,12 @@ public class StepData_Fragment extends Fragment {
 
             @Override
             public void onCalendarSelect(Calendar calendar, boolean isClick) {
+                mTextLunar.setVisibility(View.VISIBLE);
+                mTextYear.setVisibility(View.VISIBLE);
+                mTextMonthDay.setText(calendar.getMonth() + "月" + calendar.getDay() + "日");
+                mTextYear.setText(String.valueOf(calendar.getYear()));
+                mTextLunar.setText(calendar.getLunar());
+                mYear = calendar.getYear();
                 // 点击时加载数据
                 loadSportData(calendar);
             }
@@ -181,8 +223,8 @@ public class StepData_Fragment extends Fragment {
                 year = Integer.parseInt(date.substring(0, 4));
                 month = Integer.parseInt(date.substring(5, 7));
                 day = Integer.parseInt(date.substring(8));
-                map.put(getSchemeCalendar(year, month, day, 0xFFCC0000, "记").toString(),
-                        getSchemeCalendar(year, month, day, 0xFFCC0000, "记"));
+                map.put(getSchemeCalendar(year, month, day, Color.parseColor("#E9546B"), "记").toString(),
+                        getSchemeCalendar(year, month, day, Color.parseColor("#E9546B"), "记"));
             } while (cursor.moveToNext());
 
         }

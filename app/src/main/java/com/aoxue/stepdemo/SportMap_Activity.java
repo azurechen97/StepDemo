@@ -241,7 +241,7 @@ public class SportMap_Activity extends AppCompatActivity implements
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_sport_complete:
-                //结束时间戳
+
                 if (pathRecord.getStartPoint() == null) {
                     startBackground = false;
                     Intent intent = new Intent(this, MainActivity.class);
@@ -249,6 +249,7 @@ public class SportMap_Activity extends AppCompatActivity implements
                     break;
                 }
 
+                //结束时间戳
                 Date date = new Date();
                 pathRecord.setEndTime(date.getTime());
                 pathRecord.setDateTag(dateTagFormat.format(date));
@@ -489,7 +490,7 @@ public class SportMap_Activity extends AppCompatActivity implements
         options.add(new LatLng(previousLocation.getLatitude(), previousLocation.getLongitude()));
         //当前的经纬度
         options.add(new LatLng(curLocation.getLatitude(), curLocation.getLongitude()));
-        options.width(10).geodesic(true).color(Color.GREEN);
+        options.width(10).geodesic(true).color(getResources().getColor(R.color.primary_light));
         aMap.addPolyline(options);
 
     }

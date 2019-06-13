@@ -61,13 +61,14 @@
                 </LinearLayout>
 
                 <FrameLayout
-                    android:id="@+id/f1_current"
+                    android:id="@+id/fl_current"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="12dp"
-                    android:background="@drawable/bg_ripple">
+                    android:background="@drawable/bg_ripple"
+                    android:clickable="true">
 
                     <ImageView
                         android:id="@+id/ib_calendar"
@@ -107,18 +108,18 @@
                     app:calendar_padding="10dp"
                     app:current_month_text_color="#333333"
                     app:current_month_lunar_text_color="#CFCFCF"
-                    app:min_year="2004"
-                    app:max_year="2100"
+                    app:min_year="2010"
+                    app:max_year="2030"
                     app:other_month_text_color="#e1e1e1"
                     app:other_month_lunar_text_color="#e1e1e1"
                     app:scheme_text="记"
                     app:scheme_text_color="#333"
                     app:scheme_theme_color="#128c4b"
-                    app:selected_lunar_text_color="#CFCFCF"
-                    app:month_view="com.aoxue.stepdemo.calendarview.custom.CustomMonthView"
-                    app:week_view="com.aoxue.stepdemo.calendarview.custom.CustomWeekView"
-                    app:selected_text_color="#333"
-                    app:selected_theme_color="#80cfcfcf"
+                    app:selected_lunar_text_color="#FFFFFF"
+                    app:month_view="com.aoxue.stepdemo.calendarview.meizu.MeiZuMonthView"
+                    app:week_view="com.aoxue.stepdemo.calendarview.meizu.MeiZuWeekView"
+                    app:selected_text_color="#FFFFFF"
+                    app:selected_theme_color="@color/accent"
                     app:week_background="#fff"
                     app:week_text_color="#111111"
                     app:week_start_with="sun"
@@ -128,7 +129,9 @@
                     app:year_view_month_text_color="#ff0000"
                     app:year_view_month_text_size="20sp"
                     app:month_view_show_mode="mode_only_current"
-                    app:year_view_scheme_color="#f17706" />
+                    app:year_view_scheme_color="#f17706"
+                    app:current_day_text_color="@color/accent"
+                    app:current_day_lunar_text_color="#CFCFCF" />
 
 
                 <android.support.v4.widget.NestedScrollView
