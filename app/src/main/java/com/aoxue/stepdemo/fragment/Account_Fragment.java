@@ -106,6 +106,7 @@ public class Account_Fragment extends Fragment implements View.OnClickListener {
         initShared();
     }
 
+
     private void initView(View view) {
         planSettingLayout = view.findViewById(R.id.plan_setting_id);
         weekRecordLayout = view.findViewById(R.id.week_record_id);
@@ -236,14 +237,15 @@ public class Account_Fragment extends Fragment implements View.OnClickListener {
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                editor.putFloat("height",
-                                        Float.parseFloat(editText.getText().toString()));
-                                editor.apply();
+                                String heightStr = editText.getText().toString();
+                                if (heightStr.length() != 0) {
+                                    editor.putFloat("height",
+                                            Float.parseFloat(heightStr));
+                                    editor.apply();
+                                }
 
-                                getFragmentManager()
-                                        .beginTransaction()
-                                        .replace(R.id.id_nav_table_content, new Account_Fragment())
-                                        .commitNow();
+                                initShared();
+
                             }
                         })
                         .setNegativeButton("取消", null)
@@ -259,14 +261,14 @@ public class Account_Fragment extends Fragment implements View.OnClickListener {
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                editor.putFloat("weight",
-                                        Float.parseFloat(editText.getText().toString()));
-                                editor.apply();
+                                String weightStr = editText.getText().toString();
+                                if (weightStr.length() != 0) {
+                                    editor.putFloat("weight",
+                                            Float.parseFloat(weightStr));
+                                    editor.apply();
+                                }
 
-                                getFragmentManager()
-                                        .beginTransaction()
-                                        .replace(R.id.id_nav_table_content, new Account_Fragment())
-                                        .commitNow();
+                                initShared();
                             }
                         })
                         .setNegativeButton("取消", null)
@@ -305,14 +307,15 @@ public class Account_Fragment extends Fragment implements View.OnClickListener {
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                editorSettings.putString("username",
-                                        editText2.getText().toString());
+                                String usernameStr = editText2.getText().toString();
+                                if (usernameStr.length() != 0) {
+                                    editorSettings.putString("username",
+                                            usernameStr);
+                                }
+
                                 editorSettings.apply();
 
-                                getFragmentManager()
-                                        .beginTransaction()
-                                        .replace(R.id.id_nav_table_content, new Account_Fragment())
-                                        .commitNow();
+                                initShared();
                             }
                         })
                         .setNegativeButton("取消", null)
@@ -326,14 +329,15 @@ public class Account_Fragment extends Fragment implements View.OnClickListener {
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                editorSettings.putString("slogan",
-                                        editText2.getText().toString());
+                                String sloganStr = editText2.getText().toString();
+                                if (sloganStr.length() != 0) {
+                                    editorSettings.putString("slogan",
+                                            sloganStr);
+                                }
+
                                 editorSettings.apply();
 
-                                getFragmentManager()
-                                        .beginTransaction()
-                                        .replace(R.id.id_nav_table_content, new Account_Fragment())
-                                        .commitNow();
+                                initShared();
                             }
                         })
                         .setNegativeButton("取消", null)
