@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,6 +17,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.aoxue.stepdemo.utils.MyDatabaseHelper;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.aoxue.stepdemo.PlanSetting_Activity;
@@ -23,6 +26,8 @@ import com.aoxue.stepdemo.Settings_Activity;
 import com.aoxue.stepdemo.TuLinTalk_Activity;
 import com.aoxue.stepdemo.WeekRecord_Activity;
 import com.aoxue.stepdemo.utils.PermissionUtils;
+
+import java.text.DecimalFormat;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -48,6 +53,8 @@ public class Account_Fragment extends Fragment implements View.OnClickListener {
     TextView tvHeight;
     TextView tvWeight;
     TextView tvBMI;
+    TextView settingBtn;
+    TextView accountDistance;
 
     LayoutInflater layoutInflater;
     View dialogView;
@@ -58,6 +65,13 @@ public class Account_Fragment extends Fragment implements View.OnClickListener {
 
     private CircleImageView icon;
 
+    private DecimalFormat decimalFormat = new DecimalFormat("0.00");
+    private DecimalFormat oneDecimal = new DecimalFormat("0.0");
+    private DecimalFormat intFormat = new DecimalFormat("#");
+
+    private MyDatabaseHelper databaseHelper;
+    private double totalDistance = 0;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,6 +81,7 @@ public class Account_Fragment extends Fragment implements View.OnClickListener {
         PermissionUtils.verifyStoragePermissions(getActivity());
         initView(view);
         initShared();
+        initDB();
         return view;
     }
 
@@ -84,6 +99,8 @@ public class Account_Fragment extends Fragment implements View.OnClickListener {
         tvWeight = view.findViewById(R.id.tv_weight);
         tvBMI = view.findViewById(R.id.tv_bmi);
         icon = (CircleImageView) view.findViewById(R.id.iv_icon);
+        settingBtn = view.findViewById(R.id.setting_btn);
+        accountDistance = view.findViewById(R.id.account_distance);
 
         // 设置对应的监听事件
         planSettingLayout.setOnClickListener(this);
@@ -93,6 +110,7 @@ public class Account_Fragment extends Fragment implements View.OnClickListener {
         tvWeight.setOnClickListener(this);
         tvBMI.setOnClickListener(this);
         icon.setOnClickListener(this);
+        settingBtn.setOnClickListener(this);
 
         layoutInflater = LayoutInflater.from(getActivity());
         dialogView = layoutInflater.inflate(R.layout.dialog_parameters, null);
@@ -106,9 +124,12 @@ public class Account_Fragment extends Fragment implements View.OnClickListener {
                 "BMI-data", MODE_PRIVATE);
         float height = preferences.getFloat("height", (float) 175.);
         float weight = preferences.getFloat("weight", (float) 50.);
-        tvHeight.setText(getString(R.string.xliff_height, height));
-        tvWeight.setText(getString(R.string.xliff_weight, weight));
-        tvBMI.setText(getString(R.string.xliff_bmi, weight / height / height * 10000));
+        if (preferences.contains("height"))
+            tvHeight.setText(intFormat.format(height));
+        if (preferences.contains("weight"))
+            tvWeight.setText(intFormat.format(weight));
+        if (preferences.contains("height") && preferences.contains("weight"))
+            tvBMI.setText(oneDecimal.format(weight / height / height * 10000));
 
         editor = getActivity().getSharedPreferences(
                 "BMI-data", MODE_PRIVATE).edit();
@@ -127,6 +148,32 @@ public class Account_Fragment extends Fragment implements View.OnClickListener {
                     .override(300, 300)//指定图片大小
                     .into(icon);
         }
+    }
+
+    private void initDB() {
+
+        totalDistance = 0.;
+
+        databaseHelper = new MyDatabaseHelper(
+                getActivity(), "sport_record.db", null, 1);
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+
+        Cursor cursor = db.query("sport_record",
+                null, null, null,
+                null, null, null);
+
+        boolean succeed = (cursor.moveToFirst());
+
+        if (succeed) {
+
+            do {
+                totalDistance += cursor.getDouble(cursor.getColumnIndex("distance"));
+            } while (cursor.moveToNext());
+
+        }
+        cursor.close();
+
+        accountDistance.setText(decimalFormat.format(totalDistance / 1000));
     }
 
     @Override
@@ -192,7 +239,7 @@ public class Account_Fragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.tv_bmi:
-                new AlertDialog.Builder(getActivity()).setTitle("确定要清除数据吗？")
+                new AlertDialog.Builder(getActivity()).setTitle("确定要清除身体数据吗？")
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -210,11 +257,13 @@ public class Account_Fragment extends Fragment implements View.OnClickListener {
                         .show();
                 break;
 
-            case R.id.iv_icon:
+            case R.id.setting_btn:
                 Intent intent = new Intent(getActivity(),
                         Settings_Activity.class);
                 startActivity(intent);
                 break;
+
+            case R.id.iv_icon:
 
             default:
                 break;

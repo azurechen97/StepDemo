@@ -94,6 +94,7 @@
                     android:textColor="#FFFFFFFF" />
 
                 <ImageView
+                    android:layout_marginLeft="5dp"
                     android:layout_width="15dp"
                     android:layout_height="15dp"
                     android:src="@drawable/vector_drawable_tishi" />

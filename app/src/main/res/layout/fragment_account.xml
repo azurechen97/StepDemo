@@ -1,179 +1,358 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="20dp">
+    android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="140dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingTop="10dp">
+        android:layout_height="160dp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/account_bg"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:src="@mipmap/sport_bg"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="新用户"
+            android:textColor="#fff"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_toRightOf="@id/iv_icon"
+            android:layout_alignBottom="@id/account_bg" />
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:orientation="vertical"
-            android:textSize="24sp">
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_toRightOf="@id/iv_icon"
+            android:layout_below="@id/account_bg"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/vector_drawable_bi" />
 
             <TextView
+                android:id="@+id/slogan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="为祖国健康工作五十年"
-                android:textSize="20sp" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@mipmap/duigou" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:text="运动达人 --- 乐跑圈" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/tv_height"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="165 cm" />
-
-                <TextView
-                    android:id="@+id/tv_weight"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:text="80 kg"
-                    android:clickable="true" />
-
-                <TextView
-                    android:id="@+id/tv_bmi"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:text="24.2 BMI"
-                    android:clickable="true" />
-
-            </LinearLayout>
+                android:text="您还没有设置签名!"
+                android:textColor="@color/secondary_text"
+                android:textSize="12sp" />
 
         </LinearLayout>
+
 
         <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/iv_icon"
-            android:layout_width="96dp"
-            android:layout_height="96dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_alignParentBottom="true"
             android:src="@mipmap/akkarin"
-            app:civ_border_width="0dp"
-            app:civ_border_color="#00000000"
-            android:clickable="true" />
-
-
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+            app:civ_border_width="2dp"
+            app:civ_border_color="#E9EEF3"
+            android:clickable="true"
+            android:layout_marginLeft="20dp" />
 
         <TextView
+            android:layout_alignRight="@id/account_bg"
+            android:layout_alignBottom="@id/account_bg"
+            android:layout_marginRight="10dp"
+            android:id="@+id/setting_btn"
+            android:clickable="true"
+            android:layout_width="84dp"
+            android:layout_height="42dp"
+            android:text="修改资料"
+            android:textSize="12sp"
+            android:textColor="#fff"
+            android:gravity="center"
+            android:background="@drawable/vector_drawable_button_line" />
+    </RelativeLayout>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="20dp">
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="服务"
-            android:textSize="18sp" />
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="跑步累计里程" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/account_distance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="30sp"
+                        android:text="0.00" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="  km" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="80dp"
+                android:src="@drawable/vector_drawable_badge"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp" />
+
+        </RelativeLayout>
+
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="10dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="身高" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tv_height"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="30sp"
+                        android:text="___" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="  cm" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                android:orientation="vertical"
+                android:layout_centerHorizontal="true">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="体重" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tv_weight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="30sp"
+                        android:text="__" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="  kg" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                android:orientation="vertical"
+                android:layout_alignParentRight="true">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="BMI" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tv_bmi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="30sp"
+                        android:text="__._" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:padding="20dp">
 
-            <!--第一个-->
-            <LinearLayout
-                android:id="@+id/plan_setting_id"
-                android:layout_width="0dp"
+            <TextView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
+                android:text="服务" />
 
-                <ImageView
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-                    android:src="@mipmap/plan" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
 
-                <TextView
+                <!--第一个-->
+                <LinearLayout
+                    android:id="@+id/plan_setting_id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="锻炼计划" />
-            </LinearLayout>
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-            <!--第二个-->
-            <LinearLayout
-                android:id="@+id/week_record_id"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@mipmap/plan" />
 
-                <ImageView
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-                    android:src="@mipmap/history_record" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:textSize="12sp"
+                        android:textColor="@color/secondary_text"
+                        android:text="锻炼计划" />
+                </LinearLayout>
 
-                <TextView
+                <!--第二个-->
+                <LinearLayout
+                    android:id="@+id/week_record_id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="一周记录" />
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:layout_centerHorizontal="true"
+                    android:orientation="vertical">
 
-            </LinearLayout>
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@mipmap/history_record" />
 
-            <!--第三个-->
-            <LinearLayout
-                android:id="@+id/talk_id"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:textSize="12sp"
+                        android:textColor="@color/secondary_text"
+                        android:text="一周记录" />
 
-                <ImageView
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-                    android:src="@mipmap/talk" />
+                </LinearLayout>
 
-                <TextView
+                <!--第三个-->
+                <LinearLayout
+                    android:id="@+id/talk_id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="悦聊" />
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:layout_alignParentRight="true">
 
-            </LinearLayout>
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@mipmap/talk" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:textSize="12sp"
+                        android:textColor="@color/secondary_text"
+                        android:text="图灵机器人" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+            <!--如果下面还有的话可以继续在下面添加-->
+
 
         </LinearLayout>
-        <!--如果下面还有的话可以继续在下面添加-->
 
-
-    </LinearLayout>
+    </android.support.v7.widget.CardView>
 
 
 </LinearLayout>
