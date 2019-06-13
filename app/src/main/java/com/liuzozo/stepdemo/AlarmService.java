@@ -62,7 +62,7 @@ public class AlarmService extends Service {
         Notification notification = new Notification.Builder(this)
                 .setChannelId(id)
                 .setContentTitle("乐跑圈闹钟服务")//标题
-                .setContentText("运行中...")//内容
+                .setContentText("关闭本服务会导致无法闹铃!")//内容
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.mipmap.icon_app_round)
                 //小图标一定需要设置,否则会报错(如果不设置它启动服务前台化不会报错,
