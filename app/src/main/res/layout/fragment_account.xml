@@ -23,6 +23,7 @@
             android:id="@+id/username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:clickable="true"
             android:text="新用户"
             android:textColor="#fff"
             android:textSize="18sp"
@@ -33,13 +34,15 @@
             android:layout_alignBottom="@id/account_bg" />
 
         <LinearLayout
+            android:id="@+id/slogan_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginLeft="16dp"
             android:layout_toRightOf="@id/iv_icon"
             android:layout_below="@id/account_bg"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:clickable="true">
 
             <ImageView
                 android:layout_width="15dp"
@@ -49,9 +52,11 @@
 
             <TextView
                 android:id="@+id/slogan"
-                android:layout_width="wrap_content"
+                android:layout_width="160sp"
                 android:layout_height="wrap_content"
                 android:text="您还没有设置签名!"
+                android:maxWidth="160sp"
+                android:maxLines="2"
                 android:textColor="@color/secondary_text"
                 android:textSize="12sp" />
 
@@ -69,19 +74,19 @@
             android:clickable="true"
             android:layout_marginLeft="20dp" />
 
-        <TextView
-            android:layout_alignRight="@id/account_bg"
-            android:layout_alignBottom="@id/account_bg"
-            android:layout_marginRight="10dp"
-            android:id="@+id/setting_btn"
-            android:clickable="true"
-            android:layout_width="84dp"
-            android:layout_height="42dp"
-            android:text="修改资料"
-            android:textSize="12sp"
-            android:textColor="#fff"
-            android:gravity="center"
-            android:background="@drawable/vector_drawable_button_line" />
+        <!--        <TextView-->
+        <!--            android:layout_alignRight="@id/account_bg"-->
+        <!--            android:layout_alignBottom="@id/account_bg"-->
+        <!--            android:layout_marginRight="10dp"-->
+        <!--            android:id="@+id/setting_btn"-->
+        <!--            android:clickable="true"-->
+        <!--            android:layout_width="84dp"-->
+        <!--            android:layout_height="42dp"-->
+        <!--            android:text="修改资料"-->
+        <!--            android:textSize="12sp"-->
+        <!--            android:textColor="#fff"-->
+        <!--            android:gravity="center"-->
+        <!--            android:background="@drawable/vector_drawable_button_line" />-->
     </RelativeLayout>
 
     <android.support.v7.widget.CardView
@@ -178,7 +183,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="  cm" />
+                        android:text=" cm" />
 
                 </LinearLayout>
 
@@ -211,7 +216,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="  kg" />
+                        android:text=" kg" />
 
                 </LinearLayout>
 
@@ -285,7 +290,7 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:src="@mipmap/plan" />
+                        android:src="@drawable/vector_drawable_jihua" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -309,7 +314,7 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:src="@mipmap/history_record" />
+                        android:src="@drawable/vector_drawable_tubiao" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -334,7 +339,7 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:src="@mipmap/talk" />
+                        android:src="@drawable/vector_drawable_jiqiren" />
 
                     <TextView
                         android:layout_width="wrap_content"
