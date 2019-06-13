@@ -1,10 +1,16 @@
 package com.aoxue.stepdemo;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -107,6 +113,7 @@ public class SportMap_Activity extends AppCompatActivity implements
     private SQLiteDatabase db;
 
     private DecimalFormat decimalFormat = new DecimalFormat("0.00");
+    private boolean startBackground = true;
 
 
     /**
@@ -121,6 +128,50 @@ public class SportMap_Activity extends AppCompatActivity implements
     };
     private static final int PERMISSION_REQUEST_CODE = 0;
 
+
+    //后台定位前台通知
+    private static final String NOTIFICATION_CHANNEL_NAME = "BackgroundLocation";
+    private NotificationManager notificationManager = null;
+    boolean isCreateChannel = false;
+
+    @SuppressLint("NewApi")
+    private Notification buildNotification() {
+
+        Notification.Builder builder = null;
+        Notification notification = null;
+        if (android.os.Build.VERSION.SDK_INT >= 26) {
+            //Android O上对Notification进行了修改，如果设置的targetSDKVersion>=26建议使用此种方式创建通知栏
+            if (null == notificationManager) {
+                notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            }
+            String channelId = "location_background_01";
+            if (!isCreateChannel) {
+                NotificationChannel notificationChannel = new NotificationChannel(channelId,
+                        NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+                notificationChannel.enableLights(true);//是否在桌面icon右上角展示小圆点
+                notificationChannel.setLightColor(Color.BLUE); //小圆点颜色
+                notificationChannel.setShowBadge(true); //是否在久按桌面图标时显示此渠道的通知
+                notificationManager.createNotificationChannel(notificationChannel);
+                isCreateChannel = true;
+            }
+            builder = new Notification.Builder(getApplicationContext(), channelId);
+        } else {
+            builder = new Notification.Builder(getApplicationContext());
+        }
+        builder.setSmallIcon(R.mipmap.icon_app_round)
+                .setLargeIcon(BitmapFactory.decodeResource(this.getResources(), R.mipmap.icon_app_round))
+                .setContentTitle("乐跑圈")
+                .setContentText("正在后台定位")
+                .setWhen(System.currentTimeMillis());
+
+        if (android.os.Build.VERSION.SDK_INT >= 16) {
+            notification = builder.build();
+        } else {
+            return builder.getNotification();
+        }
+        return notification;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,6 +185,8 @@ public class SportMap_Activity extends AppCompatActivity implements
 
         countOver = false;
         isPaused = false;
+
+        startBackground = true;
 
         initDB();
         initView();
@@ -218,6 +271,8 @@ public class SportMap_Activity extends AppCompatActivity implements
 
                 //存储到数据表
                 DBUtils.insert(db, pathRecord);
+
+                startBackground = false;
 
                 Intent intent = new Intent(this, SportResult_Activity.class);
                 startActivity(intent);
@@ -438,13 +493,15 @@ public class SportMap_Activity extends AppCompatActivity implements
         super.onResume();
         mapView.onResume();
         setNeedCheckPermission();
+        mLocationClient.disableBackgroundLocation(true);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         mapView.onPause();
-        deactivate();
+        if (startBackground)
+            mLocationClient.enableBackgroundLocation(2001, buildNotification());
     }
 
     @Override
