@@ -284,10 +284,7 @@ public class Account_Fragment extends Fragment implements View.OnClickListener {
                                 editor.remove("weight");
                                 editor.apply();
 
-                                getFragmentManager()
-                                        .beginTransaction()
-                                        .replace(R.id.id_nav_table_content, new Account_Fragment())
-                                        .commitNow();
+                                initShared();
                             }
                         })
                         .setNegativeButton("取消", null)
